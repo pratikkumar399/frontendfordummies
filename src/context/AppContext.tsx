@@ -17,7 +17,7 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Theme State
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
