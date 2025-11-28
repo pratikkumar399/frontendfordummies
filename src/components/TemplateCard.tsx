@@ -9,7 +9,7 @@ interface TemplateCardProps {
 
 export const TemplateCard: React.FC<TemplateCardProps> = ({ template }) => {
   return (
-    <div className="group relative flex flex-col h-full bg-[#18181b] rounded-2xl border border-white/5 hover:border-primary-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-primary-900/10 hover:-translate-y-1 overflow-hidden">
+    <div className="group relative flex flex-col h-full bg-[#18181b] rounded-2xl border border-white/5 hover:border-primary-500 transition-all duration-300 hover:shadow-2xl hover:shadow-primary-900/10 hover:-translate-y-1 overflow-hidden">
       
       {/* Image Area */}
       <div className="relative h-48 overflow-hidden bg-[#202022]">
