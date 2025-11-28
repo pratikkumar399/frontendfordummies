@@ -140,10 +140,3 @@ Pull requests are welcome.
 
 MIT License. Free to use and extend.
 
----
-
-If you want, I can also generate:
-• A README with screenshots
-• A marketing-friendly README using images and sections
-• A fully SEO-optimized README for GitHub search
-• A developer onboarding README for collaborators
