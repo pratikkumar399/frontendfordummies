@@ -8,6 +8,7 @@ import { Badge } from '@/ui/Badge';
 import { Category } from '@/types/types';
 import { ArrowLeft, ExternalLink, Github, Calendar, User, Code2, BrainCircuit, PlayCircle, Zap } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import Image from 'next/image';
 
 export default function DetailPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -56,10 +57,13 @@ export default function DetailPage() {
           {/* Left Column: Image & Quick Links */}
           <div className="lg:col-span-2 space-y-8">
             <div className="rounded-xl overflow-hidden border border-dark-border shadow-2xl bg-dark-card aspect-video relative group">
-              <img 
+              <Image
                 src={template.imageUrl} 
                 alt={template.name}
+                width={1000}
+                height={1000}
                 className="w-full h-full object-cover opacity-90"
+                priority
               />
             </div>
             

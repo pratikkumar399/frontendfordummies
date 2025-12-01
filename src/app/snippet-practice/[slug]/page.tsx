@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/immutability */
 "use client";
 
 import React, { useState } from 'react';
@@ -41,8 +42,8 @@ export default function SnippetPracticePage() {
     try {
         // eslint-disable-next-line no-new-func
         new Function(code)();
-    } catch (e: any) {
-        logs.push(`Runtime Error: ${e.message}`);
+    } catch (e: unknown) {
+        logs.push(`Runtime Error: ${e instanceof Error ? e.message : 'Unknown error'}`);
     }
 
     // Restore console
@@ -57,10 +58,6 @@ export default function SnippetPracticePage() {
     setOutput(prev => ({ ...prev, [id]: logs.join('\n') || 'No output' }));
   };
 
-  const toggleExplanation = (id: string) => {
-    setShowExplanation(prev => ({ ...prev, [id]: !prev[id] }));
-  };
-
   const handleSelectOption = (snippetId: string, optionIndex: number) => {
     setAnswers(prev => ({ ...prev, [snippetId]: optionIndex }));
   };
@@ -69,10 +66,10 @@ export default function SnippetPracticePage() {
     <div className="min-h-screen bg-dark-bg pt-16">
       
       {/* Header */}
-      <nav className="sticky top-0 z-40 bg-white/80 dark:bg-[#262626]/90 backdrop-blur-md border-b border-slate-200 dark:border-[#333] h-16 flex items-center px-4 sm:px-6 lg:px-8">
+      <nav className="sticky w-[80%] mx-auto top-0 z-40  h-16 flex justify-center items-center px-4 sm:px-6 lg:px-8">
         <Link href={`/design/${slug}`} className="flex items-center gap-2 text-slate-500 dark:text-[#9ca3af] hover:text-slate-900 dark:hover:text-white transition-colors">
             <ChevronLeft size={20} />
-            <span className="font-medium">Back to details</span>
+            <span className="font-medium">Go back</span>
         </Link>
         <div className="h-6 w-[1px] bg-slate-200 dark:bg-[#444] mx-4"></div>
         <h1 className="text-lg font-bold truncate">{template.name}</h1>
