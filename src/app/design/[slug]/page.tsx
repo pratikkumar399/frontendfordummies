@@ -27,7 +27,9 @@ export default function DetailPage() {
     );
   }
 
-  const isPracticeSupported = (template.category === Category.JAVASCRIPT || template.category === Category.ALGORITHMS) && template.starterCode;
+  const isIDESupported = (template.category === Category.JAVASCRIPT || template.category === Category.ALGORITHMS) && template.starterCode;
+  const isSnippetSupported = template.category === Category.SNIPPET_PRACTICE && template.snippets && template.snippets.length > 0;
+
 
   return (
     <div className="min-h-screen bg-dark-bg pt-24 pb-12 relative overflow-hidden">
@@ -61,27 +63,41 @@ export default function DetailPage() {
               />
             </div>
             
-            <div className="flex flex-col sm:flex-row gap-4">
-               {isPracticeSupported && (
+             <div className="flex flex-col sm:flex-row gap-4">
+               {isIDESupported && (
                 <div className="flex-1">
                    <Button 
                       onClick={() => router.push(`/practice/${template.slug}`)}
                       variant="primary" 
                       size="lg" 
-                      className="w-full shadow-[0_0_20px_rgba(74,222,128,0.3)] border-primary-500/50" 
+                      className="w-full shadow-lg shadow-primary-500/20 dark:shadow-[0_0_20px_rgba(74,222,128,0.3)] border-primary-500/50" 
                       icon={<PlayCircle size={18} fill="currentColor" className="text-white/20" />}
                     >
                       Open Code Editor
                     </Button>
                 </div>
                )}
-              <a href={template.demoUrl} target="_blank" rel="noopener noreferrer" className={isPracticeSupported ? "flex-1" : "flex-1"}>
-                <Button variant={isPracticeSupported ? "secondary" : "primary"} size="lg" className="w-full" icon={<ExternalLink size={18} />}>
+               {isSnippetSupported && (
+                 <div className="flex-1">
+                   <Button 
+                      onClick={() => router.push(`/snippet-practice/${template.slug}`)}
+                      variant="primary" 
+                      size="lg" 
+                      className="w-full shadow-lg shadow-primary-500/20 dark:shadow-[0_0_20px_rgba(74,222,128,0.3)] border-primary-500/50" 
+                      icon={<PlayCircle size={18} fill="currentColor" className="text-white/20" />}
+                    >
+                      Start Snippet Practice
+                    </Button>
+                </div>
+               )}
+
+              <a href={template.demoUrl} target="_blank" rel="noopener noreferrer" className={(isIDESupported || isSnippetSupported) ? "flex-1" : "flex-1"}>
+                <Button variant={(isIDESupported || isSnippetSupported) ? "secondary" : "primary"} size="lg" className="w-full" icon={<ExternalLink size={18} />}>
                   View Solution Demo
                 </Button>
               </a>
               <a href={template.githubUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
-                <Button variant="outline" size="lg" className="w-full border-dark-border text-zinc-300 hover:border-primary-400 hover:text-primary-400 bg-dark-card" icon={<Github size={18} />}>
+                  <Button variant="outline" size="lg" className="w-full border-dark-border text-zinc-300 hover:border-primary-400 hover:text-primary-400 bg-dark-card" icon={<Github size={18} />}>
                   View Source Code
                 </Button>
               </a>

@@ -1,4 +1,13 @@
 
+export interface Snippet {
+    id: string;
+    title: string;
+    code: string;
+    options: string[];
+    correctAnswer: number; // index of the correct option
+    explanation: string;
+}
+
 export interface Template {
     id: string;
     name: string;
@@ -13,7 +22,8 @@ export interface Template {
     techStack: string[];
     author: string;
     createdAt: string;
-    starterCode?: string; // Optional starter code for practice mode
+    starterCode?: string; // Optional starter code for IDE practice mode
+    snippets?: Snippet[]; // Optional list of snippets for prediction mode
 }
 
 export enum Category {
@@ -23,7 +33,8 @@ export enum Category {
     CSS = 'CSS',
     SYSTEM_DESIGN = 'System Design',
     ALGORITHMS = 'Algorithms',
-    TAKE_HOME = 'Take-Home Project'
+    TAKE_HOME = 'Take-Home Project',
+    SNIPPET_PRACTICE = 'Snippet Practice'
 }
 
 export type SortOption = 'newest' | 'popular' | 'alphabetical';
