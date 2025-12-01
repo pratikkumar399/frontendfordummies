@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { INITIAL_TEMPLATES } from '@/lib/contants';
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const { slug } = params;
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
   const template = INITIAL_TEMPLATES.find(t => t.slug === slug);
 
   if (!template) {
