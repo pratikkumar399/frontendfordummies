@@ -1,9 +1,6 @@
 import { Template, Category } from '@/types/types';
-import { NEWS_FEED_SYSTEM_DESIGN_MD } from '@/data/markdown/news-feed-system-design';
-import { INFINITE_SCROLL_MD } from '@/data/markdown/infinite-scroll';
 import { JS_OUTPUT_CHALLENGES_SNIPPETS } from '@/data/snippets/js-output-challenges';
 import { DEBOUNCE_THROTTLE_STARTER_CODE } from '@/data/starter-code/debounce-throttle';
-import { TREE_TRAVERSAL_STARTER_CODE } from '@/data/starter-code/tree-traversal';
 import { NESTED_COMMENTS_MD } from '@/data/markdown/nested-comments';
 
 export const INITIAL_TEMPLATES: Template[] = [
