@@ -5,11 +5,12 @@ import { Button } from '@/ui/Button';
 import { ArrowLeft, Github, MonitorPlay, ExternalLink } from 'lucide-react';
 import { InfiniteScrollDemo } from '@/components/demos/InfiniteScrollDemo';
 import { getChallengeBySlug } from '@/lib/challenges';
+import { NestedCommentsSystem } from '@/components/demos/NestedCommentsSystem';
 
 // Registry maps slugs to React Components
 const DEMO_REGISTRY: Record<string, React.FC> = {
   'infinite-scroll-component': InfiniteScrollDemo,
-  'nested-comments-system': InfiniteScrollDemo, // Placeholder mapping
+  'nested-comments-system': NestedCommentsSystem, // Placeholder mapping
   // Add other demos here as you build them
 };
 

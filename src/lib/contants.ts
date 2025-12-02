@@ -47,7 +47,7 @@ export const INITIAL_TEMPLATES: Template[] = [
     fullDescription: NESTED_COMMENTS_MD,
     imageUrl: 'https://picsum.photos/seed/comments/800/600',
     demoUrl: '/design/nested-comments-system/demo',
-    githubUrl: 'https://github.com/pratikkumar399/frontendfordummies/tree/main/src/app/practice/nested-comments-system',
+    githubUrl: 'https://github.com/pratikkumar399/frontendfordummies/tree/main/src/components/demos/NestedCommentsSystem',
     tags: ['Medium', 'Recursion', 'Data Structures'],
     category: Category.REACT,
     techStack: ['React', 'Recursion', 'JSON'],
