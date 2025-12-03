@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Outfit, Fira_Code } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { Providers } from "@/app/providers";
 import { AppShell } from "@/components/AppShell";
@@ -112,6 +113,18 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${outfit.variable} ${firaCode.variable} antialiased bg-dark-bg text-dark-text`}
       >
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-J9C1KGRP3Z"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-J9C1KGRP3Z');
+          `}
+        </Script>
         <Providers>
           <AppShell>{children}</AppShell>
         </Providers>
