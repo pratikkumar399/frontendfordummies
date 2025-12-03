@@ -8,6 +8,8 @@ import { useApp } from '@/context/AppContext';
 import { ChevronLeft, Play, CheckCircle2, XCircle, Info } from 'lucide-react';
 import { Button } from '@/ui/Button';
 import { Snippet, Template } from '@/types/types';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
 export default function SnippetPracticePage() {
   const { slug } = useParams<{ slug: string }>();
@@ -53,25 +55,40 @@ export default function SnippetPracticePage() {
     const originalLog = console.log;
     const originalError = console.error;
 
-    console.log = (...args) => logs.push(args.map(a => String(a)).join(' '));
-    console.error = (...args) => logs.push(`Error: ${args.map(a => String(a)).join(' ')}`);
+    const customLog = (...args: unknown[]) => logs.push(args.map(a => String(a)).join(' '));
+    const customError = (...args: unknown[]) => logs.push(`Error: ${args.map(a => String(a)).join(' ')}`);
+
+    console.log = customLog;
+    console.error = customError;
 
     try {
-        new Function(code)();
+        // Try to create the function first (catches SyntaxErrors)
+        const fn = new Function(code);
+        fn();
     } catch (e: unknown) {
-        logs.push(`Runtime Error: ${e instanceof Error ? e.message : 'Unknown error'}`);
+        if (e instanceof SyntaxError) {
+            logs.push(`SyntaxError: ${e.message}`);
+        } else if (e instanceof ReferenceError) {
+            logs.push(`ReferenceError: ${e.message}`);
+        } else if (e instanceof TypeError) {
+            logs.push(`TypeError: ${e.message}`);
+        } else {
+            logs.push(`Runtime Error: ${e instanceof Error ? e.message : 'Unknown error'}`);
+        }
     }
 
-    // Restore console
-    console.log = originalLog;
-    console.error = originalError;
-
-    // Simulate async logs if any (basic support for simple setTimeouts in snippets)
-    // Note: This is imperfect for complex async but works for basic "what comes first" output snippets
-    // For robust async capture we'd need the same logic as PracticePage (delayed restore), 
-    // but here we want immediate feedback for simple snippets.
-    
-    setOutput(prev => ({ ...prev, [id]: logs.join('\n') || 'No output' }));
+    // Wait for microtasks (Promises) and macrotasks (setTimeout with 0-100ms delay)
+    // Use queueMicrotask to ensure Promise.then() callbacks are captured
+    queueMicrotask(() => {
+        // Small delay to also capture short setTimeout callbacks
+        setTimeout(() => {
+            // Restore console
+            console.log = originalLog;
+            console.error = originalError;
+            
+            setOutput(prev => ({ ...prev, [id]: logs.join('\n') || 'No output' }));
+        }, 150);
+    });
   };
 
   const handleSelectOption = (snippetId: string, optionIndex: number) => {
@@ -124,7 +141,7 @@ export default function SnippetPracticePage() {
                     <div className="p-6 space-y-6">
                         {/* Code Block */}
                         <div className="relative group">
-                            <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <Button 
                                     size="sm" 
                                     variant="secondary"
@@ -135,9 +152,19 @@ export default function SnippetPracticePage() {
                                     Run Code
                                 </Button>
                             </div>
-                            <pre className="bg-slate-100 dark:bg-[#1e1e1e] p-4 rounded-lg text-sm font-mono overflow-x-auto border border-slate-200 dark:border-[#333] text-slate-800 dark:text-[#d4d4d4]">
-                                <code>{snippet.code}</code>
-                            </pre>
+                            <SyntaxHighlighter
+                                language="javascript"
+                                style={oneDark}
+                                customStyle={{
+                                    margin: 0,
+                                    borderRadius: '0.5rem',
+                                    fontSize: '0.875rem',
+                                    padding: '1rem',
+                                    border: '1px solid #333',
+                                }}
+                            >
+                                {snippet.code}
+                            </SyntaxHighlighter>
                         </div>
 
                         {/* Output Area (Conditional) */}

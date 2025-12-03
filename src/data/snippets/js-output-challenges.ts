@@ -3,77 +3,122 @@ import { Snippet } from '@/types/types';
 export const JS_OUTPUT_CHALLENGES_SNIPPETS: Snippet[] = [
     {
         id: 's1',
-        title: 'Variable Hoisting',
-        code: `console.log(a);
-var a = 10;
-function test() {
-  console.log(a);
-  var a = 20;
-}
-test();`,
+        title: 'Promise Resolve & Reject',
+        code: `const promise = new Promise((resolve , reject) => {
+    resolve(10);
+    reject(20);
+    console.log("here");
+})
+
+promise.then((value) => {
+    console.log(value);
+})`,
         options: [
-            'undefined, undefined',
-            'ReferenceError, 10',
-            'undefined, 20',
-            '10, 20'
+            'here, 10',
+            '10, here',
+            'here, 20',
+            '10'
         ],
         correctAnswer: 0,
-        explanation: 'In the first log, `a` is hoisted but not initialized, so it is `undefined`. In `test()`, the local `var a` is hoisted to the top of the function scope, shadowing the global `a`. So the second log is also `undefined` before assignment.'
+        explanation: 'The Promise executor runs synchronously, so "here" is logged first. Once a promise is resolved, it cannot be rejected, so `reject(20)` is ignored. The `.then()` callback runs as a microtask after the synchronous code, logging 10.'
     },
     {
         id: 's2',
-        title: 'Event Loop & SetTimeout',
-        code: `console.log(1);
-setTimeout(() => console.log(2), 0);
-Promise.resolve().then(() => console.log(3));
-console.log(4);`,
+        title: 'Promise Reject with Then Handlers',
+        code: `const promise = new Promise((resolve , reject) => {
+    reject(20);
+    console.log("here");
+})
+
+promise.then(
+  (value) => {
+    console.log("ok");
+  },
+  (value) => {
+    console.log(value);
+  }
+);`,
         options: [
-            '1, 2, 3, 4',
-            '1, 4, 2, 3',
-            '1, 4, 3, 2',
-            '1, 3, 4, 2'
+            'here, ok',
+            'here, 20',
+            '20, here',
+            'ok, 20'
         ],
-        correctAnswer: 2,
-        explanation: 'Synchronous code runs first (1, 4). Then Microtasks (Promises) run (3). Finally, Macrotasks (setTimeout) run (2).'
+        correctAnswer: 1,
+        explanation: 'The Promise executor runs synchronously, logging "here" first. The promise is rejected with 20. The `.then()` method accepts two callbacks: `onFulfilled` and `onRejected`. Since the promise is rejected, the second callback runs, logging 20.'
     },
     {
         id: 's3',
-        title: 'Object Reference',
-        code: `const a = {};
-const b = { key: 'b' };
-const c = { key: 'c' };
+        title: 'Array Equality Comparison',
+        code: `let a = [];
+let b = [];
 
-a[b] = 123;
-a[c] = 456;
-
-console.log(a[b]);`,
+console.log(a == b);
+console.log(a === b);`,
         options: [
-            '123',
-            '456',
-            'undefined',
-            'Object'
+            'true, true',
+            'true, false',
+            'false, true',
+            'false, false'
         ],
-        correctAnswer: 1,
-        explanation: 'Object keys are converted to strings. `b` becomes `"[object Object]"` and `c` becomes `"[object Object]"`. So `a["[object Object]"]` is first set to 123, then overwritten by 456.'
+        correctAnswer: 3,
+        explanation: 'In JavaScript, arrays are objects and are compared by reference, not by value. Even though both arrays are empty, `a` and `b` point to different objects in memory, so both `==` and `===` return `false`.'
     },
     {
         id: 's4',
-        title: 'Closure & Let vs Var',
-        code: `for (var i = 0; i < 3; i++) {
-  setTimeout(() => console.log(i), 1);
+        title: 'Temporal Dead Zone with Let',
+        code: `let temp = 'outer value';
+if (true) {
+  console.log(temp);
+  let temp = 'inner value'; 
+  console.log(temp);
 }
-
-for (let j = 0; j < 3; j++) {
-  setTimeout(() => console.log(j), 1);
-}`,
+console.log(temp);`,
         options: [
-            '0 1 2 and 0 1 2',
-            '3 3 3 and 0 1 2',
-            '3 3 3 and 3 3 3',
-            '0 1 2 and 3 3 3'
+            'outer value, inner value, outer value',
+            'undefined, inner value, outer value',
+            'ReferenceError: Cannot access \'temp\' before initialization',
+            'outer value, inner value, inner value'
         ],
-        correctAnswer: 1,
-        explanation: '`var` has function scope, so the closure captures the same reference to `i`, which is 3 by the time the timeout runs. `let` has block scope, so each iteration creates a new binding for `j`.'
+        correctAnswer: 2,
+        explanation: 'The `let` declaration inside the block creates a new `temp` variable that is hoisted to the top of the block but remains in the Temporal Dead Zone (TDZ) until initialized. Accessing `temp` before its declaration throws a ReferenceError.'
+    },
+    {
+        id: 's5',
+        title: 'Let and Var Redeclaration',
+        code: `let temp = 'outer value';
+if (true) {
+  console.log(temp);
+  var temp = 'inner value';
+  console.log(temp);
+}
+console.log(temp);`,
+        options: [
+            'outer value, inner value, inner value',
+            'outer value, inner value, outer value',
+            'SyntaxError: Identifier \'temp\' has already been declared',
+            'undefined, inner value, inner value'
+        ],
+        correctAnswer: 2,
+        explanation: 'You cannot redeclare a variable with `var` if it was already declared with `let` in the same scope. Since `var` is function-scoped (or global), it attempts to redeclare `temp` in the same scope as the outer `let temp`, causing a SyntaxError.'
+    },
+    {
+        id: 's6',
+        title: 'Var Hoisting in Block',
+        code: `var temp = 'outer value';
+if (true) {
+  console.log(temp);
+  var temp = 'inner value'; 
+  console.log(temp);
+}
+console.log(temp);`,
+        options: [
+            'undefined, inner value, inner value',
+            'outer value, inner value, outer value',
+            'outer value, inner value, inner value',
+            'ReferenceError'
+        ],
+        correctAnswer: 2,
+        explanation: '`var` declarations are function-scoped, not block-scoped. The second `var temp` inside the `if` block does not create a new variable; it refers to the same `temp`. The first log shows "outer value", then `temp` is reassigned to "inner value", so both subsequent logs show "inner value".'
     }
 ];
-
