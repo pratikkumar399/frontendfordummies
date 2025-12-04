@@ -146,7 +146,7 @@ export default function PracticePage() {
       "@type": "Person",
       "name": template.author
     },
-    "url": `https://frontendfordummies-tonv.vercel.app//practice/${template.slug}`
+    "url": `https://frontenddummies.vercel.app/practice/${template.slug}`
   };
 
   const handleRunCode = async () => {

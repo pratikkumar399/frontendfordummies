@@ -18,10 +18,10 @@ export default function Home() {
     "@type": "WebSite",
     "name": "Frontend For Dummies",
     "description": "A comprehensive platform for mastering frontend coding skills, system design, and building real-world projects.",
-    "url": "https://frontendfordummies-tonv.vercel.app/",
+    "url": "https://frontenddummies.vercel.app/",
     "potentialAction": {
       "@type": "SearchAction",
-      "target": "https://frontendfordummies-tonv.vercel.app//explore?search={search_term_string}",
+      "target": "https://frontenddummies.vercel.app/explore?search={search_term_string}",
       "query-input": "required name=search_term_string"
     },
     "publisher": {
@@ -29,7 +29,7 @@ export default function Home() {
       "name": "Frontend For Dummies",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://frontendfordummies-tonv.vercel.app//logo.png"
+        "url": "https://frontenddummies.vercel.app/logo.png"
       }
     }
   };
@@ -38,8 +38,8 @@ export default function Home() {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "Frontend For Dummies",
-    "url": "https://frontendfordummies-tonv.vercel.app/",
-    "logo": "https://frontendfordummies-tonv.vercel.app//logo.png",
+    "url": "https://frontenddummies.vercel.app/",
+    "logo": "https://frontenddummies.vercel.app/logo.png",
     "sameAs": [
       "https://github.com/pratikkumar399/frontendfordummies"
     ],

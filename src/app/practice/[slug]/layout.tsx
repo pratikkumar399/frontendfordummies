@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   const title = `${template.name} - Code Practice`;
   const description = `Practice ${template.name} with our interactive code editor. ${template.shortDescription}`;
-  const url = `https://frontendfordummies-tonv.vercel.app//practice/${slug}`;
+  const url = `https://frontenddummies.vercel.app/practice/${slug}`;
 
   return {
     title,

@@ -24,7 +24,7 @@ const firaCode = Fira_Code({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://frontendfordummies-tonv.vercel.app/'),
+  metadataBase: new URL('https://frontenddummies.vercel.app/'),
   title: {
     default: "Frontend For Dummies - Master Frontend Development Skills",
     template: "%s | Frontend For Dummies"
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://frontendfordummies-tonv.vercel.app/",
+    url: "https://frontenddummies.vercel.app/",
     siteName: "Frontend For Dummies",
     title: "Frontend For Dummies - Master Frontend Development Skills",
     description: "A comprehensive platform for mastering frontend coding skills, system design, and building real-world projects.",

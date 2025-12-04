@@ -6,12 +6,12 @@ export const metadata: Metadata = {
   keywords: ['frontend challenges', 'coding practice', 'web development', 'javascript exercises', 'react challenges', 'css problems', 'algorithm practice'],
   openGraph: {
     type: 'website',
-    url: 'https://frontendfordummies-tonv.vercel.app//explore',
+    url: 'https://frontenddummies.vercel.app/explore',
     title: 'Explore Frontend Challenges - Frontend For Dummies',
     description: 'Browse our complete collection of frontend coding challenges, system design problems, and interactive practice exercises.',
     images: [
       {
-        url: '/og-explore.png',
+        url: '/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Explore Frontend Challenges',
@@ -22,10 +22,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Explore Frontend Challenges - Frontend For Dummies',
     description: 'Browse our complete collection of frontend coding challenges, system design problems, and interactive practice exercises.',
-    images: ['/og-explore.png'],
+    images: ['/og-image.png'],
   },
   alternates: {
-    canonical: 'https://frontendfordummies-tonv.vercel.app//explore',
+    canonical: 'https://frontenddummies.vercel.app/explore',
   },
 };
 

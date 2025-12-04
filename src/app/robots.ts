@@ -13,8 +13,8 @@ export default function robots(): MetadataRoute.Robots {
         disallow: '/',
       },
     ],
-    sitemap: 'https://frontendfordummies-tonv.vercel.app//sitemap.xml',
-    host: 'https://frontendfordummies-tonv.vercel.app/',
+    sitemap: 'https://frontenddummies.vercel.app/sitemap.xml',
+    host: 'https://frontenddummies.vercel.app/',
   };
 }
 
