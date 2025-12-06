@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/ui/Button';
+import { Button } from '@/components/ui/Button';
 import { PlayCircle, ExternalLink, Github } from 'lucide-react';
-import { Template, Category } from '@/types/types';
+import { Template, Category, ButtonVariant, ButtonSize } from '@/types/types';
 
 interface ChallengeActionsProps {
   template: Template;
@@ -22,8 +22,8 @@ export const ChallengeActions: React.FC<ChallengeActionsProps> = ({ template }) 
         <div className="flex-1">
           <Button
             onClick={() => router.push(`/practice/${template.slug}`)}
-            variant="primary"
-            size="lg"
+            variant={ButtonVariant.PRIMARY}
+            size={ButtonSize.LG}
             className="w-full shadow-lg shadow-primary-500/20 dark:shadow-[0_0_20px_rgba(74,222,128,0.3)] border-primary-500/50"
             icon={<PlayCircle size={18} fill="currentColor" className="text-white/20" />}
           >
@@ -35,8 +35,8 @@ export const ChallengeActions: React.FC<ChallengeActionsProps> = ({ template }) 
         <div className="flex-1">
           <Button
             onClick={() => router.push(`/snippet-practice/${template.slug}`)}
-            variant="primary"
-            size="lg"
+            variant={ButtonVariant.PRIMARY}
+            size={ButtonSize.LG}
             className="w-full shadow-lg shadow-primary-500/20 dark:shadow-[0_0_20px_rgba(74,222,128,0.3)] border-primary-500/50"
             icon={<PlayCircle size={18} fill="currentColor" className="text-white/20" />}
           >
@@ -47,8 +47,8 @@ export const ChallengeActions: React.FC<ChallengeActionsProps> = ({ template }) 
 
       <a href={template.demoUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
         <Button
-          variant={(isIDESupported || isSnippetSupported) ? "secondary" : "primary"}
-          size="lg"
+          variant={(isIDESupported || isSnippetSupported) ? ButtonVariant.SECONDARY : ButtonVariant.PRIMARY}
+          size={ButtonSize.LG}
           className="w-full"
           icon={<ExternalLink size={18} />}
         >
@@ -57,8 +57,8 @@ export const ChallengeActions: React.FC<ChallengeActionsProps> = ({ template }) 
       </a>
       <a href={template.githubUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
         <Button
-          variant="outline"
-          size="lg"
+          variant={ButtonVariant.OUTLINE}
+          size={ButtonSize.LG}
           className="w-full border-dark-border text-zinc-300 hover:border-primary-400 hover:text-primary-400 bg-dark-card"
           icon={<Github size={18} />}
         >
@@ -68,4 +68,3 @@ export const ChallengeActions: React.FC<ChallengeActionsProps> = ({ template }) 
     </div>
   );
 };
-

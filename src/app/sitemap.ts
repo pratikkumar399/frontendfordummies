@@ -1,9 +1,9 @@
 import { MetadataRoute } from 'next';
-import { INITIAL_TEMPLATES } from '@/lib/contants';
+import { INITIAL_TEMPLATES } from '@/lib/constants';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://frontenddummies.vercel.app';
-  
+
   // Static pages
   const staticPages = [
     {

@@ -1,15 +1,16 @@
 import React from 'react';
+import { ButtonVariant, ButtonSize } from '@/types/types';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: ButtonVariant;
+  size?: ButtonSize;
   children: React.ReactNode;
   icon?: React.ReactNode;
 }
 
 export const Button: React.FC<ButtonProps> = ({ 
-  variant = 'primary', 
-  size = 'md', 
+  variant = ButtonVariant.PRIMARY, 
+  size = ButtonSize.MD, 
   className = '', 
   children, 
   icon,
@@ -18,16 +19,16 @@ export const Button: React.FC<ButtonProps> = ({
   const baseStyles = 'inline-flex items-center justify-center font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-primary-400 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl tracking-wide';
   
   const variants = {
-    primary: 'bg-gradient-btn text-white border border-transparent hover:border-primary-400/30',
-    secondary: 'bg-dark-accent text-white hover:bg-zinc-700 focus:ring-white border border-dark-border',
-    outline: 'border border-dark-border bg-transparent text-zinc-300 hover:border-primary-400 hover:text-primary-400 focus:ring-zinc-700',
-    ghost: 'bg-transparent text-zinc-400 hover:text-white hover:bg-white/5'
+    [ButtonVariant.PRIMARY]: 'bg-gradient-btn text-white border border-transparent hover:border-primary-400/30',
+    [ButtonVariant.SECONDARY]: 'bg-dark-accent text-white hover:bg-zinc-700 focus:ring-white border border-dark-border',
+    [ButtonVariant.OUTLINE]: 'border border-dark-border bg-transparent text-zinc-300 hover:border-primary-400 hover:text-primary-400 focus:ring-zinc-700',
+    [ButtonVariant.GHOST]: 'bg-transparent text-zinc-400 hover:text-white hover:bg-white/5'
   };
 
   const sizes = {
-    sm: 'h-8 px-4 text-xs',
-    md: 'h-10 px-5 text-sm',
-    lg: 'h-12 px-8 text-base'
+    [ButtonSize.SM]: 'h-8 px-4 text-xs',
+    [ButtonSize.MD]: 'h-10 px-5 text-sm',
+    [ButtonSize.LG]: 'h-12 px-8 text-base'
   };
 
   return (

@@ -1,4 +1,4 @@
-import { INITIAL_TEMPLATES } from '@/lib/contants';
+import { INITIAL_TEMPLATES } from '@/lib/constants';
 import { Template } from '@/types/types';
 
 export const getChallengeBySlug = (slug: string): Template | undefined => {

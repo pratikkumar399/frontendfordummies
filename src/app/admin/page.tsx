@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useApp } from '../../context/AppContext';
-import { Category, Template } from '@/types/types';
-import { Button } from '@/ui/Button';
+import { Category, Template, ButtonVariant } from '@/types/types';
+import { Button } from '@/components/ui/Button';
 import { Save } from 'lucide-react';
 
 export default function AdminPage() {
@@ -192,10 +192,10 @@ export default function AdminPage() {
           </div>
 
           <div className="pt-5 flex items-center justify-end gap-3 border-t border-dark-border">
-            <Button type="button" variant="ghost" onClick={() => router.push('/')}>
+            <Button type="button" variant={ButtonVariant.GHOST} onClick={() => router.push('/')}>
               Cancel
             </Button>
-            <Button type="submit" variant="primary" icon={<Save size={16} />}>
+            <Button type="submit" variant={ButtonVariant.PRIMARY} icon={<Save size={16} />}>
               Save Challenge
             </Button>
           </div>

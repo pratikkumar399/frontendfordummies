@@ -38,4 +38,48 @@ export enum Category {
     SNIPPET_PRACTICE = 'Snippet Practice'
 }
 
-export type SortOption = 'newest' | 'popular' | 'alphabetical';
+export enum SortOption {
+    NEWEST = 'newest',
+    POPULAR = 'popular',
+    ALPHABETICAL = 'alphabetical'
+}
+
+// UI Component Types
+export enum ButtonVariant {
+    PRIMARY = 'primary',
+    SECONDARY = 'secondary',
+    OUTLINE = 'outline',
+    GHOST = 'ghost'
+}
+
+export enum ButtonSize {
+    SM = 'sm',
+    MD = 'md',
+    LG = 'lg'
+}
+
+export enum BadgeVariant {
+    BLUE = 'blue',
+    GRAY = 'gray',
+    GREEN = 'green',
+    PURPLE = 'purple'
+}
+
+// Practice Page Types
+export enum LogType {
+    LOG = 'log',
+    ERROR = 'error',
+    WARN = 'warn',
+    INFO = 'info'
+}
+
+export enum PracticeTab {
+    DESCRIPTION = 'description',
+    EDITORIAL = 'editorial'
+}
+
+export interface LogEntry {
+    type: LogType;
+    content: string;
+    timestamp: string;
+}

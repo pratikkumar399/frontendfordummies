@@ -3,8 +3,9 @@
 import Link from 'next/link';
 import { TemplateCard } from '@/components/TemplateCard';
 import { Sparkles, ArrowRight, Code2, Globe, Cpu, Github } from 'lucide-react';
-import { Button } from '@/ui/Button';
+import { Button } from '@/components/ui/Button';
 import { useApp } from '@/context/AppContext';
+import { ButtonSize, ButtonVariant } from '@/types/types';
 
 export default function Home() {
   const { templates } = useApp();
@@ -91,13 +92,13 @@ export default function Home() {
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-5 mb-28">
             <Link href="/explore">
-              <Button size="lg" className="h-14 px-8 text-lg font-semibold shadow-[0_0_50px_rgba(34,197,94,0.25)] hover:shadow-[0_0_80px_rgba(34,197,94,0.4)] border border-primary-500/50 hover:scale-105 transition-transform duration-300">
+              <Button size={ButtonSize.LG} className="h-14 px-8 text-lg font-semibold shadow-[0_0_50px_rgba(34,197,94,0.25)] hover:shadow-[0_0_80px_rgba(34,197,94,0.4)] border border-primary-500/50 hover:scale-105 transition-transform duration-300">
                 Start Learning
                 <ArrowRight size={20} className="ml-2" />
               </Button>
             </Link>
             <Link href="https://github.com/pratikkumar399/frontendfordummies" target="_blank" rel="noopener noreferrer">
-               <Button variant="secondary" size="lg" className="h-14 px-8 text-lg bg-zinc-900/50 backdrop-blur-sm border-zinc-800 hover:bg-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-700 hover:scale-105 transition-all duration-300">
+               <Button variant={ButtonVariant.SECONDARY} size={ButtonSize.LG} className="h-14 px-8 text-lg bg-zinc-900/50 backdrop-blur-sm border-zinc-800 hover:bg-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-700 hover:scale-105 transition-all duration-300">
                 <Github size={20} className="mr-2" />
                 Star on GitHub <ArrowRight size={20} className="ml-2" />
                </Button>
@@ -163,7 +164,7 @@ export default function Home() {
                     <p className="text-zinc-500">Popular skills mastered by the community</p>
                 </div>
                 <Link href="/explore">
-                    <Button variant="ghost" className="text-primary-400 hover:text-primary-300 hover:bg-primary-900/10">
+                    <Button variant={ButtonVariant.GHOST} className="text-primary-400 hover:text-primary-300 hover:bg-primary-900/10">
                         View All Challenges <ArrowRight size={16} className="ml-2" />
                     </Button>
                 </Link>
@@ -179,4 +180,4 @@ export default function Home() {
     </div>
     </>
   );
-};
+}

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
 import { useApp } from '@/context/AppContext';
 import Editor from '@monaco-editor/react';
+import { LogType, PracticeTab, LogEntry } from '@/types/types';
 import { 
   Play, 
   RotateCcw, 
@@ -16,13 +17,6 @@ import {
   AlertCircle
 } from 'lucide-react';
 
-// Simple types for console output
-interface LogEntry {
-  type: 'log' | 'error' | 'warn' | 'info';
-  content: string;
-  timestamp: string;
-}
-
 export default function PracticePage() {
   const { slug } = useParams<{ slug: string }>();
   const { templates, isDarkMode } = useApp();
@@ -33,7 +27,7 @@ export default function PracticePage() {
   const [code, setCode] = useState('');
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [isRunning, setIsRunning] = useState(false);
-  const [activeTab, setActiveTab] = useState<'description' | 'editorial'>('description');
+  const [activeTab, setActiveTab] = useState<PracticeTab>(PracticeTab.DESCRIPTION);
   
   // Resizable Layout State
   const [leftWidth, setLeftWidth] = useState(50); // Percentage
@@ -160,7 +154,7 @@ export default function PracticePage() {
     setLogs([]);
 
     // Proxy function to capture logs
-    const proxyLog = (type: 'log' | 'error', args: any[]) => {
+    const proxyLog = (type: LogType, args: unknown[]) => {
        const content = args.map(arg => {
         if (arg === undefined) return 'undefined';
         if (arg === null) return 'null';
@@ -184,12 +178,16 @@ export default function PracticePage() {
       setLogs(prev => [...prev, newEntry]);
       
       // Pass through to actual console for debugging
-      originalConsoleRef.current[type](...args);
+      if (type === LogType.ERROR) {
+        originalConsoleRef.current.error(...args);
+      } else {
+        originalConsoleRef.current.log(...args);
+      }
     };
 
     // Override console
-    console.log = (...args) => proxyLog('log', args);
-    console.error = (...args) => proxyLog('error', args);
+    console.log = (...args) => proxyLog(LogType.LOG, args);
+    console.error = (...args) => proxyLog(LogType.ERROR, args);
 
     try {
       // Small delay to allow React to render loading state
@@ -200,10 +198,10 @@ export default function PracticePage() {
       const func = new Function(code);
       func();
       
-    } catch (err: any) {
+    } catch (err: unknown) {
       setLogs(prev => [...prev, {
-        type: 'error',
-        content: err.toString(),
+        type: LogType.ERROR,
+        content: err instanceof Error ? err.toString() : String(err),
         timestamp: new Date().toLocaleTimeString()
       }]);
     } finally {
@@ -287,9 +285,9 @@ export default function PracticePage() {
             {/* Tabs */}
             <div className="h-10 bg-slate-50 dark:bg-[#333]/30 border-b border-slate-200 dark:border-[#3e3e3e] flex items-center gap-1 px-2 shrink-0">
                 <button 
-                    onClick={() => setActiveTab('description')}
+                    onClick={() => setActiveTab(PracticeTab.DESCRIPTION)}
                     className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-t-md transition-colors ${
-                        activeTab === 'description' 
+                        activeTab === PracticeTab.DESCRIPTION 
                         ? 'bg-white dark:bg-[#262626] text-slate-900 dark:text-white border-t border-x border-slate-200 dark:border-[#3e3e3e] relative -bottom-[1px]' 
                         : 'text-slate-500 dark:text-[#9ca3af] hover:text-slate-900 dark:hover:text-white'
                     }`}
@@ -298,9 +296,9 @@ export default function PracticePage() {
                     Description
                 </button>
                 <button 
-                    onClick={() => setActiveTab('editorial')}
+                    onClick={() => setActiveTab(PracticeTab.EDITORIAL)}
                     className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-t-md transition-colors ${
-                        activeTab === 'editorial' 
+                        activeTab === PracticeTab.EDITORIAL 
                         ? 'bg-white dark:bg-[#262626] text-slate-900 dark:text-white border-t border-x border-slate-200 dark:border-[#3e3e3e] relative -bottom-[1px]' 
                         : 'text-slate-500 dark:text-[#9ca3af] hover:text-slate-900 dark:hover:text-white'
                     }`}
@@ -312,7 +310,7 @@ export default function PracticePage() {
 
             {/* Content */}
             <div className="flex-1 overflow-y-auto custom-scrollbar p-5">
-                {activeTab === 'description' ? (
+                {activeTab === PracticeTab.DESCRIPTION ? (
                     <div className="animate-fadeIn">
                         <h1 className="text-xl font-bold text-slate-900 dark:text-white mb-4">{template.name}</h1>
                         <div className="flex gap-2 mb-6">
@@ -428,9 +426,9 @@ export default function PracticePage() {
                         <div className="space-y-2 pb-4">
                             {(() => {
                                 // Find if any error logs exist
-                                const hasError = logs.some(log => log.type === 'error');
+                                const hasError = logs.some(log => log.type === LogType.ERROR);
                                 // Find the first error index, if any
-                                const firstErrorIdx = logs.findIndex(log => log.type === 'error');
+                                const firstErrorIdx = logs.findIndex(log => log.type === LogType.ERROR);
                                 // Determine heading properties
                                 const heading = hasError ? 'Runtime Error' : 'Standard Output';
                                 const icon = hasError ? <AlertCircle size={12} /> : <CheckCircle2 size={12} />;

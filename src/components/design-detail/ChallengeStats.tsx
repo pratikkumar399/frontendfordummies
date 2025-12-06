@@ -1,7 +1,7 @@
 import React from 'react';
-import { Badge } from '@/ui/Badge';
+import { Badge } from '@/components/ui/Badge';
 import { User, Calendar, BrainCircuit, Code2, Zap } from 'lucide-react';
-import { Template } from '@/types/types';
+import { Template, BadgeVariant } from '@/types/types';
 
 interface ChallengeStatsProps {
   template: Template;
@@ -16,7 +16,7 @@ export const ChallengeStats: React.FC<ChallengeStatsProps> = ({ template }) => {
 
       <div className="mb-8">
         <div className="flex items-start justify-between gap-4 mb-6">
-          <Badge variant="green" className="shadow-[0_0_15px_rgba(74,222,128,0.15)] px-3 py-1 text-xs tracking-wider font-bold">
+          <Badge variant={BadgeVariant.GREEN} className="shadow-[0_0_15px_rgba(74,222,128,0.15)] px-3 py-1 text-xs tracking-wider font-bold">
             {template.category}
           </Badge>
           <div className="text-xs text-zinc-500 font-mono pt-1">ID: {template.id.padStart(4, '0')}</div>
@@ -106,4 +106,3 @@ export const ChallengeStats: React.FC<ChallengeStatsProps> = ({ template }) => {
     </div>
   );
 };
-

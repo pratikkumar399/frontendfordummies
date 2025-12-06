@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Template, Category } from '@/types/types';
-import { INITIAL_TEMPLATES } from '@/lib/contants';
+import { INITIAL_TEMPLATES } from '@/lib/constants';
 
 interface AppContextType {
   templates: Template[];

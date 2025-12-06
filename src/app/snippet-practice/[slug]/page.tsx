@@ -6,8 +6,8 @@ import { useParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';    
 import { useApp } from '@/context/AppContext';
 import { ChevronLeft, Play, CheckCircle2, XCircle, Info } from 'lucide-react';
-import { Button } from '@/ui/Button';
-import { Snippet, Template } from '@/types/types';
+import { Button } from '@/components/ui/Button';
+import { Snippet, Template, ButtonSize, ButtonVariant } from '@/types/types';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
@@ -143,8 +143,8 @@ export default function SnippetPracticePage() {
                         <div className="relative group">
                             <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <Button 
-                                    size="sm" 
-                                    variant="secondary"
+                                    size={ButtonSize.SM} 
+                                    variant={ButtonVariant.SECONDARY}
                                     onClick={() => handleRunSnippet(snippet.id, snippet.code)}
                                     className="bg-white dark:bg-[#333] shadow-sm text-xs h-8"
                                 >
@@ -234,7 +234,7 @@ export default function SnippetPracticePage() {
         })}
 
         <div className="flex justify-center pt-8">
-            <Button size="lg" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth'})}>
+            <Button size={ButtonSize.LG} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth'})}>
                 Back to Top
             </Button>
         </div>

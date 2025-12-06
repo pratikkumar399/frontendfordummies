@@ -1,11 +1,12 @@
 import React from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Button } from '@/ui/Button';
+import { Button } from '@/components/ui/Button';
 import { ArrowLeft, Github, MonitorPlay, ExternalLink } from 'lucide-react';
 import { InfiniteScrollDemo } from '@/components/demos/InfiniteScrollDemo';
 import { CommentsList } from '@/components/demos/NestedCommentsSystem';
 import { getChallengeBySlug } from '@/lib/challenges';
+import { ButtonVariant, ButtonSize } from '@/types/types';
 
 // Registry maps slugs to React Components
 const DEMO_REGISTRY: Record<string, React.FC> = {
@@ -53,7 +54,7 @@ export default async function DemoPage({ params }: PageProps) {
         </div>
         <div className="flex items-center gap-3">
            <a href={template.githubUrl} target="_blank" rel="noopener noreferrer">
-              <Button variant="secondary" size="sm" icon={<Github size={16} />}>
+              <Button variant={ButtonVariant.SECONDARY} size={ButtonSize.SM} icon={<Github size={16} />}>
                 <span className="hidden sm:inline">View Source</span>
               </Button>
            </a>
@@ -78,12 +79,12 @@ export default async function DemoPage({ params }: PageProps) {
             </p>
             {template.demoUrl && template.demoUrl !== '#' ? (
                <a href={template.demoUrl} target="_blank" rel="noopener noreferrer">
-                 <Button variant="primary">
+                 <Button variant={ButtonVariant.PRIMARY}>
                    Open External Demo <ExternalLink size={16} className="ml-2" />
                  </Button>
                </a>
             ) : (
-              <Button variant="outline" disabled className="opacity-50 cursor-not-allowed">No External Demo</Button>
+              <Button variant={ButtonVariant.OUTLINE} disabled className="opacity-50 cursor-not-allowed">No External Demo</Button>
             )}
           </div>
         )}

@@ -85,14 +85,13 @@ export default async function DetailPage({ params }: PageProps) {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           
-          {/* Breadcrumb / Back */}
+
           <div className="mb-8">
             <BackButton />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
-            {/* Left Column: Image & Quick Links */}
             <div className="lg:col-span-2 space-y-8">
               <div className="rounded-xl overflow-hidden border border-dark-border shadow-2xl bg-dark-card aspect-video relative group">
                 <Image
