@@ -23,6 +23,8 @@ console.log('End');`,
             "Start, End, Promise executor, Resolved"
         ],
         correctAnswer: 1,
-        explanation: 'The executor runs immediately, logging "Promise executor". Synchronous code continues to log "End". The resolved promise queues the then handler as a microtask, so "Resolved" logs after the call stack clears.'
+        explanation: `Understanding this question requires grasping the fundamental concept of how JavaScript's event loop works with synchronous and asynchronous code. When you create a new Promise, the executor function (the function you pass to the Promise constructor) runs immediately and synchronously. This is a crucial detail that many developers miss. The executor is not deferred or queued - it executes right away as part of the Promise construction.
+So the code first prints "Start", then immediately constructs the Promise which causes "Promise executor" to print. The resolve function is called, which schedules the then callback to run later in the microtask queue. The code then continues synchronously to print "End". Only after all synchronous code completes does the JavaScript engine process the microtask queue, which is when "Resolved" finally prints.
+The key insight here is that Promise executors run synchronously, but Promise callbacks (then, catch, finally) always run asynchronously, even if the Promise is already resolved.`
     }
 ];
