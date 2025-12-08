@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/Button';
+import { Button, LinkButton } from '@/components/ui/Button';
 import { PlayCircle, ExternalLink, Github } from 'lucide-react';
 import { Template, Category, ButtonVariant, ButtonSize } from '@/types/types';
 
@@ -45,26 +45,32 @@ export const ChallengeActions: React.FC<ChallengeActionsProps> = ({ template }) 
         </div>
       )}
 
-      <a href={template.demoUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
-        <Button
-          variant={(isIDESupported || isSnippetSupported) ? ButtonVariant.SECONDARY : ButtonVariant.PRIMARY}
-          size={ButtonSize.LG}
-          className="w-full"
-          icon={<ExternalLink size={18} />}
-        >
-          View Solution Demo
-        </Button>
-      </a>
-      <a href={template.githubUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
-        <Button
-          variant={ButtonVariant.OUTLINE}
-          size={ButtonSize.LG}
-          className="w-full border-dark-border text-zinc-300 hover:border-primary-400 hover:text-primary-400 bg-dark-card"
-          icon={<Github size={18} />}
-        >
-          View Source Code
-        </Button>
-      </a>
+      {template.demoUrl && template.demoUrl !== '#' && (
+        <div className="flex-1">
+          <LinkButton
+            href={template.demoUrl}
+            variant={(isIDESupported || isSnippetSupported) ? ButtonVariant.SECONDARY : ButtonVariant.PRIMARY}
+            size={ButtonSize.LG}
+            className="w-full"
+            icon={<ExternalLink size={18} />}
+          >
+            View Solution Demo
+          </LinkButton>
+        </div>
+      )}
+      {template.githubUrl && template.githubUrl !== '#' && (
+        <div className="flex-1">
+          <LinkButton
+            href={template.githubUrl}
+            variant={ButtonVariant.OUTLINE}
+            size={ButtonSize.LG}
+            className="w-full border-dark-border text-zinc-300 hover:border-primary-400 hover:text-primary-400 bg-dark-card"
+            icon={<Github size={18} />}
+          >
+            View Source Code
+          </LinkButton>
+        </div>
+      )}
     </div>
   );
 };

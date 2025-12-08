@@ -17,7 +17,6 @@ export default function SnippetPracticePage() {
   const router = useRouter();
   const template = templates.find(t => t.slug === slug) as Template;
 
-  // State
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [output, setOutput] = useState<Record<string, string>>({});
 
@@ -50,7 +49,6 @@ export default function SnippetPracticePage() {
   };
 
   const handleRunSnippet = (id: string, code: string) => {
-    // Capture console output
     const logs: string[] = [];
     const originalLog = console.log;
     const originalError = console.error;
@@ -62,7 +60,6 @@ export default function SnippetPracticePage() {
     console.error = customError;
 
     try {
-        // Try to create the function first (catches SyntaxErrors)
         const fn = new Function(code);
         fn();
     } catch (e: unknown) {
@@ -77,12 +74,8 @@ export default function SnippetPracticePage() {
         }
     }
 
-    // Wait for microtasks (Promises) and macrotasks (setTimeout with 0-100ms delay)
-    // Use queueMicrotask to ensure Promise.then() callbacks are captured
     queueMicrotask(() => {
-        // Small delay to also capture short setTimeout callbacks
         setTimeout(() => {
-            // Restore console
             console.log = originalLog;
             console.error = originalError;
             
@@ -130,7 +123,6 @@ export default function SnippetPracticePage() {
 
             return (
                 <div key={snippet.id} className="bg-white dark:bg-[#262626] rounded-xl border border-slate-200 dark:border-[#333] shadow-lg overflow-hidden animate-fadeIn" style={{ animationDelay: `${index * 100}ms` }}>
-                    {/* Snippet Header */}
                     <div className="bg-slate-50 dark:bg-[#333]/30 px-6 py-4 border-b border-slate-200 dark:border-[#3e3e3e] flex justify-between items-center">
                         <h3 className="font-bold text-lg text-slate-800 dark:text-white">
                             <span className="text-primary-600 dark:text-primary-400 mr-2">#{index + 1}</span> 
@@ -139,7 +131,6 @@ export default function SnippetPracticePage() {
                     </div>
 
                     <div className="p-6 space-y-6">
-                        {/* Code Block */}
                         <div className="relative group">
                             <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <Button 
@@ -167,7 +158,6 @@ export default function SnippetPracticePage() {
                             </SyntaxHighlighter>
                         </div>
 
-                        {/* Output Area (Conditional) */}
                         {currentOutput !== undefined && (
                             <div className="bg-black/90 rounded-lg p-4 font-mono text-xs text-green-400 border-l-4 border-green-500 shadow-inner">
                                 <div className="text-[10px] text-slate-500 mb-1 uppercase tracking-wider">Console Output</div>
@@ -175,7 +165,6 @@ export default function SnippetPracticePage() {
                             </div>
                         )}
 
-                        {/* Options */}
                         <div className="space-y-3">
                             <p className="text-sm font-medium text-slate-500 dark:text-[#9ca3af]">What will be the output?</p>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -210,7 +199,6 @@ export default function SnippetPracticePage() {
                             </div>
                         </div>
 
-                        {/* Explanation Area */}
                         {isAnswered && (
                             <div className="animate-fadeIn pt-2">
                                 <div className={`rounded-lg p-4 border ${isCorrect ? 'bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-900/30' : 'bg-amber-50 dark:bg-amber-900/10 border-amber-200 dark:border-amber-900/30'}`}>

@@ -78,7 +78,6 @@ export default async function DetailPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
       <div className="min-h-screen bg-dark-bg pt-24 pb-12 relative overflow-hidden">
-        {/* Background blobs */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
           <div className="glow-blob bg-primary-600/5 w-[800px] h-[800px] top-[0] right-[-200px] blur-[120px]"></div>
         </div>
@@ -93,7 +92,7 @@ export default async function DetailPage({ params }: PageProps) {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
             <div className="lg:col-span-2 space-y-8">
-              <div className="rounded-xl overflow-hidden border border-dark-border shadow-2xl bg-dark-card aspect-video relative group">
+              <div className="rounded-2xl overflow-hidden border border-dark-border shadow-2xl bg-dark-card aspect-video relative group">
                 <Image
                   src={template.imageUrl} 
                   alt={template.name}

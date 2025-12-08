@@ -30,16 +30,14 @@ export default function PracticePage() {
   const [activeTab, setActiveTab] = useState<PracticeTab>(PracticeTab.DESCRIPTION);
   
   // Resizable Layout State
-  const [leftWidth, setLeftWidth] = useState(50); // Percentage
-  const [consoleHeight, setConsoleHeight] = useState(35); // Percentage
+  const [leftWidth, setLeftWidth] = useState(50);
+  const [consoleHeight, setConsoleHeight] = useState(35);
   const [isDraggingH, setIsDraggingH] = useState(false);
   const [isDraggingV, setIsDraggingV] = useState(false);
   
-  // Refs
   const containerRef = useRef<HTMLDivElement>(null);
   const rightPanelRef = useRef<HTMLDivElement>(null);
   
-  // Console Capture Refs
   const originalConsoleRef = useRef({ log: console.log, error: console.error });
   const cleanupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -144,7 +142,6 @@ export default function PracticePage() {
   };
 
   const handleRunCode = async () => {
-    // If we are already running or just finished, clear any pending restoration timer
     if (cleanupTimerRef.current) {
         clearTimeout(cleanupTimerRef.current);
         cleanupTimerRef.current = null;
@@ -153,7 +150,6 @@ export default function PracticePage() {
     setIsRunning(true);
     setLogs([]);
 
-    // Proxy function to capture logs
     const proxyLog = (type: LogType, args: unknown[]) => {
        const content = args.map(arg => {
         if (arg === undefined) return 'undefined';
@@ -174,10 +170,8 @@ export default function PracticePage() {
         timestamp: new Date().toLocaleTimeString()
       };
       
-      // Update state immediately so async logs appear as they happen
       setLogs(prev => [...prev, newEntry]);
       
-      // Pass through to actual console for debugging
       if (type === LogType.ERROR) {
         originalConsoleRef.current.error(...args);
       } else {
@@ -190,10 +184,8 @@ export default function PracticePage() {
     console.error = (...args) => proxyLog(LogType.ERROR, args);
 
     try {
-      // Small delay to allow React to render loading state
       await new Promise(resolve => setTimeout(resolve, 50));
       
-      // Execute the code
       // eslint-disable-next-line no-new-func
       const func = new Function(code);
       func();
@@ -208,7 +200,6 @@ export default function PracticePage() {
       setIsRunning(false);
       if (consoleHeight < 20) setConsoleHeight(35);
       
-      // Wait 5 seconds before restoring console to catch async logs (setTimeout, Promises)
       cleanupTimerRef.current = setTimeout(() => {
           console.log = originalConsoleRef.current.log;
           console.error = originalConsoleRef.current.error;
@@ -224,7 +215,6 @@ export default function PracticePage() {
       />
       <div className="fixed inset-0 z-50 flex flex-col bg-slate-100 dark:bg-[#1a1a1a] text-slate-900 dark:text-[#eff1f6] font-sans transition-colors duration-300">
       
-      {/* Top Navigation Bar */}
       <nav className="h-12 bg-white dark:bg-[#262626] border-b border-slate-200 dark:border-[#333] flex items-center justify-between px-4 shrink-0 select-none">
         <div className="flex items-center gap-4">
             <button onClick={() => {
@@ -271,7 +261,6 @@ export default function PracticePage() {
         </div>
       </nav>
 
-      {/* Workspace Split Layout */}
       <div 
         ref={containerRef}
         className="flex-1 flex min-h-0 p-2 overflow-hidden bg-slate-100 dark:bg-[#1a1a1a]"
@@ -282,7 +271,6 @@ export default function PracticePage() {
             className="flex flex-col bg-white dark:bg-[#262626] rounded-lg overflow-hidden border border-slate-200 dark:border-[#333] min-w-[200px]"
             style={{ width: `${leftWidth}%` }}
         >
-            {/* Tabs */}
             <div className="h-10 bg-slate-50 dark:bg-[#333]/30 border-b border-slate-200 dark:border-[#3e3e3e] flex items-center gap-1 px-2 shrink-0">
                 <button 
                     onClick={() => setActiveTab(PracticeTab.DESCRIPTION)}
@@ -308,7 +296,6 @@ export default function PracticePage() {
                 </button>
             </div>
 
-            {/* Content */}
             <div className="flex-1 overflow-y-auto custom-scrollbar p-5">
                 {activeTab === PracticeTab.DESCRIPTION ? (
                     <div className="animate-fadeIn">
@@ -320,7 +307,6 @@ export default function PracticePage() {
                         </div>
                         
                         <div className="markdown-content">
-                             {/* Manually styled simple content or could re-use ReactMarkdown if imported */}
                              <div className="prose prose-sm max-w-none text-slate-700 dark:text-[#eff1f6] leading-relaxed whitespace-pre-wrap font-sans">
                                 {template.fullDescription}
                              </div>
@@ -338,7 +324,6 @@ export default function PracticePage() {
             </div>
         </div>
 
-        {/* Vertical Resizer */}
         <div 
             className={`resizer-v flex items-center justify-center hover:bg-primary-500/50 ${isDraggingH ? 'active bg-primary-600' : ''}`}
             onMouseDown={handleMouseDownH}
@@ -353,9 +338,7 @@ export default function PracticePage() {
             style={{ width: `calc(${100 - leftWidth}% - 4px)` }}
         >
             
-            {/* Editor Area */}
             <div className="flex-1 flex flex-col bg-white dark:bg-[#262626] rounded-t-lg overflow-hidden border border-slate-200 dark:border-[#333]">
-                {/* Editor Tabs */}
                 <div className="h-10 bg-slate-50 dark:bg-[#333]/30 border-b border-slate-200 dark:border-[#3e3e3e] flex items-center justify-between px-2 shrink-0">
                     <div className="flex items-center gap-1">
                         <div className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium bg-white dark:bg-[#1e1e1e] text-slate-900 dark:text-white border-t border-x border-slate-200 dark:border-[#3e3e3e] rounded-t-md relative -bottom-[1px]">
@@ -365,7 +348,6 @@ export default function PracticePage() {
                     </div>
                 </div>
 
-                {/* Code Editor Container */}
                 <div className="flex-1 relative bg-white dark:bg-[#1e1e1e] overflow-hidden">
                     <Editor
                         height="100%"
@@ -392,7 +374,6 @@ export default function PracticePage() {
                 </div>
             </div>
 
-            {/* Horizontal Resizer */}
             <div 
                 className={`resizer-h w-full flex items-center justify-center hover:bg-primary-500/50 ${isDraggingV ? 'active bg-primary-600' : ''}`}
                 onMouseDown={handleMouseDownV}
@@ -400,7 +381,6 @@ export default function PracticePage() {
                 <div className="h-[2px] w-8 bg-slate-300 dark:bg-zinc-600 rounded-full"></div>
             </div>
 
-            {/* Console Area */}
             <div 
                 className="flex flex-col bg-white dark:bg-[#262626] rounded-b-lg overflow-hidden border border-slate-200 dark:border-[#333]"
                 style={{ height: `${consoleHeight}%` }}
@@ -425,15 +405,11 @@ export default function PracticePage() {
                     ) : (
                         <div className="space-y-2 pb-4">
                             {(() => {
-                                // Find if any error logs exist
                                 const hasError = logs.some(log => log.type === LogType.ERROR);
-                                // Find the first error index, if any
                                 const firstErrorIdx = logs.findIndex(log => log.type === LogType.ERROR);
-                                // Determine heading properties
                                 const heading = hasError ? 'Runtime Error' : 'Standard Output';
                                 const icon = hasError ? <AlertCircle size={12} /> : <CheckCircle2 size={12} />;
                                 const textColor = hasError ? 'text-red-500 dark:text-red-400' : 'text-slate-500 dark:text-[#9ca3af]';
-                                // Use earliest error timestamp, otherwise last log timestamp
                                 const timestamp =
                                     hasError
                                         ? logs[firstErrorIdx].timestamp
@@ -441,12 +417,10 @@ export default function PracticePage() {
                                             ? logs[logs.length - 1].timestamp
                                             : '';
 
-                                // Choose box styles
                                 const boxClasses = hasError
                                     ? 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-900/30 text-red-700 dark:text-red-300'
                                     : 'bg-slate-100 dark:bg-[#333]/50 border-slate-200 dark:border-[#3e3e3e] text-slate-800 dark:text-[#eff1f6]';
 
-                                // Join log outputs with newlines
                                 const output = logs.map(log => log.content).join('\n');
 
                                 return (
