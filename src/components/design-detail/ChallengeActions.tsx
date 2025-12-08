@@ -24,7 +24,7 @@ export const ChallengeActions: React.FC<ChallengeActionsProps> = ({ template }) 
             onClick={() => router.push(`/practice/${template.slug}`)}
             variant={ButtonVariant.PRIMARY}
             size={ButtonSize.LG}
-            className="w-full shadow-lg shadow-primary-500/20 dark:shadow-[0_0_20px_rgba(74,222,128,0.3)] border-primary-500/50"
+            className="w-full shadow-[0_0_20px_rgba(74,222,128,0.3)] border-primary-500/50"
             icon={<PlayCircle size={18} fill="currentColor" className="text-white/20" />}
           >
             Open Code Editor
@@ -37,7 +37,7 @@ export const ChallengeActions: React.FC<ChallengeActionsProps> = ({ template }) 
             onClick={() => router.push(`/snippet-practice/${template.slug}`)}
             variant={ButtonVariant.PRIMARY}
             size={ButtonSize.LG}
-            className="w-full shadow-lg shadow-primary-500/20 dark:shadow-[0_0_20px_rgba(74,222,128,0.3)] border-primary-500/50"
+            className="w-full shadow-[0_0_20px_rgba(74,222,128,0.3)] border-primary-500/50"
             icon={<PlayCircle size={18} fill="currentColor" className="text-white/20" />}
           >
             Start Snippet Practice

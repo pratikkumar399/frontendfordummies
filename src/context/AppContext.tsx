@@ -8,7 +8,6 @@ interface AppContextType {
   templates: Template[];
   addTemplate: (template: Template) => void;
   isDarkMode: boolean;
-  toggleTheme: () => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   selectedCategory: Category | 'All';
@@ -18,8 +17,8 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Theme State
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+  // Theme State - Always dark mode
+  const isDarkMode = true;
 
   // Data State
   const [templates, setTemplates] = useState<Template[]>([]);
@@ -30,32 +29,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useEffect(() => {
     // Load from local storage or fallback to constants
     setTemplates(INITIAL_TEMPLATES);
-
-    // Check system preference for dark mode
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setIsDarkMode(true);
-    }
   }, []);
 
-  // Update DOM when theme changes
+  // Ensure dark mode is always applied
   useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [isDarkMode]);
-
-  // Persist templates when changed
-  // useEffect(() => {
-  //   if (templates.length > 0) {
-  //     localStorage.setItem('uihub_templates', JSON.stringify(templates));
-  //   }
-  // }, [templates]);
-
-  const toggleTheme = () => {
-    setIsDarkMode(prev => !prev);
-  };
+    document.documentElement.classList.add('dark');
+  }, []);
 
   const addTemplate = (template: Template) => {
     setTemplates(prev => [template, ...prev]);
@@ -67,7 +46,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         templates,
         addTemplate,
         isDarkMode,
-        toggleTheme,
         searchQuery,
         setSearchQuery,
         selectedCategory,

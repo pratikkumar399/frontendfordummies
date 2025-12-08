@@ -107,7 +107,7 @@ export default function PracticePage() {
 
   if (!template) {
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-[#1a1a1a] flex flex-col items-center justify-center p-4 text-slate-900 dark:text-white transition-colors duration-300">
+        <div className="min-h-screen bg-[#1a1a1a] flex flex-col items-center justify-center p-4 text-white">
              <h2 className="text-xl mb-4">Template not found</h2>
              <button onClick={() => router.push('/')} className="px-4 py-2 bg-primary-600 text-white rounded hover:bg-primary-700">Go Home</button>
         </div>
@@ -210,9 +210,9 @@ export default function PracticePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <div className="fixed inset-0 z-50 flex flex-col bg-slate-100 dark:bg-[#1a1a1a] text-slate-900 dark:text-[#eff1f6] font-sans transition-colors duration-300">
+      <div className="fixed inset-0 z-50 flex flex-col bg-[#1a1a1a] text-[#eff1f6] font-sans">
       
-      <nav className="h-12 bg-white dark:bg-[#262626] border-b border-slate-200 dark:border-[#333] flex items-center justify-between px-4 shrink-0 select-none">
+      <nav className="h-12 bg-[#262626] border-b border-[#333] flex items-center justify-between px-4 shrink-0 select-none">
         <div className="flex items-center gap-4">
             <button onClick={() => {
               if (window.history.length > 1 && document.referrer.includes(window.location.host)) {
@@ -220,20 +220,20 @@ export default function PracticePage() {
               } else {
                 router.push(`/design/${slug}`);
               }
-            }} className="text-slate-500 dark:text-[#9ca3af] hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-2 text-sm font-medium">
+            }} className="text-[#9ca3af] hover:text-white transition-colors flex items-center gap-2 text-sm font-medium">
                 <ChevronLeft size={16} />
                 Back
             </button>
-            <div className="h-4 w-[1px] bg-slate-200 dark:bg-[#444]"></div>
+            <div className="h-4 w-[1px] bg-[#444]"></div>
             <div className="flex items-center gap-2">
-                <span className="font-medium text-sm text-slate-800 dark:text-white">{template.name}</span>
+                <span className="font-medium text-sm text-white">{template.name}</span>
             </div>
         </div>
         
         <div className="flex items-center gap-3">
              <button 
                 onClick={() => setCode(template.starterCode || '')}
-                className="p-1.5 text-slate-500 dark:text-[#9ca3af] hover:bg-slate-100 dark:hover:bg-[#3e3e3e] rounded-md transition-colors"
+                className="p-1.5 text-[#9ca3af] hover:bg-[#3e3e3e] rounded-md transition-colors"
                 title="Reset Code"
              >
                 <RotateCcw size={15} />
@@ -243,7 +243,7 @@ export default function PracticePage() {
                 onClick={handleRunCode} 
                 disabled={isRunning}
                 className={`flex items-center gap-2 px-4 py-1.5 rounded-md text-sm font-medium transition-all ${
-                    isRunning ? 'bg-slate-200 dark:bg-[#3e3e3e] text-slate-500 dark:text-[#9ca3af] cursor-not-allowed' : 'bg-green-600/90 hover:bg-green-600 text-white shadow-lg shadow-green-900/20'
+                    isRunning ? 'bg-[#3e3e3e] text-[#9ca3af] cursor-not-allowed' : 'bg-green-600/90 hover:bg-green-600 text-white shadow-lg shadow-green-900/20'
                 }`}
              >
                 {isRunning ? (
@@ -260,21 +260,21 @@ export default function PracticePage() {
 
       <div 
         ref={containerRef}
-        className="flex-1 flex min-h-0 p-2 overflow-hidden bg-slate-100 dark:bg-[#1a1a1a]"
+        className="flex-1 flex min-h-0 p-2 overflow-hidden bg-[#1a1a1a]"
       >
         
         {/* LEFT PANEL: Description */}
         <div 
-            className="flex flex-col bg-white dark:bg-[#262626] rounded-lg overflow-hidden border border-slate-200 dark:border-[#333] min-w-[200px]"
+            className="flex flex-col bg-[#262626] rounded-lg overflow-hidden border border-[#333] min-w-[200px]"  
             style={{ width: `${leftWidth}%` }}
         >
-            <div className="h-10 bg-slate-50 dark:bg-[#333]/30 border-b border-slate-200 dark:border-[#3e3e3e] flex items-center gap-1 px-2 shrink-0">
+            <div className="h-10 bg-[#333]/30 border-b border-[#3e3e3e] flex items-center gap-1 px-2 shrink-0">
                 <button 
                     onClick={() => setActiveTab(PracticeTab.DESCRIPTION)}
                     className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-t-md transition-colors ${
                         activeTab === PracticeTab.DESCRIPTION 
-                        ? 'bg-white dark:bg-[#262626] text-slate-900 dark:text-white border-t border-x border-slate-200 dark:border-[#3e3e3e] relative -bottom-[1px]' 
-                        : 'text-slate-500 dark:text-[#9ca3af] hover:text-slate-900 dark:hover:text-white'
+                        ? 'bg-[#262626] text-white border-t border-x border-[#3e3e3e] relative -bottom-[1px]' 
+                        : 'text-[#9ca3af] hover:text-white'
                     }`}
                 >
                     <FileText size={13} className="text-blue-500" />
@@ -284,8 +284,8 @@ export default function PracticePage() {
                     onClick={() => setActiveTab(PracticeTab.EDITORIAL)}
                     className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-t-md transition-colors ${
                         activeTab === PracticeTab.EDITORIAL 
-                        ? 'bg-white dark:bg-[#262626] text-slate-900 dark:text-white border-t border-x border-slate-200 dark:border-[#3e3e3e] relative -bottom-[1px]' 
-                        : 'text-slate-500 dark:text-[#9ca3af] hover:text-slate-900 dark:hover:text-white'
+                        ? 'bg-[#262626] text-white border-t border-x border-[#3e3e3e] relative -bottom-[1px]' 
+                        : 'text-[#9ca3af] hover:text-white'
                     }`}
                 >
                     <Code2 size={13} className="text-orange-500" />
@@ -296,25 +296,25 @@ export default function PracticePage() {
             <div className="flex-1 overflow-y-auto custom-scrollbar p-5">
                 {activeTab === PracticeTab.DESCRIPTION ? (
                     <div className="animate-fadeIn">
-                        <h1 className="text-xl font-bold text-slate-900 dark:text-white mb-4">{template.name}</h1>
+                        <h1 className="text-xl font-bold text-white mb-4">{template.name}</h1>
                         <div className="flex gap-2 mb-6">
                             {template.tags.filter(tag => !['Easy', 'Medium', 'Hard'].includes(tag)).map(tag => (
-                                <span key={tag} className="px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-[#3e3e3e] text-xs font-medium text-slate-600 dark:text-[#9ca3af] border border-slate-200 dark:border-[#4a4a4a]">{tag}</span>
+                                <span key={tag} className="px-2.5 py-0.5 rounded-full bg-[#3e3e3e] text-xs font-medium text-[#9ca3af] border border-[#4a4a4a]">{tag}</span>
                             ))}
                         </div>
                         
                         <div className="markdown-content">
-                             <div className="prose prose-sm max-w-none text-slate-700 dark:text-[#eff1f6] leading-relaxed whitespace-pre-wrap font-sans">
+                             <div className="prose prose-sm max-w-none text-[#eff1f6] leading-relaxed whitespace-pre-wrap font-sans">
                                 {template.fullDescription}
                              </div>
                         </div>
                     </div>
                 ) : (
-                    <div className="flex flex-col items-center justify-center h-full text-slate-400 dark:text-[#9ca3af] p-8 text-center">
-                        <div className="bg-slate-100 dark:bg-[#333] p-4 rounded-full mb-4">
+                    <div className="flex flex-col items-center justify-center h-full text-[#9ca3af] p-8 text-center">
+                        <div className="bg-[#333] p-4 rounded-full mb-4">
                             <Code2 size={24} />
                         </div>
-                        <h3 className="text-slate-900 dark:text-white font-medium mb-2">Editorial Locked</h3>
+                        <h3 className="text-white font-medium mb-2">Editorial Locked</h3>
                         <p className="text-sm">Solve the problem to unlock the official editorial and optimization tips.</p>
                     </div>
                 )}
@@ -325,7 +325,7 @@ export default function PracticePage() {
             className={`resizer-v flex items-center justify-center hover:bg-primary-500/50 ${isDraggingH ? 'active bg-primary-600' : ''}`}
             onMouseDown={handleMouseDownH}
         >
-            <div className="w-[2px] h-8 bg-slate-300 dark:bg-zinc-600 rounded-full"></div>
+            <div className="w-[2px] h-8 bg-zinc-600 rounded-full"></div>
         </div>
 
         {/* RIGHT PANEL: Editor & Console */}
@@ -335,20 +335,20 @@ export default function PracticePage() {
             style={{ width: `calc(${100 - leftWidth}% - 4px)` }}
         >
             
-            <div className="flex-1 flex flex-col bg-white dark:bg-[#262626] rounded-t-lg overflow-hidden border border-slate-200 dark:border-[#333]">
-                <div className="h-10 bg-slate-50 dark:bg-[#333]/30 border-b border-slate-200 dark:border-[#3e3e3e] flex items-center justify-between px-2 shrink-0">
+            <div className="flex-1 flex flex-col bg-[#262626] rounded-t-lg overflow-hidden border border-[#333]">
+                <div className="h-10 bg-[#333]/30 border-b border-[#3e3e3e] flex items-center justify-between px-2 shrink-0">
                     <div className="flex items-center gap-1">
-                        <div className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium bg-white dark:bg-[#1e1e1e] text-slate-900 dark:text-white border-t border-x border-slate-200 dark:border-[#3e3e3e] rounded-t-md relative -bottom-[1px]">
-                            <span className="text-green-600 dark:text-green-500 text-[10px]">{`</>`}</span>
+                        <div className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium bg-[#1e1e1e] text-white border-t border-x border-[#3e3e3e] rounded-t-md relative -bottom-[1px]">
+                            <span className="text-green-500 text-[10px]">{`</>`}</span>
                             JavaScript
                         </div>
                     </div>
                 </div>
 
-                <div className="flex-1 relative bg-white dark:bg-[#1e1e1e] overflow-hidden">
+                <div className="flex-1 relative bg-[#1e1e1e] overflow-hidden">
                     <Editor
                         height="100%"
-                        theme={isDarkMode ? "vs-dark" : "light"}
+                        theme="vs-dark"
                         defaultLanguage="javascript"
                         language="javascript"
                         value={code}
@@ -375,28 +375,28 @@ export default function PracticePage() {
                 className={`resizer-h w-full flex items-center justify-center hover:bg-primary-500/50 ${isDraggingV ? 'active bg-primary-600' : ''}`}
                 onMouseDown={handleMouseDownV}
             >
-                <div className="h-[2px] w-8 bg-slate-300 dark:bg-zinc-600 rounded-full"></div>
+                <div className="h-[2px] w-8 bg-zinc-600 rounded-full"></div>
             </div>
 
             <div 
-                className="flex flex-col bg-white dark:bg-[#262626] rounded-b-lg overflow-hidden border border-slate-200 dark:border-[#333]"
+                className="flex flex-col bg-[#262626] rounded-b-lg overflow-hidden border border-[#333]"
                 style={{ height: `${consoleHeight}%` }}
             >
-                <div className="h-9 bg-slate-50 dark:bg-[#333]/30 border-b border-slate-200 dark:border-[#3e3e3e] flex items-center px-4 justify-between shrink-0">
-                     <div className="flex items-center gap-2 text-slate-500 dark:text-[#9ca3af] text-xs font-medium">
+                <div className="h-9 bg-[#333]/30 border-b border-[#3e3e3e] flex items-center px-4 justify-between shrink-0">
+                     <div className="flex items-center gap-2 text-[#9ca3af] text-xs font-medium">
                         <Terminal size={14} />
                         Test Result
                      </div>
                      {logs.length > 0 && (
-                        <button onClick={() => setLogs([])} className="text-xs text-slate-500 hover:text-slate-900 dark:text-[#9ca3af] dark:hover:text-white transition-colors">
+                        <button onClick={() => setLogs([])} className="text-xs text-[#9ca3af] hover:text-white transition-colors">
                             Clear
                         </button>
                      )}
                 </div>
                 
-                <div className="flex-1 overflow-y-auto p-4 font-mono text-sm bg-white dark:bg-[#262626]">
+                <div className="flex-1 overflow-y-auto p-4 font-mono text-sm bg-[#262626]">
                     {logs.length === 0 ? (
-                        <div className="h-full flex flex-col items-center justify-center text-slate-400 dark:text-[#555]">
+                        <div className="h-full flex flex-col items-center justify-center text-[#555]">
                             <div className="mb-2 opacity-50">Run code to see output</div>
                         </div>
                     ) : (
@@ -406,7 +406,7 @@ export default function PracticePage() {
                                 const firstErrorIdx = logs.findIndex(log => log.type === LogType.ERROR);
                                 const heading = hasError ? 'Runtime Error' : 'Standard Output';
                                 const icon = hasError ? <AlertCircle size={12} /> : <CheckCircle2 size={12} />;
-                                const textColor = hasError ? 'text-red-500 dark:text-red-400' : 'text-slate-500 dark:text-[#9ca3af]';
+                                const textColor = hasError ? 'text-red-400' : 'text-[#9ca3af]';
                                 const timestamp =
                                     hasError
                                         ? logs[firstErrorIdx].timestamp
@@ -415,8 +415,8 @@ export default function PracticePage() {
                                             : '';
 
                                 const boxClasses = hasError
-                                    ? 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-900/30 text-red-700 dark:text-red-300'
-                                    : 'bg-slate-100 dark:bg-[#333]/50 border-slate-200 dark:border-[#3e3e3e] text-slate-800 dark:text-[#eff1f6]';
+                                    ? 'bg-red-900/10 border-red-900/30 text-red-300'
+                                    : 'bg-[#333]/50 border-[#3e3e3e] text-[#eff1f6]';
 
                                 const output = logs.map(log => log.content).join('\n');
 

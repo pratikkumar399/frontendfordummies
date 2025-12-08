@@ -22,7 +22,7 @@ export default function SnippetPracticePage() {
 
   if (!template || !template.snippets) {
      return (
-        <div className="min-h-screen bg-slate-50 dark:bg-[#1a1a1a] flex flex-col items-center justify-center p-4 text-slate-900 dark:text-white">
+        <div className="min-h-screen bg-[#1a1a1a] flex flex-col items-center justify-center p-4 text-white">
              <h2 className="text-xl mb-4">Snippet Collection not found</h2>
              <Button onClick={() => router.push('/')}>Go Home</Button>
         </div>
@@ -97,19 +97,19 @@ export default function SnippetPracticePage() {
       <div className="min-h-screen bg-dark-bg pt-16">
       
       {/* Header */}
-      <nav className="sticky w-[80%] mx-auto top-0 z-40  h-16 flex justify-center items-center px-4 sm:px-6 lg:px-8">
+      <nav className="sticky w-[80%] mx-auto top-0 z-40 h-16 flex justify-center items-center px-4 sm:px-6 lg:px-8">
         <button onClick={() => {
           if (window.history.length > 1 && document.referrer.includes(window.location.host)) {
             router.back();
           } else {
             router.push(`/design/${slug}`);
           }
-        }} className="flex items-center gap-2 text-slate-500 dark:text-[#9ca3af] hover:text-slate-900 dark:hover:text-white transition-colors">
+        }} className="flex items-center gap-2 text-[#9ca3af] hover:text-white transition-colors">
             <ChevronLeft size={20} />
             <span className="font-medium">Back</span>
         </button>
-        <div className="h-6 w-[1px] bg-slate-200 dark:bg-[#444] mx-4"></div>
-        <h1 className="text-lg font-bold truncate">{template.name}</h1>
+        <div className="h-6 w-[1px] bg-[#444] mx-4"></div>
+        <h1 className="text-lg font-bold truncate text-white">{template.name}</h1>
       </nav>
 
       {/* Content */}
@@ -122,10 +122,10 @@ export default function SnippetPracticePage() {
             const currentOutput = output[snippet.id];
 
             return (
-                <div key={snippet.id} className="bg-white dark:bg-[#262626] rounded-xl border border-slate-200 dark:border-[#333] shadow-lg overflow-hidden animate-fadeIn" style={{ animationDelay: `${index * 100}ms` }}>
-                    <div className="bg-slate-50 dark:bg-[#333]/30 px-6 py-4 border-b border-slate-200 dark:border-[#3e3e3e] flex justify-between items-center">
-                        <h3 className="font-bold text-lg text-slate-800 dark:text-white">
-                            <span className="text-primary-600 dark:text-primary-400 mr-2">#{index + 1}</span> 
+                <div key={snippet.id} className="bg-[#262626] rounded-xl border border-[#333] shadow-lg overflow-hidden animate-fadeIn" style={{ animationDelay: `${index * 100}ms` }}>
+                    <div className="bg-[#333]/30 px-6 py-4 border-b border-[#3e3e3e] flex justify-between items-center">
+                        <h3 className="font-bold text-lg text-white">
+                            <span className="text-primary-400 mr-2">#{index + 1}</span> 
                             {snippet.title}
                         </h3>
                     </div>
@@ -137,7 +137,7 @@ export default function SnippetPracticePage() {
                                     size={ButtonSize.SM} 
                                     variant={ButtonVariant.SECONDARY}
                                     onClick={() => handleRunSnippet(snippet.id, snippet.code)}
-                                    className="bg-white dark:bg-[#333] shadow-sm text-xs h-8"
+                                    className="bg-[#333] shadow-sm text-xs h-8"
                                 >
                                     <Play size={12} className="mr-1.5 text-green-600" fill="currentColor" />
                                     Run Code
@@ -166,18 +166,18 @@ export default function SnippetPracticePage() {
                         )}
 
                         <div className="space-y-3">
-                            <p className="text-sm font-medium text-slate-500 dark:text-[#9ca3af]">What will be the output?</p>
+                            <p className="text-sm font-medium text-[#9ca3af]">What will be the output?</p>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 {snippet.options?.map((option, optIdx) => {
-                                    let stateClass = "border-slate-200 dark:border-[#3e3e3e] hover:border-primary-500 dark:hover:border-primary-400 bg-white dark:bg-[#262626]";
+                                    let stateClass = "border-[#3e3e3e] hover:border-primary-400 bg-[#262626] text-white";
                                     
                                     if (isAnswered) {
                                         if (optIdx === snippet.correctAnswer) {
-                                            stateClass = "border-green-500 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 ring-1 ring-green-500";
+                                            stateClass = "border-green-500 bg-green-900/20 text-green-300 ring-1 ring-green-500";
                                         } else if (optIdx === userAns) {
-                                            stateClass = "border-red-500 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 ring-1 ring-red-500";
+                                            stateClass = "border-red-500 bg-red-900/20 text-red-300 ring-1 ring-red-500";
                                         } else {
-                                            stateClass = "opacity-50 border-slate-200 dark:border-[#3e3e3e]";
+                                            stateClass = "opacity-50 border-[#3e3e3e] text-white";
                                         }
                                     }
 
@@ -201,14 +201,14 @@ export default function SnippetPracticePage() {
 
                         {isAnswered && (
                             <div className="animate-fadeIn pt-2">
-                                <div className={`rounded-lg p-4 border ${isCorrect ? 'bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-900/30' : 'bg-amber-50 dark:bg-amber-900/10 border-amber-200 dark:border-amber-900/30'}`}>
+                                <div className={`rounded-lg p-4 border ${isCorrect ? 'bg-green-900/10 border-green-900/30' : 'bg-amber-900/10 border-amber-900/30'}`}>
                                     <div className="flex items-start gap-3">
-                                        <Info size={18} className={`mt-0.5 shrink-0 ${isCorrect ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'}`} />
+                                        <Info size={18} className={`mt-0.5 shrink-0 ${isCorrect ? 'text-green-400' : 'text-amber-400'}`} />
                                         <div>
-                                            <h4 className={`text-sm font-bold mb-1 ${isCorrect ? 'text-green-800 dark:text-green-300' : 'text-amber-800 dark:text-amber-300'}`}>
+                                            <h4 className={`text-sm font-bold mb-1 ${isCorrect ? 'text-green-300' : 'text-amber-300'}`}>
                                                 {isCorrect ? 'Correct!' : 'Incorrect'}
                                             </h4>
-                                            <p className={`text-sm leading-relaxed ${isCorrect ? 'text-green-700 dark:text-green-200' : 'text-amber-700 dark:text-amber-200'}`}>
+                                            <p className={`text-sm leading-relaxed ${isCorrect ? 'text-green-200' : 'text-amber-200'}`}>
                                                 {snippet.explanation}
                                             </p>
                                         </div>
