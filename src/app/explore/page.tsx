@@ -3,7 +3,8 @@
 import { useState, useMemo } from 'react';
 import { useApp } from '@/context/AppContext';
 import { TemplateCard } from '@/components/TemplateCard';
-import { Category } from '@/types/types';
+import { Category, ButtonVariant, ButtonSize } from '@/types/types';
+import { Button } from '@/components/ui/Button';
 import { Search, Layers, ChevronRight, Zap, Menu, X } from 'lucide-react';
 
 export default function ExplorePage() {
@@ -98,19 +99,24 @@ export default function ExplorePage() {
                     <Layers size={20} className="text-primary-500" />
                     Categories
                 </h2>
-                <button 
+                <Button 
                     onClick={() => setIsSidebarOpen(false)}
+                    variant={ButtonVariant.GHOST}
+                    size={ButtonSize.SM}
                     className="md:hidden p-2 text-zinc-400 hover:text-white rounded-lg hover:bg-white/10"
+                    icon={<X size={20} />}
                 >
-                    <X size={20} />
-                </button>
+                  Close
+                </Button>
             </div>
 
             <nav className="space-y-2">
               {categories.map((cat) => (
-                <button
+                <Button
                   key={cat}
                   onClick={() => handleCategorySelect(cat as Category | 'All')}
+                  variant={ButtonVariant.GHOST}
+                  size={ButtonSize.MD}
                   className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
                     selectedCategory === cat
                       ? 'bg-primary-600/10 text-primary-400 border border-primary-600/20'
@@ -119,7 +125,7 @@ export default function ExplorePage() {
                 >
                   <span>{cat}</span>
                   {selectedCategory === cat && <ChevronRight size={14} />}
-                </button>
+                </Button>
               ))}
             </nav>
           </div>
@@ -132,12 +138,15 @@ export default function ExplorePage() {
           <div className="mb-8 flex flex-col gap-6">
              {/* Title Row with Mobile Menu Trigger */}
             <div className="flex items-center gap-3 md:block">
-                <button 
+                <Button 
                     onClick={() => setIsSidebarOpen(true)}
+                    variant={ButtonVariant.GHOST}
+                    size={ButtonSize.SM}
                     className="md:hidden p-2 -ml-2 text-zinc-400 hover:text-white rounded-lg hover:bg-white/5"
+                    icon={<Menu size={24} />}
                 >
-                    <Menu size={24} />
-                </button>
+                  Menu
+                </Button>
                 
                 <div className="flex-1 md:flex md:items-end md:justify-between md:mb-4">
                     <div>
@@ -187,12 +196,14 @@ export default function ExplorePage() {
                 <p className="text-zinc-500 mb-6 text-sm max-w-xs mx-auto">
                   We couldn&apos;t find any challenges matching your search filters.
                 </p>
-                <button 
+                <Button 
                   onClick={() => {setSearchQuery(''); setSelectedCategory('All');}}
+                  variant={ButtonVariant.GHOST}
+                  size={ButtonSize.SM}
                   className="text-primary-400 hover:text-primary-300 transition-colors font-medium text-sm border-b border-primary-400/30 hover:border-primary-300"
                 >
                   Clear all filters
-                </button>
+                </Button>
               </div>
             )}
           </div>

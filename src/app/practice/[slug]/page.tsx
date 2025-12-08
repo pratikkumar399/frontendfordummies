@@ -1,14 +1,14 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
-import { useParams } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname, useParams } from 'next/navigation';
 import { useApp } from '@/context/AppContext';
 import Editor from '@monaco-editor/react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
-import { LogType, PracticeTab, LogEntry } from '@/types/types';
+import { Button } from '@/components/ui/Button';
+import { LogType, PracticeTab, LogEntry, ButtonVariant, ButtonSize } from '@/types/types';
 import { 
   Play, 
   RotateCcw, 
@@ -26,13 +26,25 @@ export default function PracticePage() {
   const { slug } = useParams<{ slug: string }>();
   const { templates, isDarkMode } = useApp();
   const router = useRouter();
+  const pathname = usePathname();
   const template = templates.find(t => t.slug === slug);
+  const searchParams = useSearchParams();
 
   // Editor State
   const [code, setCode] = useState('');
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [isRunning, setIsRunning] = useState(false);
+
   const [activeTab, setActiveTab] = useState<PracticeTab>(PracticeTab.DESCRIPTION);
+
+
+
+  const updateTabQuery = (tab: PracticeTab) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('tab', tab);
+    router.replace(`${pathname}?${params.toString()}`);
+    setActiveTab(tab);
+  };
   
   // Resizable Layout State
   const [leftWidth, setLeftWidth] = useState(50);
@@ -52,6 +64,16 @@ export default function PracticePage() {
       setCode(template.starterCode);
     }
   }, [template]);
+
+    // Initialize tab from query param and keep it in sync
+  useEffect(() => {
+    const tabParam = searchParams.get('tab');
+    if (tabParam === PracticeTab.EDITORIAL) {
+      setActiveTab(PracticeTab.EDITORIAL);
+    } else {
+      setActiveTab(PracticeTab.DESCRIPTION);
+    }
+  }, [searchParams]);
 
   // Cleanup console override on unmount
   useEffect(() => {
@@ -114,7 +136,7 @@ export default function PracticePage() {
     return (
         <div className="min-h-screen bg-[#1a1a1a] flex flex-col items-center justify-center p-4 text-white">
              <h2 className="text-xl mb-4">Template not found</h2>
-             <button onClick={() => router.push('/')} className="px-4 py-2 bg-primary-600 text-white rounded hover:bg-primary-700">Go Home</button>
+             <Button onClick={() => router.push('/')} variant={ButtonVariant.PRIMARY} size={ButtonSize.SM}>Go Home</Button>
         </div>
     );
   }
@@ -219,16 +241,21 @@ export default function PracticePage() {
       
       <nav className="h-12 bg-[#262626] border-b border-[#333] flex items-center justify-between px-4 shrink-0 select-none">
         <div className="flex items-center gap-4">
-            <button onClick={() => {
-              if (window.history.length > 1 && document.referrer.includes(window.location.host)) {
-                router.back();
-              } else {
-                router.push(`/design/${slug}`);
-              }
-            }} className="text-[#9ca3af] hover:text-white transition-colors flex items-center gap-2 text-sm font-medium">
-                <ChevronLeft size={16} />
-                Back
-            </button>
+            <Button 
+              onClick={() => {
+                if (window.history.length > 1 && document.referrer.includes(window.location.host)) {
+                  router.back();
+                } else {
+                  router.push(`/design/${slug}`);
+                }
+              }}
+              variant={ButtonVariant.GHOST}
+              size={ButtonSize.SM}
+              className="text-[#9ca3af] hover:text-white bg-transparent hover:bg-transparent flex items-center gap-2 text-sm font-medium"
+              icon={<ChevronLeft size={16} />}
+            >
+              Back
+            </Button> 
             <div className="h-4 w-[1px] bg-[#444]"></div>
             <div className="flex items-center gap-2">
                 <span className="font-medium text-sm text-white">{template.name}</span>
@@ -236,30 +263,27 @@ export default function PracticePage() {
         </div>
         
         <div className="flex items-center gap-3">
-             <button 
+             <Button 
                 onClick={() => setCode(template.starterCode || '')}
-                className="p-1.5 text-[#9ca3af] hover:bg-[#3e3e3e] rounded-md transition-colors"
+                variant={ButtonVariant.GHOST}
+                size={ButtonSize.SM}
+                className="p-1.5 text-[#9ca3af] hover:bg-[#3e3e3e]"
                 title="Reset Code"
+                icon={<RotateCcw size={15} />}
              >
-                <RotateCcw size={15} />
-             </button>
+                Reset Code
+             </Button>
              
-             <button 
+             <Button 
                 onClick={handleRunCode} 
                 disabled={isRunning}
-                className={`flex items-center gap-2 px-4 py-1.5 rounded-md text-sm font-medium transition-all ${
-                    isRunning ? 'bg-[#3e3e3e] text-[#9ca3af] cursor-not-allowed' : 'bg-green-600/90 hover:bg-green-600 text-white shadow-lg shadow-green-900/20'
-                }`}
+                variant={ButtonVariant.PRIMARY}
+                size={ButtonSize.SM}
+                icon={!isRunning ? <Play size={14} fill="currentColor" /> : undefined}
+                className={isRunning ? 'bg-[#3e3e3e] text-[#9ca3af] cursor-not-allowed' : 'bg-green-600/90 hover:bg-green-600 shadow-lg shadow-green-900/20'}
              >
-                {isRunning ? (
-                    <span className="animate-pulse">Running...</span>
-                ) : (
-                    <>
-                        <Play size={14} fill="currentColor" />
-                        Run
-                    </>
-                )}
-             </button>
+                {isRunning ? <span className="animate-pulse">Running...</span> : 'Run'}
+             </Button>
         </div>
       </nav>
 
@@ -270,32 +294,36 @@ export default function PracticePage() {
         
         {/* LEFT PANEL: Description */}
         <div 
-            className="flex flex-col bg-[#262626] rounded-lg overflow-hidden border border-[#333] min-w-[200px]"  
+            className="flex flex-col bg-[#262626] rounded-[12px] overflow-hidden border border-[#333] min-w-[200px]"  
             style={{ width: `${leftWidth}%` }}
         >
             <div className="h-10 bg-[#333]/30 border-b border-[#3e3e3e] flex items-center gap-1 px-2 shrink-0">
-                <button 
-                    onClick={() => setActiveTab(PracticeTab.DESCRIPTION)}
+                <Button 
+                    onClick={() => updateTabQuery(PracticeTab.DESCRIPTION)}
+                    variant={ButtonVariant.GHOST}
+                    size={ButtonSize.SM}
                     className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-t-md transition-colors ${
                         activeTab === PracticeTab.DESCRIPTION 
                         ? 'bg-[#262626] text-white border-t border-x border-[#3e3e3e] relative -bottom-[1px]' 
                         : 'text-[#9ca3af] hover:text-white'
                     }`}
+                    icon={<FileText size={13} className="text-blue-500" />}
                 >
-                    <FileText size={13} className="text-blue-500" />
                     Description
-                </button>
-                <button 
-                    onClick={() => setActiveTab(PracticeTab.EDITORIAL)}
+                </Button>
+                <Button 
+                    onClick={() => updateTabQuery(PracticeTab.EDITORIAL)}
+                    variant={ButtonVariant.GHOST}
+                    size={ButtonSize.SM}
                     className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-t-md transition-colors ${
                         activeTab === PracticeTab.EDITORIAL 
                         ? 'bg-[#262626] text-white border-t border-x border-[#3e3e3e] relative -bottom-[1px]' 
                         : 'text-[#9ca3af] hover:text-white'
                     }`}
+                    icon={<Code2 size={13} className="text-orange-500" />}
                 >
-                    <Code2 size={13} className="text-orange-500" />
                     Editorial
-                </button>
+                </Button>
             </div>
 
             <div className="flex-1 overflow-y-auto custom-scrollbar p-5">
@@ -389,7 +417,7 @@ export default function PracticePage() {
             style={{ width: `calc(${100 - leftWidth}% - 4px)` }}
         >
             
-            <div className="flex-1 flex flex-col bg-[#262626] rounded-t-lg overflow-hidden border border-[#333]">
+            <div className="flex-1 flex flex-col bg-[#262626] rounded-[12px] overflow-hidden border border-[#333]">
                 <div className="h-10 bg-[#333]/30 border-b border-[#3e3e3e] flex items-center justify-between px-2 shrink-0">
                     <div className="flex items-center gap-1">
                         <div className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium bg-[#1e1e1e] text-white border-t border-x border-[#3e3e3e] rounded-t-md relative -bottom-[1px]">
@@ -442,9 +470,14 @@ export default function PracticePage() {
                         Test Result
                      </div>
                      {logs.length > 0 && (
-                        <button onClick={() => setLogs([])} className="text-xs text-[#9ca3af] hover:text-white transition-colors">
+                        <Button 
+                          onClick={() => setLogs([])} 
+                          variant={ButtonVariant.GHOST} 
+                          size={ButtonSize.SM} 
+                          className="text-xs text-[#9ca3af] hover:text-white bg-transparent hover:bg-transparent px-2 py-1"
+                        >
                             Clear
-                        </button>
+                        </Button>
                      )}
                 </div>
                 
@@ -510,13 +543,16 @@ const EditorialCodeBlock = ({ language, value }: { language: string, value: stri
 
   return (
     <div className="relative group my-4">
-      <button
+      <Button
         onClick={onCopy}
-        className="absolute top-2 right-2 p-2 rounded-md bg-zinc-700/50 bg-zinc-700 text-zinc-400 hover:text-white opacity-0 opacity-100 transition-all duration-200 z-10"
+        variant={ButtonVariant.GHOST}
+        size={ButtonSize.SM}
+        className="absolute top-2 right-2 p-2 rounded-[6px] bg-zinc-700/50 text-zinc-400 hover:text-white opacity-0 group-hover:opacity-100 transition-all duration-200 z-10"
         title="Copy code"
+        icon={isCopied ? <Check size={16} className="text-green-400" /> : <Copy size={16} />}
       >
-        {isCopied ? <Check size={16} className="text-green-400" /> : <Copy size={16} />}
-      </button>
+        Copy
+      </Button>
       <SyntaxHighlighter
         style={oneDark}
         language={language}
