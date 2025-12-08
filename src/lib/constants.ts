@@ -13,7 +13,7 @@ export const INITIAL_TEMPLATES: Template[] = [
     shortDescription: 'Predict the output of tricky JavaScript snippets involving hoisting, closures, and the event loop.',
     fullDescription: 'This collection tests your deep understanding of the JavaScript runtime. You will be presented with snippets of code and asked to predict the console output. These cover topics like Hoisting, Closures, `this` binding, Asynchronous operations, and the Event Loop.',
     imageUrl: 'https://picsum.photos/seed/jspractice/800/600',
-    demoUrl: 'https://github.com/pratikkumar399/frontendfordummies/tree/main/src/data/snippets/js-output-challenges.ts',
+    demoUrl: '#',
     githubUrl: 'https://github.com/pratikkumar399/frontendfordummies/tree/main/src/data/snippets/js-output-challenges.ts',
     tags: ['Tricky', 'Event Loop', 'Closures'],
     category: Category.SNIPPET_PRACTICE,
