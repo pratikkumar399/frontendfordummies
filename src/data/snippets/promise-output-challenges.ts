@@ -179,7 +179,11 @@ promise
             "1, undefined, 2, Error, Done"
         ],
         correctAnswer: 0,
-        explanation: `First then returns 2, so next logs 2. Missing return yields undefined for the next then. That then returns a rejected Promise, jumping to catch which logs "Error". Catch resolves the chain, so the final then runs and logs "Done".`
+        explanation: `This comprehensive example demonstrates several important concepts about how values and errors flow through Promise chains. The first then receives one, logs it, and explicitly returns two. This returned value becomes the resolved value for the next then callback.
+The second then receives two and logs it, but notice it doesn't have a return statement. This is a common source of bugs in real applications. When a function in JavaScript doesn't explicitly return a value, it implicitly returns undefined. So the third then receives undefined and logs it.
+The third then returns a rejected Promise, which immediately throws the chain into an error state. This is different from throwing an error - when you return Promise.reject, you're explicitly returning a Promise that's already in the rejected state. The error skips any then callbacks and goes straight to the catch.
+The catch logs "Error" and implicitly returns undefined (no explicit return). But here's the crucial part - when a catch callback completes without throwing an error, it converts the Promise chain back to a fulfilled state. The chain recovers from the error, and subsequent then callbacks continue executing normally. That's why the final then callback runs and prints "Done".
+This pattern of catch followed by then is powerful for error recovery - you can handle an error, log it or transform it, and then let the chain continue with normal processing.`
     },
     {
         id: 's8',
@@ -201,7 +205,11 @@ console.log('4');`,
             "1, 2, 3, 4"
         ],
         correctAnswer: 0,
-        explanation: `Synchronous logs: 3, then inside test before await logs 1, then 4. The await schedules the remainder as a microtask, so 2 logs afterward, yielding 3, 1, 4, 2.`
+        explanation: `This question combines async/await syntax with the event loop mechanics we've been exploring. Understanding this requires knowing that async functions and the await keyword are syntactic sugar over Promises, but they follow the same microtask queue rules.
+The code starts by printing three, which is synchronous code before any function calls. Then we call test(), which is an async function. Inside test, the first thing that happens synchronously is printing one. This is important - everything before the first await in an async function runs synchronously, just like the Promise executor we saw earlier.
+Then we hit await Promise.resolve(). The await keyword pauses the execution of the async function and schedules the rest of the function (everything after the await) to run as a microtask. Control returns to the caller, and the synchronous code continues by printing four.
+Now all synchronous code is complete. The JavaScript engine processes the microtask queue, which contains the continuation of the test function. That continuation runs and prints two. The key insight is that await doesn't just pause execution - it converts the rest of the function into a microtask callback, similar to what happens with a then callback.
+This is why async/await code follows the same timing rules as explicit Promise chains - they're fundamentally the same mechanism, just with different syntax.`
     },
     {
         id: 's9',
@@ -250,7 +258,10 @@ Promise.all([promise1, promise2, promise3])
             "1, 3"
         ],
         correctAnswer: 0,
-        explanation: `The inner Promise chain isn't returned, so the outer chain continues with return 3. Outer then logs 1, inner logs 2 later, outer next then logs 3, giving 1, 3, 2 order.`
+        explanation: `The key issue here is that we have a Promise chain nested inside another Promise chain, but they're not connected to each other.
+When the outer then callback runs, it prints one, then creates a new Promise chain starting with Promise.resolve(2). However, this inner Promise chain is not returned from the callback - it's just created and left floating. The outer then callback explicitly returns three, which is what flows to the next outer then.
+Since we return three immediately, the outer chain continues synchronously (as microtasks go) and prints three. Meanwhile, the inner Promise chain was scheduled as a separate microtask. After the outer chain completes its current step, the event loop processes other microtasks, which includes the inner chain's then callback, finally printing two.
+The correct way to write this code, if you want the chains to work together, would be to return the inner Promise chain from the outer then callback. That would create a proper nested structure where the outer chain waits for the inner chain to complete. Without that return statement, you've created two independent Promise chains that just happen to be started from the same place in the code, leading to this confusing execution order.`
     },
     {
         id: 's11',
