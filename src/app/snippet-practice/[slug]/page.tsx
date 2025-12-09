@@ -142,7 +142,7 @@ export default function SnippetPracticePage() {
 
                     <div className="p-6 space-y-6">
                         <div className="relative group">
-                            <div className="absolute top-3 right-3 z-10 opacity-0 opacity-100 transition-opacity">
+                            <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <Button 
                                     size={ButtonSize.SM} 
                                     variant={ButtonVariant.SECONDARY}
