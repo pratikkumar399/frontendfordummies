@@ -106,6 +106,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
+      <head>
+        <link rel="preconnect" href="https://placehold.co" />
+        <link rel="preconnect" href="https://cdn.pixabay.com" />
+      </head>
       <body
         className={`${inter.variable} ${outfit.variable} ${firaCode.variable} antialiased bg-dark-bg text-dark-text`}
       >
