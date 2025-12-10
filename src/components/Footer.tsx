@@ -17,7 +17,7 @@ export default function Footer() {
           <div className="flex gap-8 text-sm text-zinc-500">
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
             <Link href="/site-map" className="hover:text-white transition-colors">Sitemap</Link>
-            <a href="https://github.com/pratikkumar399/frontendfordummies" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">GitHub</a>
+            {/* <a href="https://github.com/pratikkumar399/frontendfordummies" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">GitHub</a> */}
           </div>
         </div>
         <div className="mt-8 pt-8 border-t border-white/5 text-center text-xs text-zinc-600">

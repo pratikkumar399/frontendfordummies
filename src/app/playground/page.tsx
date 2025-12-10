@@ -121,7 +121,7 @@ export default function PlaygroundPage() {
       // Also log to original console
       switch (type) {
         case LogType.ERROR:
-          originalConsoleRef.current.error(...args);
+          originalConsoleRef.current?.error(...args);
           break;
         case LogType.WARN:
           originalConsoleRef.current.warn(...args);

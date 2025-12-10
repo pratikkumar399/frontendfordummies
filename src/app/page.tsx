@@ -89,7 +89,7 @@ export default function Home() {
                 Start Learning
                 <ArrowRight size={20} className="ml-2" />
             </LinkButton>
-            <LinkButton 
+            {/* <LinkButton 
               href="https://github.com/pratikkumar399/frontendfordummies"
               variant={ButtonVariant.SECONDARY} 
               size={ButtonSize.LG} 
@@ -97,7 +97,7 @@ export default function Home() {
               icon={<Github size={20} />}
             >
                 Star on GitHub <ArrowRight size={20} className="ml-2" />
-            </LinkButton>
+            </LinkButton> */}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 text-left">

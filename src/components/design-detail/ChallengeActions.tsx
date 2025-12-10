@@ -58,7 +58,7 @@ export const ChallengeActions: React.FC<ChallengeActionsProps> = ({ template }) 
           </LinkButton>
         </div>
       )}
-      {template.githubUrl && template.githubUrl !== '#' && (
+      {/* {template.githubUrl && template.githubUrl !== '#' && (
         <div className="flex-1">
           <LinkButton
             href={template.githubUrl}
@@ -70,7 +70,7 @@ export const ChallengeActions: React.FC<ChallengeActionsProps> = ({ template }) 
             View Source Code
           </LinkButton>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

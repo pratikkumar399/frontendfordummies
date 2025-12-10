@@ -87,7 +87,7 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({ template }) => {
             <ArrowRight size={14} className="transition-transform group-hover/btn:translate-x-1" />
             </Link>
             
-            <a 
+            {/* <a 
                 href={template.githubUrl} 
                 target="_blank" 
                 rel="noopener noreferrer" 
@@ -95,7 +95,7 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({ template }) => {
                 title="View Source on GitHub"
             >
                 <Github size={18} className="transition-transform group-hover/icon:scale-110" />
-            </a>
+            </a> */}
         </div>
       </div>
     </div>

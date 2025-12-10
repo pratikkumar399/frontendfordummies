@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Button, LinkButton } from '@/components/ui/Button';
-import { ArrowLeft, Github, MonitorPlay, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Github, MonitorPlay, ExternalLink, Code } from 'lucide-react';
 import { InfiniteScrollDemo } from '@/components/demos/InfiniteScrollDemo';
 import { CommentsList } from '@/components/demos/NestedCommentsSystem';
 import { getChallengeBySlug } from '@/lib/challenges';
@@ -51,13 +51,21 @@ export default async function DemoPage({ params }: PageProps) {
         </div>
         <div className="flex items-center gap-3">
           <LinkButton 
+            href={`/design/${slug}/code`}
+            variant={ButtonVariant.PRIMARY}
+            size={ButtonSize.SM}
+            icon={<Code size={16} />}
+          >
+            <span className="hidden sm:inline">Code</span>
+          </LinkButton>
+          {/* <LinkButton 
             href={template.githubUrl} 
             variant={ButtonVariant.SECONDARY} 
             size={ButtonSize.SM} 
             icon={<Github size={16} />}
           >
             <span className="hidden sm:inline">View Source</span>
-          </LinkButton>
+          </LinkButton> */}
         </div>
       </header>
 
