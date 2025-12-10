@@ -78,15 +78,16 @@ export const metadata: Metadata = {
   other: {
     'google-adsense-account': 'ca-pub-9139551096547240',
     'google-site-verification': 'j-b9jDccBDlDqf9PVxBp303sB2fvZXWZU1OIyoTJSbs',
+    'apple-mobile-web-app-title': 'FDummy',
   },
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: '48x48', type: 'image/x-icon' },
-      { url: '/img/icon.png', sizes: '192x192', type: 'image/png' },
-      { url: '/img/icon.png', sizes: '512x512', type: 'image/png' },
+      { url: '/web-app-manifest-192x192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/web-app-manifest-512x512.png', sizes: '512x512', type: 'image/png' },
     ],
-    shortcut: '/favicon.ico',
-    apple: '/img/icon.png',
+    apple: [{ url: '/apple-icon.png', sizes: '180x180', type: 'image/png' }],
+    shortcut: ['/favicon.ico'],
   },
 };
 

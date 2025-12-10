@@ -2,8 +2,10 @@ const CACHE_NAME = 'frontend-dummies-v1';
 const urlsToCache = [
     '/',
     '/manifest.json',
-    '/img/icon.png',
     '/favicon.ico',
+    '/web-app-manifest-192x192.png',
+    '/web-app-manifest-512x512.png',
+    '/apple-icon.png',
 ];
 
 // Install event - cache resources
