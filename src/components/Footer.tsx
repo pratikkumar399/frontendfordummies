@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import Link from 'next/link';
 
 export default function Footer() {
   return (
@@ -15,9 +15,9 @@ export default function Footer() {
           </div>
           
           <div className="flex gap-8 text-sm text-zinc-500">
-            <a href="#" className="hover:text-white transition-colors">Privacy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms</a>
-            <a href="#" className="hover:text-white transition-colors">GitHub</a>
+            <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
+            <Link href="/site-map" className="hover:text-white transition-colors">Sitemap</Link>
+            <a href="https://github.com/pratikkumar399/frontendfordummies" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">GitHub</a>
           </div>
         </div>
         <div className="mt-8 pt-8 border-t border-white/5 text-center text-xs text-zinc-600">

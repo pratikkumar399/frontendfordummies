@@ -21,7 +21,6 @@ export default function Navbar() {
             </span>
           </Link>
 
-
           <LinkButton 
             href="/playground" 
             variant={ButtonVariant.SECONDARY}

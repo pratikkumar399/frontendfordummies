@@ -41,7 +41,7 @@ export default function AdminPage() {
       slug,
       shortDescription: formData.shortDescription,
       fullDescription: formData.fullDescription,
-      imageUrl: formData.imageUrl || `https://picsum.photos/seed/${slug}/800/600`,
+      imageUrl: formData.imageUrl || `https://placehold.co/800x600/png?text=${slug}`,
       demoUrl: formData.demoUrl || '#',
       githubUrl: formData.githubUrl || '#',
       tags: formData.tags.split(',').map(t => t.trim()).filter(Boolean),
