@@ -1,17 +1,21 @@
 {
   "name": "Frontend Dummies - Master Frontend Development",
   "short_name": "FrontendDummies",
-  "description": "A comprehensive platform for mastering frontend coding skills, system design, and building real-world projects",
+  "description": "A comprehensive platform for mastering frontend coding skills, system design, and building real-world projects.",
+  "id": "/",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "background_color": "#0f0f10",
   "theme_color": "#22c55e",
-  "id": "/",
-  "orientation": "portrait-primary",
-  "scope": "/",
-  "categories": ["education", "productivity", "developer"],
   "lang": "en-US",
   "dir": "ltr",
+  "categories": [
+    "education",
+    "productivity",
+    "developer"
+  ],
   "prefer_related_applications": false,
   "icons": [
     {
@@ -29,7 +33,7 @@
       "src": "/web-app-manifest-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "maskable"
     },
     {
       "src": "/web-app-manifest-512x512.png",
@@ -41,13 +45,27 @@
       "src": "/web-app-manifest-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "maskable"
     },
     {
       "src": "/apple-icon.png",
       "sizes": "180x180",
       "type": "image/png",
       "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/home-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/screenshots/home-mobile.png",
+      "sizes": "720x1280",
+      "type": "image/png",
+      "form_factor": "narrow"
     }
   ]
 }
