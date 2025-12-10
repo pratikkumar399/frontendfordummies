@@ -1,6 +1,6 @@
 {
-  "name": "Frontend For Dummies - Master Frontend Development",
-  "short_name": "Frontend4Dummies",
+  "name": "Frontend Dummies - Master Frontend Development",
+  "short_name": "FrontendDummies",
   "description": "A comprehensive platform for mastering frontend coding skills, system design, and building real-world projects",
   "start_url": "/",
   "display": "standalone",
@@ -11,5 +11,30 @@
   "categories": ["education", "productivity", "developer"],
   "lang": "en-US",
   "dir": "ltr",
-  "prefer_related_applications": false
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/img/icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/img/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/img/icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
 }

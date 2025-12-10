@@ -4,6 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import { Providers } from "@/app/providers";
 import { AppShell } from "@/components/AppShell";
+import { PWARegister } from "@/components/PWARegister";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -79,9 +80,13 @@ export const metadata: Metadata = {
     'google-site-verification': 'j-b9jDccBDlDqf9PVxBp303sB2fvZXWZU1OIyoTJSbs',
   },
   icons: {
-    icon: '/favicon.ico',
+    icon: [
+      { url: '/favicon.ico', sizes: '48x48', type: 'image/x-icon' },
+      { url: '/img/icon.png', sizes: '192x192', type: 'image/png' },
+      { url: '/img/icon.png', sizes: '512x512', type: 'image/png' },
+    ],
     shortcut: '/favicon.ico',
-    apple: '/favicon.ico',
+    apple: '/img/icon.png',
   },
 };
 
@@ -90,7 +95,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
-  themeColor: '#0f0f10', // Always dark theme
+  themeColor: '#22c55e', // Match manifest theme color
 };
 
 export default function RootLayout({
@@ -115,6 +120,7 @@ export default function RootLayout({
             gtag('config', 'G-J9C1KGRP3Z');
           `}
         </Script>
+        <PWARegister />
         <Providers>
           <AppShell>{children}</AppShell>
         </Providers>
