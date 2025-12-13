@@ -23,7 +23,17 @@ export default function ExplorePage() {
     });
   }, [templates, searchQuery, selectedCategory]);
 
-  const categories = ['All', ...Object.values(Category).filter(c => c !== 'All')];
+  const categoriesWithContent = useMemo(() => {
+    const categorySet = new Set<Category>();
+    templates.forEach(t => {
+      if (t.category !== Category.BLOGS) {
+        categorySet.add(t.category);
+      }
+    });
+    return Array.from(categorySet);
+  }, [templates]);
+
+  const categories = ['All', ...categoriesWithContent];
 
   const handleCategorySelect = (cat: Category | 'All') => {
     setSelectedCategory(cat);

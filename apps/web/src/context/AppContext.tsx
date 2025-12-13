@@ -20,18 +20,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Theme State - Always dark mode
   const isDarkMode = true;
 
-  // Data State
-  const [templates, setTemplates] = useState<Template[]>([]);
+  const [templates, setTemplates] = useState<Template[]>(INITIAL_TEMPLATES);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<Category | 'All'>('All');
 
-  // Initialize Data
-  useEffect(() => {
-    // Load from local storage or fallback to constants
-    setTemplates(INITIAL_TEMPLATES);
-  }, []);
 
-  // Ensure dark mode is always applied
   useEffect(() => {
     document.documentElement.classList.add('dark');
   }, []);

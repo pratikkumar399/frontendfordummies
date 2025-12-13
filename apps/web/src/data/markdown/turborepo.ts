@@ -1,0 +1,408 @@
+export const TURBOREPO_MD = `
+# Turborepo Documentation
+
+## What is Turborepo?
+
+Turborepo is a high-performance build system for JavaScript and TypeScript monorepos. It's designed to make monorepo development faster and more efficient by intelligently caching and parallelizing tasks across your workspace.
+
+### Key Features
+
+- **Intelligent Caching**: Automatically caches task outputs and reuses them when inputs haven't changed
+- **Task Orchestration**: Runs tasks in parallel while respecting dependencies
+- **Remote Caching**: Share cache across team members and CI/CD pipelines
+- **Incremental Builds**: Only rebuilds what changed, not everything
+- **Zero Runtime Overhead**: No daemon or long-running processes
+
+## Benefits of Turborepo
+
+### 1. **Faster Build Times**
+- Caches build outputs, so unchanged packages don't rebuild
+- Can reduce build times from minutes to seconds
+- Especially powerful in CI/CD where builds are frequent
+
+### 2. **Parallel Execution**
+- Runs independent tasks simultaneously
+- Automatically determines task dependencies
+- Maximizes CPU utilization
+
+### 3. **Incremental Builds**
+- Only processes changed packages and their dependents
+- Skips unnecessary work
+- Perfect for large monorepos with many packages
+
+### 4. **Remote Caching**
+- Share cache with your team
+- CI builds can benefit from local developer caches
+- Reduces redundant work across the organization
+
+### 5. **Simple Configuration**
+- Minimal setup required
+- Works with existing npm/yarn/pnpm workspaces
+- No need to change your existing build scripts
+
+### 6. **Better Developer Experience**
+- Faster feedback loops
+- Consistent builds across environments
+- Easy to understand task dependencies
+
+## Migration Guide
+
+### Prerequisites
+
+1. **Monorepo Structure**: Your project should already be organized as a monorepo with:
+   - Multiple packages/apps in separate directories
+   - A root \`package.json\` with workspaces configured
+   - Individual \`package.json\` files in each package/app
+
+2. **Node.js Version**: Ensure you're using Node.js 18+ (this project uses Node.js 20+)
+
+### Step-by-Step Migration
+
+#### Step 1: Install Turborepo
+
+\`\`\`bash
+npm install turbo --save-dev
+# or
+yarn add turbo -D
+# or
+pnpm add turbo -D
+\`\`\`
+
+#### Step 2: Create \`turbo.json\`
+
+Create a \`turbo.json\` file in your repository root. This file defines your task pipeline:
+
+\`\`\`json
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["**/.env.*local"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+    },
+    "lint": {
+      "dependsOn": ["^lint"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "start": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}
+\`\`\`
+
+#### Step 3: Update Root \`package.json\` Scripts
+
+Replace your existing scripts with Turborepo commands:
+
+\`\`\`json
+{
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "start": "turbo run start",
+    "lint": "turbo run lint",
+    "clean": "turbo run clean && rm -rf node_modules"
+  }
+}
+\`\`\`
+
+#### Step 4: Keep Individual Package Scripts
+
+Your individual packages should keep their original scripts. Turborepo will execute these:
+
+\`\`\`json
+// apps/web/package.json
+{
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  }
+}
+\`\`\`
+
+#### Step 5: Configure TypeScript Paths (if needed)
+
+If you're using shared packages, configure TypeScript path mappings:
+
+\`\`\`json
+// apps/web/tsconfig.json
+{
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"],
+      "@repo/ui": ["../../packages/ui/src"]
+    }
+  }
+}
+\`\`\`
+
+#### Step 6: Test Your Setup
+
+\`\`\`bash
+# Run all dev servers
+npm run dev
+
+# Build all packages
+npm run build
+
+# Lint all packages
+npm run lint
+\`\`\`
+
+### Migration Checklist
+
+- [ ] Install Turborepo as a dev dependency
+- [ ] Create \`turbo.json\` configuration file
+- [ ] Update root \`package.json\` scripts to use \`turbo run\`
+- [ ] Ensure individual package scripts remain unchanged
+- [ ] Configure task dependencies in \`turbo.json\`
+- [ ] Set up output directories for caching
+- [ ] Test all tasks (dev, build, lint, etc.)
+- [ ] Verify parallel execution works correctly
+- [ ] Check that caching is working (second run should be faster)
+
+## Project Configuration
+
+### Current Setup
+
+This project uses Turborepo with the following structure:
+
+\`\`\`
+frontendfordummies/
+├── apps/
+│   └── web/              # Next.js application
+├── packages/
+│   └── ui/               # Shared UI components
+├── turbo.json            # Turborepo configuration
+└── package.json          # Root package with workspaces
+\`\`\`
+
+### Configuration Details
+
+#### Root \`package.json\`
+
+\`\`\`json
+{
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "start": "turbo run start",
+    "lint": "turbo run lint",
+    "clean": "turbo run clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0"
+  },
+  "packageManager": "npm@10.0.0",
+  "engines": {
+    "node": ">=20"
+  }
+}
+\`\`\`
+
+**Key Points:**
+- Uses npm workspaces to manage monorepo packages
+- All scripts delegate to Turborepo
+- Requires Node.js 20+ and npm 10.0.0
+
+#### \`turbo.json\` Configuration
+
+\`\`\`json
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["**/.env.*local"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+    },
+    "lint": {
+      "dependsOn": ["^lint"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "start": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}
+\`\`\`
+
+**Task Configuration Explained:**
+
+1. **\`build\` Task:**
+   - \`dependsOn: ["^build"]\`: Waits for dependencies to build first (the \`^\` means dependencies)
+   - \`outputs\`: Specifies what to cache (\`.next\` for Next.js, \`dist\` for other packages)
+   - Excludes \`.next/cache/**\` from caching (Next.js internal cache)
+
+2. **\`lint\` Task:**
+   - \`dependsOn: ["^lint"]\`: Lints dependencies first
+   - No outputs specified (linting doesn't produce files to cache)
+
+3. **\`dev\` Task:**
+   - \`cache: false\`: Development servers shouldn't be cached
+   - \`persistent: true\`: Indicates a long-running process
+
+4. **\`start\` Task:**
+   - \`cache: false\`: Production servers shouldn't be cached
+   - \`persistent: true\`: Long-running process
+
+5. **\`globalDependencies\`:**
+   - \`["**/.env.*local"]\`: Changes to \`.env.local\` files invalidate all caches
+
+#### Package Structure
+
+**Apps (\`apps/web\`):**
+- Next.js application
+- Uses \`@repo/ui\` package from the monorepo
+- Has its own build, dev, and lint scripts
+
+**Packages (\`packages/ui\`):**
+- Shared UI component library
+- Exported as \`@repo/ui\`
+- Can be imported in apps using: \`import { Button } from "@repo/ui"\`
+
+#### TypeScript Configuration
+
+The web app's \`tsconfig.json\` includes path mappings for the shared package:
+
+\`\`\`json
+{
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"],
+      "@repo/ui": ["../../packages/ui/src"]
+    }
+  }
+}
+\`\`\`
+
+This allows importing shared components directly:
+\`\`\`typescript
+import { Button } from "@repo/ui";
+\`\`\`
+
+### How It Works in This Project
+
+1. **Development:**
+   \`\`\`bash
+   npm run dev
+   \`\`\`
+   - Turborepo runs \`dev\` scripts in parallel
+   - Both the web app and UI package can run their dev servers simultaneously
+   - No caching (as configured)
+
+2. **Building:**
+   \`\`\`bash
+   npm run build
+   \`\`\`
+   - Turborepo builds dependencies first (\`packages/ui\`)
+   - Then builds the web app
+   - Caches outputs for faster subsequent builds
+   - Only rebuilds what changed
+
+3. **Linting:**
+   \`\`\`bash
+   npm run lint
+   \`\`\`
+   - Runs linting in all packages
+   - Respects dependency order
+   - Can run in parallel for independent packages
+
+### Benefits in This Project
+
+1. **Shared Components**: The \`@repo/ui\` package can be developed and tested independently
+2. **Fast Iteration**: Changes to the UI package are immediately available to the web app
+3. **Consistent Builds**: All packages use the same build system
+4. **Easy Scaling**: Adding new apps or packages is straightforward
+5. **Type Safety**: TypeScript paths ensure proper type checking across packages
+
+## Advanced Configuration
+
+### Remote Caching (Optional)
+
+To enable remote caching (share cache with your team):
+
+1. Create a Vercel account (or use another provider)
+2. Link your repository:
+   \`\`\`bash
+   npx turbo login
+   npx turbo link
+   \`\`\`
+3. Cache will automatically be shared
+
+### Custom Task Pipelines
+
+You can create more complex pipelines:
+
+\`\`\`json
+{
+  "tasks": {
+    "test": {
+      "dependsOn": ["build"],
+      "outputs": ["coverage/**"]
+    },
+    "type-check": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    }
+  }
+}
+\`\`\`
+
+### Environment Variables
+
+Turborepo can track environment variables:
+
+\`\`\`json
+{
+  "tasks": {
+    "build": {
+      "env": ["NODE_ENV", "API_URL"]
+    }
+  }
+}
+\`\`\`
+
+## Troubleshooting
+
+### Cache Not Working
+
+- Check that \`outputs\` are correctly specified in \`turbo.json\`
+- Verify file paths match your actual build outputs
+- Clear cache: \`npx turbo clean\`
+
+### Tasks Running in Wrong Order
+
+- Check \`dependsOn\` configuration
+- Use \`^\` prefix for dependency tasks
+- Use task names without \`^\` for same-package dependencies
+
+### TypeScript Path Resolution Issues
+
+- Ensure \`tsconfig.json\` paths are correctly configured
+- Restart your TypeScript server/IDE
+- Check that package names match in \`package.json\` and imports
+
+## Resources
+
+- [Turborepo Documentation](https://turbo.build/repo/docs)
+- [Turborepo GitHub](https://github.com/vercel/turbo)
+- [Monorepo Guide](https://turbo.build/repo/docs/handbook)
+`;
+

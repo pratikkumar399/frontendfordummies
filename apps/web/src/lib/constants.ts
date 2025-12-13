@@ -6,6 +6,7 @@ import commentsImage from '@/data/assets/comments.png';
 import { SMART_JS_MD } from '@/data/markdown/smartjs';
 import { DEBOUNCE_EDITORIAL } from '@/data/editorial/debounce-editorial';
 import { PROMISE_OUTPUT_CHALLENGES_SNIPPETS } from '@/data/snippets/promise-output-challenges';
+import { TURBOREPO_MD } from '@/data/markdown/turborepo';
 
 export const INITIAL_TEMPLATES: Template[] = [
   {
@@ -95,5 +96,21 @@ The key insight with debouncing is that we reset the timer every time the functi
     createdAt: '2025-12-02',
     snippets: PROMISE_OUTPUT_CHALLENGES_SNIPPETS,
     goal: 'Test your JavaScript knowledge by predicting the correct output for each snippet. Aim for 100% accuracy!'
+  },
+  {
+    id: '6',
+    name: 'Turborepo: Complete Guide to Monorepo Build System',
+    slug: 'turborepo-complete-guide',
+    shortDescription: 'Learn how to set up and migrate to Turborepo for faster builds, intelligent caching, and better monorepo management.',
+    fullDescription: TURBOREPO_MD,
+    imageUrl: 'https://placehold.co/800x600/6366f1/ffffff/png?text=Turborepo+Guide',
+    demoUrl: '#',
+    githubUrl: 'https://github.com/vercel/turbo',
+    tags: ['Monorepo', 'Build System', 'Performance', 'DevOps'],
+    category: Category.BLOGS,
+    techStack: ['Turborepo', 'Monorepo', 'JavaScript', 'TypeScript'],
+    author: 'modernDev',
+    createdAt: '2025-01-15',
+    goal: 'Understand Turborepo and learn how to migrate your monorepo for faster builds and better developer experience.'
   }
 ];

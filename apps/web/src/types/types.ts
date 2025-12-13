@@ -36,7 +36,8 @@ export enum Category {
     SYSTEM_DESIGN = 'System Design',
     ALGORITHMS = 'Algorithms',
     TAKE_HOME = 'Take-Home Project',
-    SNIPPET_PRACTICE = 'Snippet Practice'
+    SNIPPET_PRACTICE = 'Snippet Practice',
+    BLOGS = 'Blogs'
 }
 
 export enum SortOption {
