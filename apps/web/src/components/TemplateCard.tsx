@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Template, Category } from '../types/types';
 import {  ArrowRight, Layers } from 'lucide-react';
 
@@ -34,11 +35,12 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({ template }) => {
         {/* Overlay Gradient */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#18181b] via-transparent to-transparent z-10 opacity-80" />
         
-        <img 
+        <Image 
           src={template.imageUrl} 
           alt={template.name}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100"
-          loading="lazy"
+          fill
+          className="object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
         
         {/* Floating Category Badge */}
