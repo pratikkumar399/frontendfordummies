@@ -1,0 +1,10 @@
+.bg-gradient-btn {
+  background: linear-gradient(135deg, #006239 0%, #166534 100%);
+  transition: all 0.3s ease;
+}
+
+.bg-gradient-btn:hover {
+  background: linear-gradient(135deg, #15803d 0%, #14532d 100%);
+  box-shadow: 0 0 20px rgba(74, 222, 128, 0.2);
+}
+

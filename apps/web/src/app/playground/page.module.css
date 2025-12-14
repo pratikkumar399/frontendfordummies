@@ -1,0 +1,16 @@
+.resizerV {
+  width: 4px;
+  background: #121212;
+  cursor: col-resize;
+  transition: background 0.2s;
+  z-index: 50;
+}
+
+.resizerV:hover,
+.resizerV.active {
+  background: #006239;
+}
+
+.active {
+  background: #006239;
+}

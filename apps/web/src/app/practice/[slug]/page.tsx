@@ -27,6 +27,7 @@ import PageLoader from '@/components/PageLoader';
 import { validateCode, sanitizeError } from '@/lib/code-execution';
 import { checkRateLimit } from '@/lib/rate-limiter';
 import { showToast } from '@/lib/toast';
+import styles from './page.module.css';
 
 export default function PracticePage() {
   const { slug } = useParams<{ slug: string }>();
@@ -446,7 +447,7 @@ export default function PracticePage() {
                             ))}
                         </div>
                         
-                        <div className="markdown-content">
+                        <div className={styles.markdownContent}>
                              <div className="prose prose-sm max-w-none text-[#eff1f6] leading-relaxed whitespace-pre-wrap font-sans">
                                 {template.fullDescription}
                              </div>
@@ -455,7 +456,7 @@ export default function PracticePage() {
                 ) : template.editorial ? (
                     <div className="animate-fadeIn">
                         <h1 className="text-xl font-bold text-white mb-6">Editorial: {template.name}</h1>
-                        <div className="markdown-content prose prose-invert prose-sm max-w-none">
+                        <div className={`${styles.markdownContent} prose prose-invert prose-sm max-w-none`}>
                             <ReactMarkdown
                               components={{
                                 h1: ({ children }) => <h1 className="text-2xl font-bold text-white mt-8 mb-4 first:mt-0">{children}</h1>,
@@ -514,7 +515,7 @@ export default function PracticePage() {
         </div>
 
         <div 
-            className={`resizer-v flex items-center justify-center hover:bg-primary-500/50 ${isDraggingH ? 'active bg-primary-600' : ''}`}
+            className={`${styles.resizerV} flex items-center justify-center hover:bg-primary-500/50 ${isDraggingH ? styles.active : ''}`}
             onMouseDown={handleMouseDownH}
         >
             <div className="w-[2px] h-8 bg-zinc-600 rounded-full"></div>
@@ -587,7 +588,7 @@ export default function PracticePage() {
             </div>
 
             <div 
-                className={`resizer-h w-full flex items-center justify-center hover:bg-primary-500/50 ${isDraggingV ? 'active bg-primary-600' : ''}`}
+                className={`${styles.resizerH} w-full flex items-center justify-center hover:bg-primary-500/50 ${isDraggingV ? styles.active : ''}`}
                 onMouseDown={handleMouseDownV}
             >
                 <div className="h-[2px] w-8 bg-zinc-600 rounded-full"></div>

@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { Category } from '@/types/types';
+import styles from './page.module.css';
 
 // Define params as a Promise for Next.js 15 compatibility
 type PageProps = {
@@ -82,7 +83,7 @@ export default async function BlogDetailPage({ params }: PageProps) {
       />
       <div className="min-h-screen bg-dark-bg pt-24 pb-12 relative overflow-hidden">
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className="glow-blob bg-primary-600/5 w-[800px] h-[800px] top-[0] right-[-200px] blur-[120px]"></div>
+          <div className={`${styles.glowBlob} bg-primary-600/5 w-[800px] h-[800px] top-[0] right-[-200px] blur-[120px]`}></div>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">

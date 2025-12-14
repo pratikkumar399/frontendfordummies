@@ -7,6 +7,7 @@ import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import { Template, ButtonVariant, ButtonSize } from '@/types/types';
 import { Copy, Check } from 'lucide-react';
 import { Button } from '@repo/ui';
+import styles from './ChallengeDescription.module.css';
 
 interface ChallengeDescriptionProps {
   template: Template;
@@ -18,7 +19,7 @@ export const ChallengeDescription: React.FC<ChallengeDescriptionProps> = ({ temp
   return (
     <div className="bg-dark-card rounded-2xl p-8 border border-dark-border">
       {/* <h2 className="text-2xl font-bold text-white mb-6">Challenge Description</h2> */}
-      <div className="markdown-content">
+      <div className={styles.markdownContent}>
         <ReactMarkdown
           components={{
             code({ className, children, ...props }) {
@@ -52,7 +53,7 @@ export const ChallengeDescription: React.FC<ChallengeDescriptionProps> = ({ temp
   );
 };
 
-const CodeBlock = ({ language, value, style }: { language: string, value: string, style: any }) => {
+const CodeBlock = ({ language, value, style }: { language: string, value: string, style: typeof oneDark }) => {
     const [isCopied, setIsCopied] = useState(false);
 
     const onCopy = () => {

@@ -1,0 +1,8 @@
+.glowBlob {
+  position: absolute;
+  filter: blur(80px);
+  opacity: 0.4;
+  border-radius: 50%;
+  z-index: 0;
+}
+

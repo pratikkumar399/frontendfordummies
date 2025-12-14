@@ -21,6 +21,7 @@ import {
 import { validateCode, sanitizeError } from '@/lib/code-execution';
 import { checkRateLimit } from '@/lib/rate-limiter';
 import { showToast } from '@/lib/toast';
+import styles from './page.module.css';
 
 const DEFAULT_CODE = `// Welcome to JS Playground!
 // Write your JavaScript code here and click Run to execute.
@@ -400,7 +401,7 @@ export default function PlaygroundPage() {
 
         {/* Resizer */}
         <div 
-          className={`resizer-v flex items-center justify-center hover:bg-primary-500/50 rounded-[6px] ${isDragging ? 'active bg-primary-600' : ''}`}
+          className={`${styles.resizerV} flex items-center justify-center hover:bg-primary-500/50 rounded-[6px] ${isDragging ? styles.active : ''}`}
           onMouseDown={handleMouseDown}
         >
           <div className="w-[2px] h-8 bg-zinc-600 rounded-full"></div>

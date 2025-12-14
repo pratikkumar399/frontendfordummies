@@ -1,0 +1,89 @@
+.markdownContent h1 {
+  font-size: 2em;
+  font-weight: 700;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  color: #fff;
+}
+
+.markdownContent h2 {
+  font-size: 1.5em;
+  font-weight: 600;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  color: #f0fdf4;
+  border-bottom: 1px solid #292929;
+  padding-bottom: 0.3em;
+}
+
+.markdownContent h3 {
+  font-size: 1.25em;
+  font-weight: 600;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  color: #dcfce7;
+}
+
+.markdownContent p {
+  margin-bottom: 1em;
+  line-height: 1.7;
+  color: #a1a1aa;
+}
+
+.markdownContent ul,
+.markdownContent ol {
+  margin-bottom: 1em;
+  padding-left: 1.5em;
+  list-style-type: disc;
+  color: #a1a1aa;
+}
+
+.markdownContent li {
+  margin-bottom: 0.4em;
+}
+
+.markdownContent code {
+  background-color: #292929;
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-family: var(
+    --font-mono,
+    "Fira Code",
+    "Menlo",
+    "Monaco",
+    "Courier New",
+    monospace
+  );
+  font-size: 0.9em;
+  color: #4ade80;
+}
+
+.markdownContent pre {
+  background-color: #171717;
+  padding: 1em;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin-bottom: 1.5em;
+  border: 1px solid #292929;
+}
+
+.markdownContent pre code {
+  background-color: transparent;
+  padding: 0;
+  color: #e2e8f0;
+}
+
+.markdownContent blockquote {
+  border-left: 4px solid #006239;
+  padding-left: 1em;
+  margin-left: 0;
+  margin-bottom: 1em;
+  font-style: italic;
+  color: #9ca3af;
+}
+
+.markdownContent strong {
+  color: #fff;
+  font-weight: 600;
+}
+

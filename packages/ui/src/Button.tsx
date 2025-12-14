@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { ButtonVariant, ButtonSize } from './types';
+import './Button.css';
 
 // Shared styles for button appearance
 const baseStyles = 'inline-flex items-center justify-center font-medium transition-all duration-300 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:ring-primary-500/50 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl tracking-wide';
