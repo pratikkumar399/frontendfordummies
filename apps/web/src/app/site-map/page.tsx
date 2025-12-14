@@ -38,11 +38,6 @@ export default function SitemapPage() {
                 </Link>
               </li>
               <li>
-                <Link href="/admin" className="hover:text-primary-300 transition-colors block py-1">
-                  Submit Challenge
-                </Link>
-              </li>
-              <li>
                 <Link href="/privacy" className="hover:text-primary-300 transition-colors block py-1">
                   Privacy Policy
                 </Link>

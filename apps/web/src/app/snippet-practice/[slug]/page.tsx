@@ -11,6 +11,8 @@ import { Snippet, Template, ButtonSize, ButtonVariant } from '@/types/types';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import PageLoader from '@/components/PageLoader';
+import { validateCode, sanitizeError } from '@/lib/code-execution';
+import { checkRateLimit } from '@/lib/rate-limiter';
 
 export default function SnippetPracticePage() {
   const { slug } = useParams<{ slug: string }>();
@@ -53,15 +55,40 @@ export default function SnippetPracticePage() {
     },
     "datePublished": template.createdAt,
     "numberOfQuestions": template.snippets?.length || 0,
-    "url": `https://www.frontenddummies.com/snippet-practice/${template.slug}`,
+    "url": `https://frontenddummies.comsnippet-practice/${template.slug}`,
     "inLanguage": "en-US",
     "interactivityType": "active"
   };
 
   const handleRunSnippet = (id: string, code: string) => {
+    // Check rate limit
+    const rateLimit = checkRateLimit('snippet-practice');
+    if (!rateLimit.allowed) {
+      queueMicrotask(() => {
+        setTimeout(() => {
+          setOutput(prev => ({ 
+            ...prev, 
+            [id]: `Rate limit exceeded. Please wait ${rateLimit.retryAfter} seconds before running code again.` 
+          }));
+        }, 150);
+      });
+      return;
+    }
+
     const logs: string[] = [];
     const originalLog = console.log;
     const originalError = console.error;
+
+    // Validate code before execution
+    const validation = validateCode(code);
+    if (!validation.isValid) {
+      queueMicrotask(() => {
+        setTimeout(() => {
+          setOutput(prev => ({ ...prev, [id]: `Error: ${validation.error || 'Code validation failed'}` }));
+        }, 150);
+      });
+      return;
+    }
 
     const customLog = (...args: unknown[]) => logs.push(args.map(a => String(a)).join(' '));
     const customError = (...args: unknown[]) => logs.push(`Error: ${args.map(a => String(a)).join(' ')}`);
@@ -73,15 +100,7 @@ export default function SnippetPracticePage() {
         const fn = new Function(code);
         fn();
     } catch (e: unknown) {
-        if (e instanceof SyntaxError) {
-            logs.push(`SyntaxError: ${e.message}`);
-        } else if (e instanceof ReferenceError) {
-            logs.push(`ReferenceError: ${e.message}`);
-        } else if (e instanceof TypeError) {
-            logs.push(`TypeError: ${e.message}`);
-        } else {
-            logs.push(`Runtime Error: ${e instanceof Error ? e.message : 'Unknown error'}`);
-        }
+        logs.push(sanitizeError(e));
     }
 
     queueMicrotask(() => {

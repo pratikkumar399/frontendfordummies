@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/admin/", "/api/"],
     },
-    sitemap: "https://www.frontenddummies.com/sitemap.xml",
+    sitemap: "https://frontenddummies.comsitemap.xml",
   };
 }

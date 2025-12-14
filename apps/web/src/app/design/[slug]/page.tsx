@@ -52,7 +52,7 @@ export default async function DetailPage({ params }: PageProps) {
     "provider": {
       "@type": "Organization",
       "name": "Frontend For Dummies",
-      "sameAs": "https://www.frontenddummies.com/"
+      "sameAs": "https://frontenddummies.com"
     },
     "educationalLevel": template.tags.find(t => ['Easy', 'Medium', 'Hard'].includes(t)) || 'Intermediate',
     "teaches": template.techStack,
@@ -63,7 +63,7 @@ export default async function DetailPage({ params }: PageProps) {
       "name": template.author
     },
     "image": template.imageUrl,
-    "url": `https://www.frontenddummies.com/design/${template.slug}`,
+    "url": `https://frontenddummies.comdesign/${template.slug}`,
     "hasCourseInstance": {
       "@type": "CourseInstance",
       "courseMode": "online",

@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   keywords: ['frontend challenges', 'coding practice', 'web development', 'javascript exercises', 'react challenges', 'css problems', 'algorithm practice'],
   openGraph: {
     type: 'website',
-    url: 'https://www.frontenddummies.com/explore',
+    url: 'https://frontenddummies.comexplore',
     title: 'Explore Frontend Challenges - Frontend For Dummies',
     description: 'Browse our complete collection of frontend coding challenges, system design problems, and interactive practice exercises.',
     images: [
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     images: ['/og-image.png'],
   },
   alternates: {
-    canonical: 'https://www.frontenddummies.com/explore',
+    canonical: 'https://frontenddummies.comexplore',
   },
 };
 

@@ -25,7 +25,7 @@ const firaCode = Fira_Code({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://www.frontenddummies.com/'),
+  metadataBase: new URL('https://frontenddummies.com'),
   title: {
     default: "Frontend Dummies - Master Frontend Development Skills",
     template: "%s | Frontend Dummies"
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://www.frontenddummies.com/",
+    url: "https://frontenddummies.com",
     siteName: "Frontend Dummies",
     title: "Frontend Dummies - Master Frontend Development Skills",
     description: "A comprehensive platform for mastering frontend coding skills, system design, and building real-world projects.",

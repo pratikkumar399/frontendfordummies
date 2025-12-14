@@ -22,6 +22,8 @@ import {
   Check
 } from 'lucide-react';
 import PageLoader from '@/components/PageLoader';
+import { validateCode, sanitizeError } from '@/lib/code-execution';
+import { checkRateLimit } from '@/lib/rate-limiter';
 
 export default function PracticePage() {
   const { slug } = useParams<{ slug: string }>();
@@ -173,13 +175,26 @@ export default function PracticePage() {
       "@type": "Person",
       "name": template.author
     },
-    "url": `https://www.frontenddummies.com/practice/${template.slug}`
+    "url": `https://frontenddummies.compractice/${template.slug}`
   };
 
   const handleRunCode = async () => {
     if (cleanupTimerRef.current) {
         clearTimeout(cleanupTimerRef.current);
         cleanupTimerRef.current = null;
+    }
+    
+    // Check rate limit
+    const rateLimit = checkRateLimit('practice');
+    if (!rateLimit.allowed) {
+      setLogs([{
+        type: LogType.ERROR,
+        content: `Rate limit exceeded. Please wait ${rateLimit.retryAfter} seconds before running code again.`,
+        timestamp: new Date().toLocaleTimeString()
+      }]);
+      setIsRunning(false);
+      if (consoleHeight < 20) setConsoleHeight(35);
+      return;
     }
     
     setIsRunning(true);
@@ -214,6 +229,19 @@ export default function PracticePage() {
       }
     };
 
+    // Validate code before execution
+    const validation = validateCode(code);
+    if (!validation.isValid) {
+      setLogs(prev => [...prev, {
+        type: LogType.ERROR,
+        content: validation.error || 'Code validation failed',
+        timestamp: new Date().toLocaleTimeString()
+      }]);
+      setIsRunning(false);
+      if (consoleHeight < 20) setConsoleHeight(35);
+      return;
+    }
+
     // Override console
     console.log = (...args) => proxyLog(LogType.LOG, args);
     console.error = (...args) => proxyLog(LogType.ERROR, args);
@@ -227,7 +255,7 @@ export default function PracticePage() {
     } catch (err: unknown) {
       setLogs(prev => [...prev, {
         type: LogType.ERROR,
-        content: err instanceof Error ? err.toString() : String(err),
+        content: sanitizeError(err),
         timestamp: new Date().toLocaleTimeString()
       }]);
     } finally {

@@ -16,6 +16,8 @@ import {
   Code2,
   Home
 } from 'lucide-react';
+import { validateCode, sanitizeError } from '@/lib/code-execution';
+import { checkRateLimit } from '@/lib/rate-limiter';
 
 const DEFAULT_CODE = `// Welcome to JS Playground!
 // Write your JavaScript code here and click Run to execute.
@@ -93,6 +95,18 @@ export default function PlaygroundPage() {
       cleanupTimerRef.current = null;
     }
     
+    // Check rate limit
+    const rateLimit = checkRateLimit('playground');
+    if (!rateLimit.allowed) {
+      setLogs([{
+        type: LogType.ERROR,
+        content: `Rate limit exceeded. Please wait ${rateLimit.retryAfter} seconds before running code again.`,
+        timestamp: new Date().toLocaleTimeString()
+      }]);
+      setIsRunning(false);
+      return;
+    }
+    
     setIsRunning(true);
     setLogs([]);
 
@@ -134,6 +148,18 @@ export default function PlaygroundPage() {
       }
     };
 
+    // Validate code before execution
+    const validation = validateCode(code);
+    if (!validation.isValid) {
+      setLogs(prev => [...prev, {
+        type: LogType.ERROR,
+        content: validation.error || 'Code validation failed',
+        timestamp: new Date().toLocaleTimeString()
+      }]);
+      setIsRunning(false);
+      return;
+    }
+
     // Override console methods
     console.log = (...args) => proxyLog(LogType.LOG, args);
     console.error = (...args) => proxyLog(LogType.ERROR, args);
@@ -151,7 +177,7 @@ export default function PlaygroundPage() {
     } catch (err: unknown) {
       setLogs(prev => [...prev, {
         type: LogType.ERROR,
-        content: err instanceof Error ? err.toString() : String(err),
+        content: sanitizeError(err),
         timestamp: new Date().toLocaleTimeString()
       }]);
     } finally {

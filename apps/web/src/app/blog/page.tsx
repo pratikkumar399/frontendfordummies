@@ -30,12 +30,12 @@ export default function BlogPage() {
     "@type": "Blog",
     "name": "Frontend For Dummies Blog",
     "description": "Learn frontend development through comprehensive guides, tutorials, and best practices.",
-    "url": "https://www.frontenddummies.com/blog",
+    "url": "https://frontenddummies.comblog",
     "blogPost": filteredBlogs.map((blog) => ({
       "@type": "BlogPosting",
       "headline": blog.name,
       "description": blog.shortDescription,
-      "url": `https://www.frontenddummies.com/blog/${blog.slug}`,
+      "url": `https://frontenddummies.comblog/${blog.slug}`,
       "datePublished": blog.createdAt,
       "author": {
         "@type": "Person",
