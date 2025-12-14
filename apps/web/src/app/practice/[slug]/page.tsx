@@ -543,7 +543,9 @@ export default function PracticePage() {
                           className="p-1.5 rounded-md text-[#9ca3af] hover:text-white hover:bg-[#3e3e3e]"
                           title="Undo (Ctrl+Z)"
                           icon={<RotateCcw size={14} />}
-                        />
+                        >
+                          <span className="sr-only">Undo</span>
+                        </Button>
                         <Button
                           onClick={handleRedo}
                           variant={ButtonVariant.GHOST}
@@ -551,7 +553,9 @@ export default function PracticePage() {
                           className="p-1.5 rounded-md text-[#9ca3af] hover:text-white hover:bg-[#3e3e3e]"
                           title="Redo (Ctrl+Y)"
                           icon={<RotateCw size={14} />}
-                        />
+                        >
+                          <span className="sr-only">Redo</span>
+                        </Button>
                     </div>
                 </div>
 

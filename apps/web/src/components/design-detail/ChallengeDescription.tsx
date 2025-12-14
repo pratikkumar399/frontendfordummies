@@ -70,7 +70,9 @@ const CodeBlock = ({ language, value, style }: { language: string, value: string
                 className="absolute top-2 right-2 p-2 rounded-md bg-zinc-700/50 hover:bg-zinc-700 text-zinc-400 hover:text-white opacity-0 group-hover:opacity-100 transition-all duration-200"
                 title="Copy code"
                 icon={isCopied ? <Check size={16} className="text-green-400" /> : <Copy size={16} />}
-            />
+            >
+                <span className="sr-only">Copy code</span>
+            </Button>
             <SyntaxHighlighter
                 style={style}
                 language={language}
