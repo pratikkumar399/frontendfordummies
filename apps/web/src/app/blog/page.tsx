@@ -28,7 +28,7 @@ export default function BlogPage() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Blog",
-    "name": "Frontend For Dummies Blog",
+    "name": "Frontend Dummies Blog",
     "description": "Learn frontend development through comprehensive guides, tutorials, and best practices.",
     "url": "https://frontenddummies.com/blog",
     "blogPost": filteredBlogs.map((blog) => ({

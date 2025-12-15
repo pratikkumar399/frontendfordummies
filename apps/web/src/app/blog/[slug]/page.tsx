@@ -61,7 +61,7 @@ export default async function BlogDetailPage({ params }: PageProps) {
     },
     "publisher": {
       "@type": "Organization",
-      "name": "Frontend For Dummies",
+      "name": "Frontend Dummies",
       "logo": {
         "@type": "ImageObject",
         "url": "https://frontenddummies.com/favicon.ico"

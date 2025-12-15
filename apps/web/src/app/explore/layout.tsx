@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     url: 'https://frontenddummies.com/explore',
-    title: 'Explore Frontend Challenges - Frontend For Dummies',
+    title: 'Explore Frontend Challenges - Frontend Dummies',
     description: 'Browse our complete collection of frontend coding challenges, system design problems, and interactive practice exercises.',
     images: [
       {
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Explore Frontend Challenges - Frontend For Dummies',
+    title: 'Explore Frontend Challenges - Frontend Dummies',
     description: 'Browse our complete collection of frontend coding challenges, system design problems, and interactive practice exercises.',
     images: ['/og-image.png'],
   },

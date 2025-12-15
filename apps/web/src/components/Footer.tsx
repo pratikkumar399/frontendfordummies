@@ -21,7 +21,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-8 pt-8 border-t border-white/5 text-center text-xs text-zinc-600">
-          © {new Date().getFullYear()} Frontend For Dummies. Open Source Learning.
+          © {new Date().getFullYear()} Frontend Dummies. Open Source Learning.
         </div>
       </div>
     </footer>

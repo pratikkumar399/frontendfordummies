@@ -24,7 +24,7 @@ export default function Home() {
     },
     "publisher": {
       "@type": "Organization",
-      "name": "Frontend For Dummies",
+      "name": "Frontend Dummies",
       "logo": {
         "@type": "ImageObject",
         "url": "https://frontenddummies.com/og-image.png"

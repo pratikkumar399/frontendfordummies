@@ -51,7 +51,7 @@ export default async function DetailPage({ params }: PageProps) {
     "description": template.shortDescription,
     "provider": {
       "@type": "Organization",
-      "name": "Frontend For Dummies",
+      "name": "Frontend Dummies",
       "sameAs": "https://frontenddummies.com/"
     },
     "educationalLevel": template.tags.find(t => ['Easy', 'Medium', 'Hard'].includes(t)) || 'Intermediate',
