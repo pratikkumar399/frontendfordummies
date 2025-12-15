@@ -7,6 +7,7 @@ import { SMART_JS_MD } from '@/data/markdown/smartjs';
 import { DEBOUNCE_EDITORIAL } from '@/data/editorial/debounce-editorial';
 import { PROMISE_OUTPUT_CHALLENGES_SNIPPETS } from '@/data/snippets/promise-output-challenges';
 import { TURBOREPO_MD } from '@/data/markdown/turborepo';
+import { JAVASCRIPT_FUNDAMENTALS_MD } from '@/data/markdown/javascript-fundamentals';
 
 export const INITIAL_TEMPLATES: Template[] = [
   {
@@ -112,5 +113,21 @@ The key insight with debouncing is that we reset the timer every time the functi
     author: 'modernDev',
     createdAt: '2025-01-15',
     goal: 'Understand Turborepo and learn how to migrate your monorepo for faster builds and better developer experience.'
+  },
+  {
+    id: '7',
+    name: 'JavaScript Basics and Language Fundamentals',
+    slug: 'javascript-fundamentals',
+    shortDescription: 'Deep dive into how JavaScript really works: types, memory, hoisting, coercion, and references.',
+    fullDescription: JAVASCRIPT_FUNDAMENTALS_MD,
+    imageUrl: 'https://placehold.co/800x600/f97316/ffffff/png?text=JS+Fundamentals',
+    demoUrl: '#',
+    githubUrl: '#',
+    tags: ['JavaScript', 'Fundamentals', 'Types', 'Hoisting'],
+    category: Category.JAVASCRIPT,
+    techStack: ['JavaScript'],
+    author: 'modernDev',
+    createdAt: '2025-12-16',
+    goal: 'Build a rock-solid mental model of JavaScript core language fundamentals so the language stops surprising you.'
   }
 ];

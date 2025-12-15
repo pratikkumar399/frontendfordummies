@@ -1,0 +1,435 @@
+export const JAVASCRIPT_FUNDAMENTALS_MD = `
+# JavaScript Basics and Language Fundamentals
+
+*A deep, practical guide to how JavaScript actually works*
+
+JavaScript looks simple on the surface. You can write a few lines, manipulate the DOM, fetch data, and ship features quickly. But under the hood, JavaScript has nuanced rules around memory, execution, coercion, and scope that directly affect correctness, performance, and debuggability.
+
+This article goes step by step through the core language fundamentals that every serious JavaScript developer must understand. Not as isolated topics, but as a connected system.
+
+---
+
+## 1. JavaScript Data Types
+
+### Primitive vs Non-Primitive
+
+JavaScript has **seven primitive types** and **one non-primitive category**.
+
+### Primitive Types
+
+Primitive values are **immutable** and **stored by value**.
+
+1. \`number\`
+2. \`string\`
+3. \`boolean\`
+4. \`undefined\`
+5. \`null\`
+6. \`symbol\`
+7. \`bigint\`
+
+Example:
+
+\`\`\`js
+let a = 10;
+let b = a;
+b = 20;
+
+console.log(a); // 10
+\`\`\`
+
+Here, \`a\` and \`b\` hold independent copies of the value.
+
+### Non-Primitive Types
+
+Non-primitives are **objects**, including:
+
+* Objects
+* Arrays
+* Functions
+* Dates
+* Maps, Sets, etc.
+
+They are **stored by reference**.
+
+\`\`\`js
+let obj1 = { x: 10 };
+let obj2 = obj1;
+
+obj2.x = 20;
+console.log(obj1.x); // 20
+\`\`\`
+
+Both variables point to the same memory location.
+
+Key takeaway:
+Primitive types copy values. Objects copy references.
+
+---
+
+## 2. \`var\`, \`let\`, and \`const\`
+
+### \`var\`
+
+* Function-scoped
+* Hoisted and initialized with \`undefined\`
+* Can be re-declared and re-assigned
+
+\`\`\`js
+console.log(a); // undefined
+var a = 10;
+\`\`\`
+
+This behavior is a common source of bugs and is why \`var\` is largely avoided today.
+
+### \`let\`
+
+* Block-scoped
+* Hoisted but not initialized
+* Can be re-assigned but not re-declared in the same scope
+
+\`\`\`js
+let x = 10;
+x = 20; // allowed
+\`\`\`
+
+### \`const\`
+
+* Block-scoped
+* Must be initialized
+* Cannot be re-assigned
+
+\`\`\`js
+const y = 10;
+// y = 20; ❌ error
+\`\`\`
+
+Important clarification:
+\`const\` does **not** make objects immutable.
+
+\`\`\`js
+const user = { name: "A" };
+user.name = "B"; // allowed
+\`\`\`
+
+It only prevents reassignment of the reference.
+
+---
+
+## 3. Hoisting in JavaScript
+
+Hoisting is JavaScript’s behavior of **moving declarations to the top of the scope during compilation**.
+
+What gets hoisted:
+
+* Variable declarations
+* Function declarations
+
+What does not get hoisted:
+
+* Variable initializations
+* Function expressions
+
+Example:
+
+\`\`\`js
+console.log(a); // undefined
+var a = 10;
+\`\`\`
+
+This is effectively treated as:
+
+\`\`\`js
+var a;
+console.log(a);
+a = 10;
+\`\`\`
+
+Function declarations are fully hoisted:
+
+\`\`\`js
+sayHello();
+
+function sayHello() {
+  console.log("Hello");
+}
+\`\`\`
+
+Function expressions are not:
+
+\`\`\`js
+sayHi(); // error
+
+const sayHi = () => {};
+\`\`\`
+
+---
+
+## 4. Temporal Dead Zone (TDZ)
+
+The **Temporal Dead Zone** is the time between entering a scope and initializing a \`let\` or \`const\` variable.
+
+\`\`\`js
+console.log(a); // ReferenceError
+let a = 10;
+\`\`\`
+
+The variable exists in memory, but it cannot be accessed.
+
+Why TDZ exists:
+
+* To prevent accessing variables before they are properly initialized
+* To avoid bugs that \`var\` introduced
+
+TDZ enforces safer coding practices.
+
+---
+
+## 5. \`null\` vs \`undefined\`
+
+### \`undefined\`
+
+* Means a variable exists but has no value
+* Assigned automatically by JavaScript
+
+\`\`\`js
+let a;
+console.log(a); // undefined
+\`\`\`
+
+### \`null\`
+
+* Explicitly assigned
+* Represents intentional absence of value
+
+\`\`\`js
+let b = null;
+\`\`\`
+
+Key difference:
+
+* \`undefined\` is a default state
+* \`null\` is an intentional decision
+
+---
+
+## 6. \`==\` vs \`===\`
+
+### \`==\` (Loose Equality)
+
+* Performs type coercion
+* Compares values after conversion
+
+\`\`\`js
+0 == "0";      // true
+false == 0;    // true
+null == undefined; // true
+\`\`\`
+
+### \`===\` (Strict Equality)
+
+* No type coercion
+* Compares both type and value
+
+\`\`\`js
+0 === "0"; // false
+\`\`\`
+
+Rule of thumb:
+Use \`===\` unless you have a very specific reason not to.
+
+Loose equality introduces implicit conversions that are hard to reason about.
+
+---
+
+## 7. Type Coercion Rules
+
+Type coercion is JavaScript automatically converting values from one type to another.
+
+### String coercion
+
+\`\`\`js
+"5" + 1; // "51"
+\`\`\`
+
+### Numeric coercion
+
+\`\`\`js
+"5" - 1; // 4
+\`\`\`
+
+### Boolean coercion
+
+Falsy values:
+
+* \`false\`
+* \`0\`
+* \`""\`
+* \`null\`
+* \`undefined\`
+* \`NaN\`
+
+Everything else is truthy.
+
+\`\`\`js
+if ("0") {
+  // this runs
+}
+\`\`\`
+
+Understanding coercion is critical for writing predictable conditions.
+
+---
+
+## 8. \`typeof\` Quirks
+
+The \`typeof\` operator is useful but imperfect.
+
+\`\`\`js
+typeof 10;        // "number"
+typeof "a";       // "string"
+typeof true;      // "boolean"
+typeof undefined; // "undefined"
+typeof function(){}; // "function"
+\`\`\`
+
+The famous bug:
+
+\`\`\`js
+typeof null; // "object"
+\`\`\`
+
+This is a historical bug in JavaScript that cannot be fixed without breaking the web.
+
+Correct way to check null:
+
+\`\`\`js
+value === null;
+\`\`\`
+
+---
+
+## 9. \`NaN\` and Edge Cases
+
+\`NaN\` stands for Not a Number.
+
+\`\`\`js
+Number("abc"); // NaN
+\`\`\`
+
+Important properties:
+
+\`\`\`js
+NaN === NaN; // false
+\`\`\`
+
+To check NaN:
+
+\`\`\`js
+Number.isNaN(value);
+\`\`\`
+
+Avoid:
+
+\`\`\`js
+isNaN("abc"); // true (coerces first)
+\`\`\`
+
+Always prefer \`Number.isNaN\`.
+
+---
+
+## 10. Pass by Value vs Pass by Reference
+
+JavaScript technically uses **pass by value**, but the value for objects is a reference.
+
+### Primitive example
+
+\`\`\`js
+function change(x) {
+  x = 20;
+}
+
+let a = 10;
+change(a);
+console.log(a); // 10
+\`\`\`
+
+### Object example
+
+\`\`\`js
+function change(obj) {
+  obj.x = 20;
+}
+
+let o = { x: 10 };
+change(o);
+console.log(o.x); // 20
+\`\`\`
+
+The reference is copied, not the object itself.
+
+---
+
+## 11. Shallow Copy vs Deep Copy
+
+### Shallow Copy
+
+Copies only the first level.
+
+\`\`\`js
+const obj = { a: 1, b: { c: 2 } };
+const copy = { ...obj };
+
+copy.b.c = 5;
+console.log(obj.b.c); // 5
+\`\`\`
+
+Methods that create shallow copies:
+
+* Spread operator
+* \`Object.assign\`
+* \`Array.slice\`
+
+### Deep Copy
+
+Creates a completely independent copy.
+
+Common approaches:
+
+\`\`\`js
+JSON.parse(JSON.stringify(obj));
+\`\`\`
+
+Limitations:
+
+* Loses functions
+* Breaks dates
+* Cannot handle circular references
+
+Better approach:
+
+* \`structuredClone\` (modern browsers)
+* Libraries like \`lodash.cloneDeep\`
+
+---
+
+## Final Mental Model
+
+JavaScript is not weird. It is **consistent**, but opinionated and historically constrained.
+
+If you understand:
+
+* How memory works
+* How hoisting and TDZ protect you
+* How coercion changes values
+* How references behave
+
+Then JavaScript stops surprising you.
+
+Most bugs are not caused by React, frameworks, or tools.
+They are caused by misunderstanding these fundamentals.
+
+Master these, and everything else becomes easier.
+`;
+
+
