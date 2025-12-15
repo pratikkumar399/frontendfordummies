@@ -14,7 +14,7 @@ export default function Home() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "Frontend For Dummies",
+    "name": "Frontend Dummies",
     "description": "A comprehensive platform for mastering frontend coding skills, system design, and building real-world projects.",
     "url": "https://frontenddummies.com/",
     "potentialAction": {
@@ -35,7 +35,7 @@ export default function Home() {
   const organizationData = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "Frontend For Dummies",
+    "name": "Frontend Dummies",
     "url": "https://frontenddummies.com/",
     "logo": "https://frontenddummies.com/og-image.png",
     "sameAs": [
