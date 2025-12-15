@@ -411,25 +411,6 @@ Better approach:
 * \`structuredClone\` (modern browsers)
 * Libraries like \`lodash.cloneDeep\`
 
----
-
-## Final Mental Model
-
-JavaScript is not weird. It is **consistent**, but opinionated and historically constrained.
-
-If you understand:
-
-* How memory works
-* How hoisting and TDZ protect you
-* How coercion changes values
-* How references behave
-
-Then JavaScript stops surprising you.
-
-Most bugs are not caused by React, frameworks, or tools.
-They are caused by misunderstanding these fundamentals.
-
-Master these, and everything else becomes easier.
 `;
 
 
