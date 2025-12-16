@@ -214,7 +214,7 @@ export default function SnippetPracticePage() {
 
                         <div className="space-y-3">
                             <p className="text-sm font-medium text-[#9ca3af]">What will be the output?</p>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div className="grid grid-cols-1 gap-3">
                                 {snippet.options?.map((option, optIdx) => {
                                     let stateClass = "border-[#3e3e3e] hover:border-primary-400 bg-[#262626] text-white";
                                     
@@ -235,12 +235,18 @@ export default function SnippetPracticePage() {
                                             disabled={isAnswered}
                                             variant={ButtonVariant.OUTLINE}
                                             size={ButtonSize.MD}
-                                            className={`relative px-4 py-3 rounded-lg text-left text-sm font-medium border transition-all duration-200 ${stateClass}`}
+                                            className={`relative w-full px-4 py-3 rounded-lg text-left text-sm font-medium border transition-all duration-200 ${stateClass}`}
                                         >
-                                            <div className="flex items-center justify-between w-full">
-                                                <span>{option}</span>
-                                                {isAnswered && optIdx === snippet.correctAnswer && <CheckCircle2 size={16} className="text-green-500" />}
-                                                {isAnswered && optIdx === userAns && optIdx !== snippet.correctAnswer && <XCircle size={16} className="text-red-500" />}
+                                            <div className="flex items-start justify-between w-full gap-3">
+                                                <span className="break-words leading-relaxed text-sm">
+                                                    {option}
+                                                </span>
+                                                {isAnswered && optIdx === snippet.correctAnswer && (
+                                                    <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-green-500" />
+                                                )}
+                                                {isAnswered && optIdx === userAns && optIdx !== snippet.correctAnswer && (
+                                                    <XCircle size={16} className="mt-0.5 shrink-0 text-red-500" />
+                                                )}
                                             </div>
                                         </Button>
                                     );
