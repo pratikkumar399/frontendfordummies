@@ -26,6 +26,7 @@ export interface Template {
     snippets?: Snippet[]; // Optional list of snippets for prediction mode
     goal?: string; // Optional goal description for the challenge
     directToPractice?: boolean; // If true, "Start Challenge" goes directly to practice page instead of design page
+    directToSnippetPractice?: boolean; // If true, "Start Challenge" goes directly to snippet practice page instead of design page
 }
 
 export enum Category {

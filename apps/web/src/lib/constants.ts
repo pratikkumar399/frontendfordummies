@@ -20,7 +20,8 @@ export const INITIAL_TEMPLATES: Template[] = [
     author: 'modernDev',
     createdAt: '2025-12-02',
     snippets: JS_OUTPUT_CHALLENGES_SNIPPETS,
-    goal: 'Test your JavaScript knowledge by predicting the correct output for each snippet. Aim for 100% accuracy!'
+    goal: 'Test your JavaScript knowledge by predicting the correct output for each snippet. Aim for 100% accuracy!',
+    directToSnippetPractice: true,
   },
   {
     id: '2',

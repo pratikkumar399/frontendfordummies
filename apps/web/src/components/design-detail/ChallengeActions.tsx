@@ -23,7 +23,7 @@ export const ChallengeActions: React.FC<ChallengeActionsProps> = ({ template }) 
           <Button
             onClick={() => router.push(`/practice/${template.slug}`)}
             variant={ButtonVariant.PRIMARY}
-            size={ButtonSize.LG}
+            size={ButtonSize.MD}
             className="w-full shadow-[0_0_20px_rgba(74,222,128,0.3)] border-primary-500/50"
             icon={<PlayCircle size={18} fill="currentColor" className="text-white/20" />}
           >
@@ -36,7 +36,7 @@ export const ChallengeActions: React.FC<ChallengeActionsProps> = ({ template }) 
           <Button
             onClick={() => router.push(`/snippet-practice/${template.slug}`)}
             variant={ButtonVariant.PRIMARY}
-            size={ButtonSize.LG}
+            size={ButtonSize.MD}
             className="w-full shadow-[0_0_20px_rgba(74,222,128,0.3)] border-primary-500/50"
             icon={<PlayCircle size={18} fill="currentColor" className="text-white/20" />}
           >
@@ -50,7 +50,7 @@ export const ChallengeActions: React.FC<ChallengeActionsProps> = ({ template }) 
           <LinkButton
             href={template.demoUrl}
             variant={(isIDESupported || isSnippetSupported) ? ButtonVariant.SECONDARY : ButtonVariant.PRIMARY}
-            size={ButtonSize.LG}
+            size={ButtonSize.MD}
             className="w-full"
             icon={<ExternalLink size={18} />}
           >

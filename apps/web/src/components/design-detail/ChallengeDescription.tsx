@@ -17,8 +17,7 @@ const DEFAULT_GOAL = 'Implement this within 45-60 minutes. Focus on clean code, 
 
 export const ChallengeDescription: React.FC<ChallengeDescriptionProps> = ({ template }) => {
   return (
-    <div className="bg-dark-card rounded-2xl p-8 border border-dark-border">
-      {/* <h2 className="text-2xl font-bold text-white mb-6">Challenge Description</h2> */}
+    <div>
       <div className={styles.markdownContent}>
         <ReactMarkdown
           components={{

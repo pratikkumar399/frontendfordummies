@@ -11,21 +11,22 @@ interface TemplateListItemProps {
   template: Template;
 }
 
-// Helper function to determine the challenge URL
+
 const getChallengeUrl = (template: Template): string => {
-  // Blogs go to blog page
+
   if (template.category === Category.BLOGS) {
     return `/blog/${template.slug}`;
   }
-  // If directToPractice is explicitly set, use it
   if (template.directToPractice) {
-    // Determine the practice route based on category
     if (template.category === Category.SNIPPET_PRACTICE && template.snippets?.length) {
       return `/snippet-practice/${template.slug}`;
     }
     if (template.starterCode) {
       return `/practice/${template.slug}`;
     }
+  }
+  if (template.directToSnippetPractice) {
+      return `/snippet-practice/${template.slug}`;
   }
   return `/design/${template.slug}`;
 };
@@ -38,7 +39,6 @@ export const TemplateListItem: React.FC<TemplateListItemProps> = ({ template }) 
     <div className="group relative flex flex-col sm:flex-row items-stretch sm:items-center gap-4 p-4 bg-[#18181b] rounded-[12px] border border-white/5 hover:border-primary-500 transition-all duration-300 hover:shadow-lg hover:shadow-primary-900/10 cursor-pointer"
     onClick={() => router.push(challengeUrl)}
     >
-      {/* Image */}
       <div className="flex-shrink-0 w-full sm:w-32 h-32 sm:h-20 rounded-xl overflow-hidden bg-[#202022] relative" style={{ borderRadius: '0.75rem' }}>
         <Image 
           src={template.imageUrl} 
@@ -50,7 +50,7 @@ export const TemplateListItem: React.FC<TemplateListItemProps> = ({ template }) 
         />
       </div>
 
-      {/* Content */}
+
       <div className="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-center gap-4">
         <div className="flex-1 min-w-0 overflow-hidden sm:pr-0">
           <div className="flex items-center gap-2 mb-1">
@@ -78,7 +78,7 @@ export const TemplateListItem: React.FC<TemplateListItemProps> = ({ template }) 
           </div>
         </div>
         
-        {/* Action Button */}
+
         <Link 
           href={challengeUrl}
           className="flex-shrink-0 flex items-center justify-center gap-2 px-4 py-2.5 h-10 bg-white/5 hover:bg-primary-600 hover:text-white text-zinc-300 rounded-[6px] text-sm font-semibold transition-all duration-300 group/btn border border-transparent hover:border-primary-500/50 w-full sm:w-[180px]"

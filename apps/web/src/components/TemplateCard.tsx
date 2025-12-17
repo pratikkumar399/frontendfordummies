@@ -23,6 +23,9 @@ const getChallengeUrl = (template: Template): string => {
     if (template.category === Category.SNIPPET_PRACTICE && template.snippets?.length) {
       return `/snippet-practice/${template.slug}`;
     }
+    if (template.directToSnippetPractice) {
+      return `/snippet-practice/${template.slug}`;
+    }
     if (template.starterCode) {
       return `/practice/${template.slug}`;
     }

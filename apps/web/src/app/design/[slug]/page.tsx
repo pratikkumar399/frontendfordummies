@@ -82,37 +82,83 @@ export default async function DetailPage({ params }: PageProps) {
           <div className={`${styles.glowBlob} bg-primary-600/5 w-[800px] h-[800px] top-[0] right-[-200px] blur-[120px]`}></div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           
 
           <div className="mb-8">
             <BackButton />
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            <div className="lg:col-span-3 space-y-8">
-              <div className="rounded-2xl overflow-hidden border border-dark-border shadow-2xl bg-dark-card aspect-video relative group">
+          {/* Single-column layout inspired by article page */}
+          <div className="space-y-10 lg:space-y-12">
+            {/* Header section */}
+            <header className="space-y-6">
+              {/* Badges */}
+              <div className="flex flex-wrap items-center gap-3 text-xs font-medium text-zinc-400 uppercase tracking-[0.2em]">
+                <span className="text-primary-400">Starter</span>
+                {template.tags
+                  .filter(tag => !['Easy', 'Medium', 'Hard'].includes(tag))
+                  .slice(0, 2)
+                  .map(tag => (
+                    <span
+                      key={tag}
+                      className="px-2 py-1 rounded-full bg-dark-bg/60 border border-dark-border text-[10px] normal-case tracking-normal text-zinc-300"
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+              </div>
+
+              {/* Title + subtitle full width */}
+              <div className="space-y-4">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight tracking-tight">
+                  {template.name}
+                </h1>
+
+                <p className="text-zinc-400 text-sm sm:text-base">
+                  {template.shortDescription}
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-wrap items-center gap-3 text-xs text-zinc-500">
+                  <span className="font-medium text-zinc-300">
+                    By {template.author}
+                  </span>
+                  <span className="w-1 h-1 rounded-full bg-zinc-700" />
+                  <span>{template.createdAt}</span>
+                  {template.tags.find(tag => ['Easy', 'Medium', 'Hard'].includes(tag)) && (
+                    <>
+                      <span className="w-1 h-1 rounded-full bg-zinc-700" />
+                      <span className="uppercase tracking-[0.18em] text-zinc-400">
+                        {template.tags.find(tag => ['Easy', 'Medium', 'Hard'].includes(tag))}
+                      </span>
+                    </>
+                  )}
+                </div>
+
+                <div className="w-full max-w-sm sm:w-auto sm:flex-1 sm:max-w-xs">
+                  <ChallengeActions template={template} />
+                </div>
+              </div>
+            </header>
+
+            <div className="overflow-hidden ">
+              <div className="aspect-video relative group">
                 <Image
                   src={template.imageUrl} 
                   alt={template.name}
                   width={1000}
                   height={1000}
-                  className="w-full h-full object-contain opacity-90"
+                  className="w-full h-full rounded-[12px]  lg:object-cover opacity-90"
                   priority
                 />
-
               </div>
-              
-              <ChallengeActions template={template} />
-              <ChallengeDescriptionServer template={template} />
+
+              <div className="pt-6 ">
+                <ChallengeDescriptionServer template={template} />
+              </div>
             </div>
-
-            {/* Right Column: Meta Info Card */}
-            {/* <div className="space-y-6">
-              <ChallengeStats template={template} />
-            </div> */}
-
           </div>
         </div>
       </div>

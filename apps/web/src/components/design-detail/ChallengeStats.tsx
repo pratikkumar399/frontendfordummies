@@ -9,7 +9,7 @@ interface ChallengeStatsProps {
 
 export const ChallengeStats: React.FC<ChallengeStatsProps> = ({ template }) => {
   return (
-    <div className="bg-[#1e1e20] rounded-2xl p-6 lg:p-8 border border-white/5 shadow-2xl sticky top-24 ring-1 ring-white/5 relative overflow-hidden">
+    <div className="bg-[#1e1e20] rounded-2xl p-6 lg:p-8 border border-white/5 shadow-2xl sticky  ring-1 ring-white/5 relative overflow-hidden">
       
       {/* Subtle top gradient line */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary-600 via-primary-400 to-primary-600 opacity-50" />
@@ -33,14 +33,14 @@ export const ChallengeStats: React.FC<ChallengeStatsProps> = ({ template }) => {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 gap-3 mb-8">
-        <div className="bg-white/5 rounded-lg p-3 border border-white/5 hover:border-white/10 transition-colors group">
+        <div className="bg-white/5 rounded-[6px] p-3 border border-white/5 hover:border-white/10 transition-colors group">
           <div className="flex items-center text-zinc-500 text-[10px] uppercase tracking-wider font-bold mb-1">
             <User size={12} className="mr-1.5 group-hover:text-white transition-colors" />
             Source
           </div>
           <div className="text-zinc-200 text-sm font-semibold truncate" title={template.author}>{template.author}</div>
         </div>
-        <div className="bg-white/5 rounded-lg p-3 border border-white/5 hover:border-white/10 transition-colors group">
+        <div className="bg-white/5 rounded-[6px] p-3 border border-white/5 hover:border-white/10 transition-colors group">
           <div className="flex items-center text-zinc-500 text-[10px] uppercase tracking-wider font-bold mb-1">
             <Calendar size={12} className="mr-1.5 group-hover:text-white transition-colors" />
             Added
@@ -86,7 +86,7 @@ export const ChallengeStats: React.FC<ChallengeStatsProps> = ({ template }) => {
       </div>
 
       {/* Pro Tip Card */}
-      <div className="mt-8 relative group">
+      {/* <div className="mt-8 relative group">
         <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-orange-500/20 blur-xl opacity-0 group-hover:opacity-50 transition-opacity duration-700" />
         <div className="relative bg-gradient-to-br from-amber-950/30 to-black border border-amber-900/50 rounded-xl p-5 shadow-lg">
           <div className="flex gap-4">
@@ -101,7 +101,7 @@ export const ChallengeStats: React.FC<ChallengeStatsProps> = ({ template }) => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
     </div>
   );
