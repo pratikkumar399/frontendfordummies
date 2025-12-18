@@ -68,7 +68,13 @@ Performance Impact: Layout is computationally expensive. Accessing certain prope
 
 After layout, the browser converts the Render Tree into actual pixels through painting. This creates layers and fills in text, colors, images, borders, shadows, and other visual properties. It creates layers for efficient updates, elements with certain properties like `transform`, `opacity`, or `position: fixed` often get their own layers.
 
-Paint costs vary by CSS property. Solid colors are cheap to paint. Gradients require per-pixel calculations. Shadows and blurs are expensive because they examine multiple pixels to calculate each output pixel. Text rendering is relatively optimized, while complex filters can be very costly.
+Paint costs vary by different CSS property. 
+- Solid colors are cheaper to paint. 
+- Gradients require per-pixel complex calculations. 
+- Shadows and blurs are expensive because they examine multiple pixels to calculate each output pixel. 
+- Text rendering is relatively optimized, while complex filters can be very costly.
+
+Since some properties are expensive than others, they increase the time taken to paint the page.
 
 ### Stage 6: Composite
 
@@ -89,15 +95,15 @@ This is crucial for performance: properties like `transform` and `opacity` can b
 }
 ```
 
-## How JavaScript Blocks the Critical Path
+## How JavaScript Blocks the Critical Path?
 
-JavaScript fundamentally disrupts this flow. When the browser encounters a `<script>` tag, it stops DOM construction, downloads the JavaScript if external, executes it, then resumes parsing.
+javaScript disrupts this flow. When the browser encounters a `<script>` tag, it stops DOM construction, downloads the JavaScript if external, executes it, then resumes parsing.
 
-This blocking exists because JavaScript can modify everything—the DOM, styles, even document structure. The browser can't continue safely without executing scripts first.
+This blocking happens because JavaScript can modify everything: the DOM, styles, even document structure. The browser can't continue safely without executing scripts first.
 
 ### Async and Defer Attributes
 
-Modern HTML provides two attributes that change this blocking behavior:
+HTML provides two attributes that changes this blocking behavior:
 
 **Async scripts** download in parallel and execute immediately when ready, pausing parsing only during execution:
 
