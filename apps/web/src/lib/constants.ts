@@ -143,22 +143,23 @@ The key insight with debouncing is that we reset the timer every time the functi
     createdAt: '2025-12-16',
     goal: 'Use this checklist to ship SEO-friendly pages with strong Core Web Vitals.'
   },
+  // {
+  //   id: '9',
+  //   name: 'Modal Component',
+  //   slug: 'modal-component',
+  //   shortDescription: 'A modal component that can be used to display a modal.',
+  //   fullDescription: '',
+  //   imageUrl: 'https://placehold.co/800x600/8b5cf6/ffffff/png?text=Modal+Component',
+  //   demoUrl: '/design/modal-component/demo',
+  //   githubUrl: '#',
+  //   tags: ['React', 'Modal Component'],
+  //   category: Category.REACT,
+  //   techStack: ['React'],
+  //   author: 'modernDev',
+  //   createdAt: '2025-12-17',
+  //   goal: 'Implement a modal component that can be used to display a modal.'
+  // },
   {
-    id: '9',
-    name: 'Modal Component',
-    slug: 'modal-component',
-    shortDescription: 'A modal component that can be used to display a modal.',
-    fullDescription: '',
-    imageUrl: 'https://placehold.co/800x600/8b5cf6/ffffff/png?text=Modal+Component',
-    demoUrl: '/design/modal-component/demo',
-    githubUrl: '#',
-    tags: ['React', 'Modal Component'],
-    category: Category.REACT,
-    techStack: ['React'],
-    author: 'modernDev',
-    createdAt: '2025-12-17',
-    goal: 'Implement a modal component that can be used to display a modal.'
-  }, {
     id: '10',
     name: 'Understanding the Critical Rendering Path',
     slug: 'understanding-the-critical-rendering-path',
