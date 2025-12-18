@@ -4,6 +4,7 @@ import path from 'path';
 const DEMO_PATHS: Record<string, string> = {
   'nested-comments-system': 'src/components/demos/NestedCommentsSystem',
   'infinite-scroll-component': 'src/components/demos/InfiniteScrollDemo.tsx',
+  'modal-component': 'src/components/demos/ModalComponent',
 };
 
 export interface FileNode {
@@ -17,7 +18,7 @@ export interface FileNode {
 
 async function getFilesRecursively(dir: string, basePath: string): Promise<FileNode[]> {
   const entries = await fs.readdir(dir, { withFileTypes: true });
-  
+
   // Sort entries: directories first, then files, alphabetically
   entries.sort((a, b) => {
     if (a.isDirectory() && !b.isDirectory()) return -1;
@@ -43,11 +44,11 @@ async function getFilesRecursively(dir: string, basePath: string): Promise<FileN
       const content = await fs.readFile(fullPath, 'utf-8');
       const ext = path.extname(entry.name).toLowerCase();
       let language = 'javascript';
-      
+
       if (ext === '.ts' || ext === '.tsx') language = 'typescript';
       else if (ext === '.css') language = 'css';
       else if (ext === '.json') language = 'json';
-      
+
       nodes.push({
         name: entry.name,
         type: 'file',
@@ -68,10 +69,10 @@ export async function getDemoFiles(slug: string): Promise<FileNode[]> {
   }
 
   const fullPath = path.join(process.cwd(), relativePath);
-  
+
   try {
     const stats = await fs.stat(fullPath);
-    
+
     if (stats.isDirectory()) {
       return getFilesRecursively(fullPath, fullPath);
     } else {
@@ -79,7 +80,7 @@ export async function getDemoFiles(slug: string): Promise<FileNode[]> {
       const name = path.basename(fullPath);
       const ext = path.extname(name).toLowerCase();
       let language = 'javascript';
-      
+
       if (ext === '.ts' || ext === '.tsx') language = 'typescript';
       else if (ext === '.css') language = 'css';
       else if (ext === '.json') language = 'json';

@@ -2,6 +2,7 @@ import { Template, Category } from '@/types/types';
 import { JS_OUTPUT_CHALLENGES_SNIPPETS } from '@/data/snippets/js-output-challenges';
 import { DEBOUNCE_STARTER_CODE } from '@/data/starter-code/debounce';
 import commentsImage from '@/data/assets/comments.png';
+import criticalRenderingPathImage from '@/data/assets/crp.png';
 import { PROMISE_OUTPUT_CHALLENGES_SNIPPETS } from '@/data/snippets/promise-output-challenges';
 
 export const INITIAL_TEMPLATES: Template[] = [
@@ -141,5 +142,36 @@ The key insight with debouncing is that we reset the timer every time the functi
     author: 'modernDev',
     createdAt: '2025-12-16',
     goal: 'Use this checklist to ship SEO-friendly pages with strong Core Web Vitals.'
-  }
+  },
+  {
+    id: '9',
+    name: 'Modal Component',
+    slug: 'modal-component',
+    shortDescription: 'A modal component that can be used to display a modal.',
+    fullDescription: '',
+    imageUrl: 'https://placehold.co/800x600/8b5cf6/ffffff/png?text=Modal+Component',
+    demoUrl: '/design/modal-component/demo',
+    githubUrl: '#',
+    tags: ['React', 'Modal Component'],
+    category: Category.REACT,
+    techStack: ['React'],
+    author: 'modernDev',
+    createdAt: '2025-12-17',
+    goal: 'Implement a modal component that can be used to display a modal.'
+  }, {
+    id: '10',
+    name: 'Understanding the Critical Rendering Path',
+    slug: 'understanding-the-critical-rendering-path',
+    shortDescription: 'A guide to the critical rendering path and how to optimize it.',
+    fullDescription: '',
+    imageUrl: criticalRenderingPathImage.src,
+    demoUrl: '#',
+    githubUrl: '#',
+    tags: ['Critical Rendering Path', 'Performance', 'Frontend'],
+    category: Category.BLOGS,
+    techStack: ['Critical Rendering Path', 'Performance', 'Frontend'],
+    author: 'modernDev',
+    createdAt: '2025-12-17',
+    goal: 'Understand the critical rendering path and how to optimize it. This will help you to build faster and more responsive websites.'
+  },
 ];

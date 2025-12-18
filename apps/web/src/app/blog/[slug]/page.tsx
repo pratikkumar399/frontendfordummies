@@ -136,7 +136,7 @@ export default async function BlogDetailPage({ params }: PageProps) {
                   alt={template.name}
                   width={1000}
                   height={1000}
-                  className="w-full h-full rounded-[12px]  object-cover opacity-90"
+                  className="w-auto h-full rounded-[12px]  object-contain opacity-90 mx-auto"
                   priority
                 />
               </div>

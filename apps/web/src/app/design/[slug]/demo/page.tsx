@@ -7,10 +7,11 @@ import { InfiniteScrollDemo } from '@/components/demos/InfiniteScrollDemo';
 import { CommentsList } from '@/components/demos/NestedCommentsSystem';
 import { getChallengeBySlug } from '@/lib/challenges';
 import { ButtonVariant, ButtonSize } from '@/types/types';
+import ModalComponent from '@/components/demos/ModalComponent';
 
 const DEMO_REGISTRY: Record<string, React.FC> = {
-  'infinite-scroll-component': InfiniteScrollDemo,
   'nested-comments-system': CommentsList,
+  'modal-component': ModalComponent,
 };
 
 type PageProps = {
