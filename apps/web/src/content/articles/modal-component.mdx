@@ -1,0 +1,352 @@
+In this article, we'll build a modal component from scratch in React. Not a basic one that just shows and hides, a proper, production-ready modal that handles all the things you'd expect from a good modal. Let's dig in.
+
+## The Problems a Modal Needs to Solve
+
+Before we write any code, let's think about what a modal actually needs to do:
+
+- **Render on top of everything.** The modal should appear above all other content, regardless of where it's triggered from in the component tree.
+- **Block background scrolling.** When the modal is open, the user shouldn't be able to scroll the page behind it.
+- **Close on Escape key.** This is standard UX—pressing Escape should dismiss the modal.
+- **Close on overlay click.** Clicking the dark backdrop should close the modal (usually).
+- **Trap focus.** For accessibility, focus should stay inside the modal while it's open.
+- **Be accessible.** Proper ARIA attributes so screen readers understand what's happening.
+
+Let's tackle each of these.
+
+## Step 1: The Basic Structure
+
+First, let's define what our component API should look like:
+
+```tsx
+<ModalComponent
+  isModalOpen={isOpen}
+  onClose={handleClose}
+  closeOnOverlayClick={true}
+  closeOnEsc={true}
+>
+  <h1>Hello from the modal!</h1>
+  <button onClick={handleClose}>Close</button>
+</ModalComponent>
+```
+
+Clean and simple. The parent controls whether the modal is open, and the modal tells the parent when it wants to close. This is the "controlled component" pattern, and it's the right way to handle modals in React.
+
+## Step 2: Using Portals
+
+Here's the first trick: **React Portals**.
+
+Normally, React renders components inside their parent's DOM node. But modals need to render at the top level of the DOM (usually as a direct child of `<body>`) so they can appear above everything else without worrying about `z-index` battles or `overflow: hidden` on parent containers.
+
+```tsx
+import { createPortal } from 'react-dom';
+
+const ModalComponent = ({ isModalOpen, onClose, children }) => {
+  if (!isModalOpen) return null;
+
+  return createPortal(
+    <div className="modal-root">
+      <div className="modal-content">
+        {children}
+      </div>
+    </div>,
+    document.body
+  );
+};
+```
+
+`createPortal` takes two arguments: what to render and where to render it. We're rendering into `document.body`, which means our modal will always be at the root level of the DOM.
+
+## Step 3: Handling SSR 
+
+If you're using Next.js or any server-side rendering framework, there's a catch: `document.body` doesn't exist on the server. Try to access it during SSR and you'll get a hydration error.
+
+The fix is to delay rendering until we're on the client:
+
+```tsx
+const [mounted, setMounted] = useState(false);
+
+useEffect(() => {
+  setMounted(true);
+}, []);
+
+if (!mounted || !isModalOpen) return null;
+```
+
+This ensures the portal only renders after the component has mounted on the client. Thi is a simple thing, but easy to forget.
+
+## Step 4: Scroll Locking
+
+When a modal opens, the background page shouldn't scroll. This prevents that awkward experience where users accidentally scroll the page while trying to interact with the modal.
+
+```tsx
+useEffect(() => {
+  if (!isModalOpen) return;
+
+  document.body.style.overflow = 'hidden';
+
+  return () => {
+    document.body.style.overflow = '';
+  };
+}, [isModalOpen]);
+```
+
+We set `overflow: hidden` on the body when the modal opens, and clean it up when it closes. The cleanup function in `useEffect` handles this automatically.
+
+## Step 5: Keyboard Handling (Escape to Close)
+
+Good UX means users can press Escape to close the modal. Let's add that:
+
+```tsx
+useEffect(() => {
+  if (!isModalOpen) return;
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      onClose();
+    }
+  };
+
+  document.addEventListener('keydown', handleKeyDown);
+
+  return () => {
+    document.removeEventListener('keydown', handleKeyDown);
+  };
+}, [isModalOpen, onClose]);
+```
+
+We add a global keydown listener when the modal opens and remove it when it closes. The event listener is on `document`, not the modal itself, so it works even if focus is elsewhere.
+
+## Step 6: Click Outside to Close
+
+Clicking the dark overlay should close the modal. But clicking inside the modal content should not. Here's how:
+
+```tsx
+<div className="modal-root" onClick={onClose}>
+  <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+    {children}
+  </div>
+</div>
+```
+
+The outer container (the overlay) has the `onClick` handler to close. The inner content calls `stopPropagation()` to prevent the click from bubbling up. This way, clicks inside the modal stay inside.
+
+Want to make this configurable? Add a prop:
+
+```tsx
+<div
+  className="modal-root"
+  onClick={closeOnOverlayClick ? onClose : undefined}
+>
+```
+
+Now the consumer can decide whether clicking outside should close the modal.
+
+## Step 7: Focus Management
+
+This is the accessibility piece. When a modal opens, focus should move to the modal. When it closes, focus should return to the element that triggered it.
+
+```tsx
+const modalRef = useRef<HTMLDivElement>(null);
+
+useEffect(() => {
+  if (!isModalOpen) return;
+  modalRef.current?.focus();
+}, [isModalOpen]);
+
+// In the JSX:
+<div
+  className="modal-content"
+  ref={modalRef}
+  tabIndex={-1}
+>
+  {children}
+</div>
+```
+
+Setting `tabIndex={-1}` makes the div focusable programmatically (but not via Tab key), and we call `focus()` when the modal opens.
+
+For a more complete solution, you'd also want to trap focus inside the modal and return focus to the trigger element on close. That's a bit more code, but the pattern is the same.
+
+## Step 8: ARIA Attributes
+
+Screen readers need to know that this is a modal dialog. Add these attributes:
+
+```tsx
+<div
+  className="modal-content"
+  role="dialog"
+  aria-modal="true"
+  tabIndex={-1}
+>
+  {children}
+</div>
+```
+
+- `role="dialog"` tells assistive tech this is a dialog.
+- `aria-modal="true"` indicates the rest of the page is inert while this is open.
+
+## The Final Component
+
+Here's everything put together:
+
+```tsx
+'use client';
+
+import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+
+interface ModalComponentProps {
+  isModalOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+  closeOnOverlayClick?: boolean;
+  closeOnEsc?: boolean;
+}
+
+const ModalComponent = ({
+  isModalOpen,
+  onClose,
+  children,
+  closeOnOverlayClick = true,
+  closeOnEsc = true,
+}: ModalComponentProps) => {
+  const modalRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+
+  // SSR safety
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Scroll lock and keyboard handling
+  useEffect(() => {
+    if (!isModalOpen || !mounted) return;
+
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (closeOnEsc && e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isModalOpen, onClose, closeOnEsc, mounted]);
+
+  // Focus management
+  useEffect(() => {
+    if (!isModalOpen || !mounted) return;
+    modalRef.current?.focus();
+  }, [isModalOpen, mounted]);
+
+  if (!mounted || !isModalOpen) return null;
+
+  return createPortal(
+    <div
+      className="modal-overlay"
+      onClick={closeOnOverlayClick ? onClose : undefined}
+    >
+      <div
+        className="modal-content"
+        role="dialog"
+        aria-modal="true"
+        tabIndex={-1}
+        onClick={(e) => e.stopPropagation()}
+        ref={modalRef}
+      >
+        {children}
+      </div>
+    </div>,
+    document.body
+  );
+};
+
+export default ModalComponent;
+```
+
+## Using the Modal
+
+Here's how you'd use it in a parent component:
+
+```tsx
+const MyPage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  return (
+    <div>
+      <button onClick={() => setIsModalOpen(true)}>
+        Open Modal
+      </button>
+
+      <ModalComponent
+        isModalOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      >
+        <h1>Hello!</h1>
+        <p>This is modal content.</p>
+        <button onClick={() => setIsModalOpen(false)}>
+          Close
+        </button>
+      </ModalComponent>
+    </div>
+  );
+};
+```
+
+## Styling
+
+The CSS is straightforward:
+
+```css
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  min-width: 300px;
+  max-width: 90%;
+  outline: none;
+}
+```
+
+The `inset: 0` is shorthand for `top: 0; right: 0; bottom: 0; left: 0;`—it makes the overlay cover the entire viewport.
+
+## What We Didn't Cover
+
+This modal is solid, but there's more you could add:
+
+- **Focus trapping**: Keep Tab key cycling through focusable elements inside the modal only.
+- **Animations**: Fade in/out, slide up, scale—whatever fits your design.
+- **Stacking modals**: What happens if you open a modal from inside a modal? (Usually you shouldn't, but sometimes you need to.)
+- **Different sizes**: Small, medium, large, full-screen variants.
+
+But for most use cases, what we built here is exactly what you need.
+
+## Wrapping Up
+
+Modals seem simple, but getting them right takes some thought. The key pieces are:
+
+1. **Portals** to render at the top of the DOM
+2. **SSR handling** for Next.js/server rendering
+3. **Scroll locking** to prevent background scrolling
+4. **Keyboard handling** for Escape key
+5. **Click outside** to close
+6. **Focus management** for accessibility
+7. **ARIA attributes** for screen readers
+
+Now you know how it all works under the hood. Go build something cool with it.
+

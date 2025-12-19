@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import styles from './page.module.css';
+import { GiscusComments } from '@/components/GiscusComments';
 
 // Define params as a Promise for Next.js 15 compatibility
 type PageProps = {
@@ -83,7 +84,7 @@ export default async function DetailPage({ params }: PageProps) {
         </div>
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          
+
 
           <div className="mb-8">
             <BackButton />
@@ -146,7 +147,7 @@ export default async function DetailPage({ params }: PageProps) {
             <div className="overflow-hidden ">
               <div className="aspect-video relative group">
                 <Image
-                  src={template.imageUrl} 
+                  src={template.imageUrl}
                   alt={template.name}
                   width={1000}
                   height={1000}
@@ -158,6 +159,12 @@ export default async function DetailPage({ params }: PageProps) {
               <div className="pt-6 ">
                 <ChallengeDescriptionServer template={template} />
               </div>
+
+            </div>
+
+            {/* Comments */}
+            <div className="mt-10">
+              <GiscusComments />
             </div>
           </div>
         </div>
