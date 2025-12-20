@@ -5,12 +5,13 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { useApp } from '@/context/AppContext';
-import { ChevronLeft, Play, CheckCircle2, XCircle, Info } from 'lucide-react';
+import { Play, CheckCircle2, XCircle, Info } from 'lucide-react';
 import { Button } from '@repo/ui';
 import { Snippet, Template, ButtonSize, ButtonVariant } from '@/types/types';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import PageLoader from '@/components/PageLoader';
+import { BackButton } from '@/components/design-detail/BackButton';
 import { validateCode, sanitizeError } from '@/lib/code-execution';
 import { checkRateLimit } from '@/lib/rate-limiter';
 import { showToast } from '@/lib/toast';
@@ -198,28 +199,15 @@ export default function SnippetPracticePage() {
       <div className="min-h-screen bg-dark-bg pt-16">
 
         {/* Header */}
-        <nav className="sticky w-[80%] mx-auto top-0 z-30 h-16 flex items-center px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-dark-bg/95 to-dark-bg/80 backdrop-blur-lg border-b border-dark-border/60">
-          <div className="flex items-center gap-4 min-w-0">
-            <Button
-              onClick={() => {
-                if (window.history.length > 1) {
-                  router.back();
-                } else {
-                  router.push(`/design/${slug}`);
-                }
-              }}
-              variant={ButtonVariant.GHOST}
-              size={ButtonSize.SM}
-              className="flex items-center gap-2 text-[#9ca3af] hover:text-white"
-              icon={<ChevronLeft size={20} />}
-            >
-              <span className="font-medium text-xs sm:text-sm">Back</span>
-            </Button>
-            <div className="h-6 w-[1px] bg-[#444]"></div>
-            <h1 className="text-sm sm:text-base md:text-lg font-bold truncate text-white">
-              {template.name}
-            </h1>
+        <nav className="sticky w-[80%] mx-auto top-0 z-30 h-16 flex items-center justify-between px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-dark-bg/95 to-dark-bg/80 backdrop-blur-lg border-b border-dark-border/60">
+          <div className="flex-shrink-0">
+            <BackButton href={`/design/${slug}`} />
           </div>
+          <h1 className="absolute left-1/2 -translate-x-1/2 text-sm sm:text-base md:text-lg font-bold truncate text-white max-w-[50%] text-center">
+            {template.name}
+          </h1>
+          {/* Empty div to balance the layout */}
+          <div className="flex-shrink-0 w-[70px]" />
         </nav>
 
         {/* Fixed Circular Question Counter - bottom right */}
