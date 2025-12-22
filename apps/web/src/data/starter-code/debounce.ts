@@ -3,7 +3,7 @@ export const DEBOUNCE_STARTER_CODE = `function debounce(func, wait) {
 
 }
 
-// Test cases
+// Test cases -> comment and test one by one
 console.log('=== Test 1: Basic Debouncing ===');
 const log = () => console.log('Fired!');
 const debouncedLog = debounce(log, 1000);

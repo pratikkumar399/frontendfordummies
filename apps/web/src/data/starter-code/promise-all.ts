@@ -3,7 +3,7 @@ export const PROMISE_ALL_STARTER_CODE = `const promiseAll = (promises) => {
 
 };
 
-// Test cases
+// Test cases -> comment and test one by one
 const promises1 = [
   Promise.resolve(1),
   Promise.resolve(2),

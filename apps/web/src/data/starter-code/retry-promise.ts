@@ -24,7 +24,7 @@ function retry(asyncFn, retries = 3, delay = 0) {
   // 5. Reject with last error if all retries fail
 }
 
-// Test cases
+// Test cases -> comment and test one by one
 console.log('=== Test 1: Success on First Try ===');
 retry(() => createMockApi(true, 50), 3, 100)
   .then(result => console.log('Test 1 - Success:', result))
