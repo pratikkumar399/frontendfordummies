@@ -14,7 +14,7 @@ export default function Navbar() {
         <div className="flex justify-between h-16 items-center">
           <Link href="/" className="flex items-center gap-2 sm:gap-3 group cursor-pointer">
             <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-[12px] cursor-pointer">
-                <img src="/favicon.ico" alt="Frontend Dummies" className="object-contain" />
+              <img src="/favicon.ico" alt="Frontend Dummies" className="object-contain" />
             </div>
             <span className="font-bold text-base sm:text-lg tracking-tight text-white font-sans group-hover:text-primary-400 transition-colors">
               <span className="hidden sm:inline">Frontend</span><span className="sm:hidden">F</span><span className="text-primary-400">Dummies</span>
@@ -22,8 +22,9 @@ export default function Navbar() {
           </Link>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            <LinkButton 
-              href="/blog" 
+            <LinkButton
+              href="/blog"
+              target='_blank'
               variant={ButtonVariant.SECONDARY}
               size={ButtonSize.SM}
               icon={<BookOpen size={16} />}
@@ -31,8 +32,8 @@ export default function Navbar() {
             >
               <span className="hidden sm:inline">Blogs</span>
             </LinkButton>
-            <LinkButton 
-              href="/playground" 
+            <LinkButton
+              href="/playground"
               target='_blank'
               variant={ButtonVariant.SECONDARY}
               size={ButtonSize.SM}

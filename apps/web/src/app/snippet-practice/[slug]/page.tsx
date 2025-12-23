@@ -199,15 +199,15 @@ export default function SnippetPracticePage() {
       <div className="min-h-screen bg-dark-bg pt-16">
 
         {/* Header */}
-        <nav className="sticky w-[80%] mx-auto top-0 z-30 h-16 flex items-center justify-between px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-dark-bg/95 to-dark-bg/80 backdrop-blur-lg border-b border-dark-border/60">
+        <nav className="sticky w-full sm:w-[80%] mx-auto top-0 z-30 h-16 flex items-center justify-between px-3 sm:px-6 lg:px-8 bg-gradient-to-b from-dark-bg/95 to-dark-bg/80 backdrop-blur-lg border-b border-dark-border/60">
           <div className="flex-shrink-0">
             <BackButton href={`/design/${slug}`} />
           </div>
-          <h1 className="absolute left-1/2 -translate-x-1/2 text-sm sm:text-base md:text-lg font-bold truncate text-white max-w-[50%] text-center">
+          <h1 className="absolute left-1/2 -translate-x-1/2 text-xs sm:text-sm md:text-base lg:text-lg font-bold truncate text-white max-w-[calc(100%-140px)] sm:max-w-[50%] text-center px-2">
             {template.name}
           </h1>
           {/* Empty div to balance the layout */}
-          <div className="flex-shrink-0 w-[70px]" />
+          <div className="flex-shrink-0 w-[60px] sm:w-[70px]" />
         </nav>
 
         {/* Fixed Circular Question Counter - bottom right */}
