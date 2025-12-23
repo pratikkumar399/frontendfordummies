@@ -27,6 +27,7 @@ import PageLoader from '@/components/PageLoader';
 import { validateCode, sanitizeError } from '@/lib/code-execution';
 import { checkRateLimit } from '@/lib/rate-limiter';
 import { showToast } from '@/lib/toast';
+import { throttle } from '@/lib/utils';
 import styles from '@/app/practice/[slug]/page.module.css';
 
 interface PracticeClientProps {
@@ -174,7 +175,7 @@ function PracticeClientInner({ slug, editorial }: PracticeClientProps) {
     );
   }
 
-  const handleRunCode = async () => {
+  const handleRunCode = useCallback(async () => {
     if (cleanupTimerRef.current) {
       clearTimeout(cleanupTimerRef.current);
       cleanupTimerRef.current = null;
@@ -334,7 +335,13 @@ function PracticeClientInner({ slug, editorial }: PracticeClientProps) {
         console.error = originalConsoleRef.current.error;
       }, 5000);
     }
-  };
+  }, [code, consoleHeight, setLogs, setIsRunning, setConsoleHeight]);
+
+  // Throttle handleRunCode to prevent rapid clicks (500ms throttle)
+  const throttledHandleRunCode = useCallback(
+    throttle(handleRunCode, 500),
+    [handleRunCode]
+  );
 
   const handleEditorMount: OnMount = (editorInstance) => {
     editorRef.current = editorInstance;
@@ -424,7 +431,7 @@ function PracticeClientInner({ slug, editorial }: PracticeClientProps) {
           />
 
           <Button
-            onClick={handleRunCode}
+            onClick={throttledHandleRunCode}
             disabled={isRunning}
             variant={ButtonVariant.PRIMARY}
             size={ButtonSize.SM}

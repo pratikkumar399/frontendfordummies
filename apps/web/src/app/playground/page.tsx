@@ -21,6 +21,7 @@ import {
 import { validateCode, sanitizeError } from '@/lib/code-execution';
 import { checkRateLimit } from '@/lib/rate-limiter';
 import { showToast } from '@/lib/toast';
+import { throttle } from '@/lib/utils';
 import styles from './page.module.css';
 
 const DEFAULT_CODE = `// Welcome to JS Playground!
@@ -99,7 +100,7 @@ export default function PlaygroundPage() {
     };
   }, [isDragging, handleMouseMove, handleMouseUp]);
 
-  const handleRunCode = async () => {
+  const handleRunCode = useCallback(async () => {
     if (cleanupTimerRef.current) {
       clearTimeout(cleanupTimerRef.current);
       cleanupTimerRef.current = null;
@@ -271,7 +272,13 @@ export default function PlaygroundPage() {
         console.info = originalConsoleRef.current.info;
       }, 5000);
     }
-  };
+  }, [code]);
+
+  // Throttle handleRunCode to prevent rapid clicks (500ms throttle)
+  const throttledHandleRunCode = useCallback(
+    throttle(handleRunCode, 500),
+    [handleRunCode]
+  );
 
   const handleReset = () => {
     setShowResetDialog(true);
@@ -370,7 +377,7 @@ export default function PlaygroundPage() {
           </Button>
 
           <Button
-            onClick={handleRunCode}
+            onClick={throttledHandleRunCode}
             disabled={isRunning}
             variant={ButtonVariant.PRIMARY}
             size={ButtonSize.SM}

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/immutability */
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { useApp } from '@/context/AppContext';
@@ -15,6 +15,7 @@ import { BackButton } from '@/components/design-detail/BackButton';
 import { validateCode, sanitizeError } from '@/lib/code-execution';
 import { checkRateLimit } from '@/lib/rate-limiter';
 import { showToast } from '@/lib/toast';
+import { throttle } from '@/lib/utils';
 
 export default function SnippetPracticePage() {
   const { slug } = useParams<{ slug: string }>();
@@ -121,7 +122,7 @@ export default function SnippetPracticePage() {
     "interactivityType": "active"
   };
 
-  const handleRunSnippet = (id: string, code: string) => {
+  const handleRunSnippet = useCallback((id: string, code: string) => {
     // Check rate limit
     const rateLimit = checkRateLimit('snippet-practice');
     if (!rateLimit.allowed) {
@@ -184,7 +185,13 @@ export default function SnippetPracticePage() {
         }
       }, 150);
     });
-  };
+  }, []);
+
+  // Throttle handleRunSnippet to prevent rapid clicks (500ms throttle)
+  const throttledHandleRunSnippet = useCallback(
+    throttle(handleRunSnippet, 500),
+    [handleRunSnippet]
+  );
 
   const handleSelectOption = (snippetId: string, optionIndex: number) => {
     setAnswers(prev => ({ ...prev, [snippetId]: optionIndex }));
@@ -249,7 +256,7 @@ export default function SnippetPracticePage() {
                       <Button
                         size={ButtonSize.SM}
                         variant={ButtonVariant.SECONDARY}
-                        onClick={() => handleRunSnippet(snippet.id, snippet.code)}
+                        onClick={() => throttledHandleRunSnippet(snippet.id, snippet.code)}
                         className="bg-[#333] shadow-sm text-xs h-8"
                       >
                         <Play size={12} className="mr-1.5 text-green-600" fill="currentColor" />
