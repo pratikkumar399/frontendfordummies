@@ -28,9 +28,9 @@ export const ChallengeDescription: React.FC<ChallengeDescriptionProps> = ({ temp
 
               return !isInline ? (
                 <CodeBlock
-                   language={match[1]}
-                   value={codeString}
-                   style={vscDarkPlus}
+                  language={match[1]}
+                  value={codeString}
+                  style={vscDarkPlus}
                 />
               ) : (
                 <code className="bg-dark-border px-1.5 py-0.5 rounded text-primary-300 text-sm" {...props}>
@@ -52,40 +52,40 @@ export const ChallengeDescription: React.FC<ChallengeDescriptionProps> = ({ temp
   );
 };
 
-const CodeBlock = ({ language, value, style }: { language: string, value: string, style: typeof oneDark }) => {
-    const [isCopied, setIsCopied] = useState(false);
+const CodeBlock = ({ language, value, style }: { language: string, value: string, style: typeof vscDarkPlus }) => {
+  const [isCopied, setIsCopied] = useState(false);
 
-    const onCopy = () => {
-        navigator.clipboard.writeText(value);
-        setIsCopied(true);
-        setTimeout(() => setIsCopied(false), 2000);
-    };
+  const onCopy = () => {
+    navigator.clipboard.writeText(value);
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2000);
+  };
 
-    return (
-        <div className="relative group my-4">
-            <Button
-                onClick={onCopy}
-                variant={ButtonVariant.GHOST}
-                size={ButtonSize.SM}
-                className="absolute top-2 right-2 p-2 rounded-md bg-zinc-700/50 hover:bg-zinc-700 text-zinc-400 hover:text-white opacity-0 group-hover:opacity-100 transition-all duration-200"
-                title="Copy code"
-                icon={isCopied ? <Check size={16} className="text-green-400" /> : <Copy size={16} />}
-            >
-                <span className="sr-only">Copy code</span>
-            </Button>
-            <SyntaxHighlighter
-                style={style}
-                language={language}
-                PreTag="div"
-                customStyle={{
-                    margin: 0,
-                    borderRadius: '0.5rem',
-                    fontSize: '0.875rem',
-                    padding: '1rem',
-                }}
-            >
-                {value}
-            </SyntaxHighlighter>
-        </div>
-    );
+  return (
+    <div className="relative group my-4">
+      <Button
+        onClick={onCopy}
+        variant={ButtonVariant.GHOST}
+        size={ButtonSize.SM}
+        className="absolute top-2 right-2 p-2 rounded-md bg-zinc-700/50 hover:bg-zinc-700 text-zinc-400 hover:text-white opacity-0 group-hover:opacity-100 transition-all duration-200"
+        title="Copy code"
+        icon={isCopied ? <Check size={16} className="text-green-400" /> : <Copy size={16} />}
+      >
+        <span className="sr-only">Copy code</span>
+      </Button>
+      <SyntaxHighlighter
+        style={style}
+        language={language}
+        PreTag="div"
+        customStyle={{
+          margin: 0,
+          borderRadius: '0.5rem',
+          fontSize: '0.875rem',
+          padding: '1rem',
+        }}
+      >
+        {value}
+      </SyntaxHighlighter>
+    </div>
+  );
 };
