@@ -10,7 +10,7 @@ import { generateWebsiteStructuredData, generateOrganizationStructuredData } fro
 export default function Home() {
   const { templates } = useApp();
 
-  const featuredTemplates = templates.slice(10, 14);
+  const featuredTemplates = templates.slice(12, 16);
 
   const structuredData = generateWebsiteStructuredData();
   const organizationData = generateOrganizationStructuredData();

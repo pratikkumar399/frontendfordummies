@@ -7,6 +7,8 @@ import { CALL_POLYFILL_STARTER_CODE } from '@/data/starter-code/call';
 import commentsImage from '@/data/assets/comments.png';
 import criticalRenderingPathImage from '@/data/assets/crp.png';
 import clientSideRateLimiterImage from '@/data/assets/rate-limiter.png';
+import imageCarouselImage from '@/data/assets/image-carousel.png';
+import dynamicTicTacToeImage from '@/data/assets/tic-tac-toe.png';
 import { PROMISE_OUTPUT_CHALLENGES_SNIPPETS } from '@/data/snippets/promise-output-challenges';
 
 export const INITIAL_TEMPLATES: Template[] = [
@@ -313,13 +315,13 @@ In this challenge, implement a polyfill that mirrors call's behavior:
     slug: 'image-carousel',
     shortDescription: 'A carousel component that can be used to display a list of images.',
     fullDescription: '',
-    imageUrl: 'https://placehold.co/800x600/14b8a6/ffffff/png?text=image+carousel',
+    imageUrl: imageCarouselImage.src,
     demoUrl: '/design/image-carousel/demo',
     githubUrl: '#',
     tags: ['Medium', 'Image Carousel', 'React'],
     category: Category.REACT,
     subcategory: ReactSubcategory.MACHINE_CODING_QUESTIONS,
-    techStack: ['React'],
+    techStack: ['React', 'JavaScript'],
     author: 'modernDev',
     createdAt: '2025-12-22',
     goal: 'Implement a image carousel component that can be used to display a list of images.'
@@ -330,13 +332,13 @@ In this challenge, implement a polyfill that mirrors call's behavior:
     slug: 'dynamic-tic-tac-toe',
     shortDescription: 'A dynamic tic tac toe game that can be used to play a game of tic tac toe.',
     fullDescription: '',
-    imageUrl: 'https://placehold.co/800x600/14b8a6/ffffff/png?text=dynamic+tic+tac+toe',
+    imageUrl: dynamicTicTacToeImage.src,
     demoUrl: '/design/dynamic-tic-tac-toe/demo',
     githubUrl: '#',
     tags: ['Medium', 'Tic Tac Toe', 'React'],
     category: Category.REACT,
     subcategory: ReactSubcategory.MACHINE_CODING_QUESTIONS,
-    techStack: ['React'],
+    techStack: ['React', 'JavaScript'],
     author: 'modernDev',
     createdAt: '2025-12-22',
     goal: 'Implement a dynamic tic tac toe game that can be used to play a game of tic tac toe.'
