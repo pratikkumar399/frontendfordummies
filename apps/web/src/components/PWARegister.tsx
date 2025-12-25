@@ -1,38 +1,77 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export function PWARegister() {
-  useEffect(() => {
-    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-      // Register service worker
-      window.addEventListener('load', () => {
-        navigator.serviceWorker
-          .register('/sw.js')
-          .then((registration) => {
-            console.log('Service Worker registered:', registration.scope);
-            
-            // Check for updates periodically
-            setInterval(() => {
-              registration.update();
-            }, 60 * 60 * 1000); // Check every hour
-          })
-          .catch((error) => {
-            console.error('Service Worker registration failed:', error);
-          });
-      });
+  const refreshingRef = useRef(false);
+  const intervalRef = useRef<number | null>(null);
 
-      // Handle service worker updates
-      let refreshing = false;
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        if (!refreshing) {
-          refreshing = true;
-          window.location.reload();
+  useEffect(() => {
+    // Ensure browser + Service Worker support
+    if (typeof window === 'undefined') return;
+    if (!('serviceWorker' in navigator)) return;
+
+    let controllerChangeHandler: (() => void) | null = null;
+
+    // Register the Service Worker
+    const register = async () => {
+      try {
+        const registration = await navigator.serviceWorker.register('/sw.js');
+
+        // Periodically check for updates
+        intervalRef.current = window.setInterval(() => {
+          registration.update();
+        }, 60 * 60 * 1000);
+
+        // Activate waiting worker immediately if present
+        if (registration.waiting) {
+          registration.waiting.postMessage({ type: 'SKIP_WAITING' });
         }
-      });
-    }
+
+        // Listen for newly installed workers
+        registration.addEventListener('updatefound', () => {
+          const worker = registration.installing;
+          if (!worker) return;
+
+          worker.addEventListener('statechange', () => {
+            if (
+              worker.state === 'installed' &&
+              navigator.serviceWorker.controller
+            ) {
+              worker.postMessage({ type: 'SKIP_WAITING' });
+            }
+          });
+        });
+      } catch (err) {
+        console.error('Service Worker registration failed:', err);
+      }
+    };
+
+    register();
+
+    // Reload page once when new worker takes control
+    controllerChangeHandler = () => {
+      if (refreshingRef.current) return;
+      refreshingRef.current = true;
+      window.location.reload();
+    };
+
+    navigator.serviceWorker.addEventListener(
+      'controllerchange',
+      controllerChangeHandler
+    );
+
+    // Cleanup listeners and timers on unmount
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (controllerChangeHandler) {
+        navigator.serviceWorker.removeEventListener(
+          'controllerchange',
+          controllerChangeHandler
+        );
+      }
+    };
   }, []);
 
   return null;
 }
-

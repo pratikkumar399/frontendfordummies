@@ -1,83 +1,69 @@
 const CACHE_NAME = 'frontend-dummies-v7';
-const urlsToCache = [
-    '/',
-    '/manifest.json',
-    '/favicon.ico',
-    '/web-app-manifest-192x192.png',
-    '/web-app-manifest-512x512.png',
-    '/apple-icon.png',
+
+const STATIC_ASSETS = [
+  '/manifest.json',
+  '/favicon.ico',
+  '/web-app-manifest-192x192.png',
+  '/web-app-manifest-512x512.png',
+  '/apple-icon.png',
 ];
 
-// Install event - cache resources
+// Cache core static assets during installation
 self.addEventListener('install', (event) => {
-    event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then((cache) => {
-                return cache.addAll(urlsToCache);
-            })
-            .catch((error) => {
-                console.error('Cache installation failed:', error);
-            })
-    );
-    self.skipWaiting();
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS))
+  );
 });
 
-// Activate event - clean up old caches
+// Remove old caches and take control immediately
 self.addEventListener('activate', (event) => {
-    event.waitUntil(
-        caches.keys().then((cacheNames) => {
-            return Promise.all(
-                cacheNames.map((cacheName) => {
-                    if (cacheName !== CACHE_NAME) {
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
+  event.waitUntil(
+    caches.keys().then((names) =>
+      Promise.all(
+        names.map((name) => {
+          if (name !== CACHE_NAME) return caches.delete(name);
         })
-    );
-    return self.clients.claim();
+      )
+    )
+  );
+  self.clients.claim();
 });
 
-// Fetch event - serve from cache, fallback to network
+// Allow client to trigger immediate activation of new worker
+self.addEventListener('message', (event) => {
+  if (event.data?.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
+// Intercept requests for caching and offline behavior
 self.addEventListener('fetch', (event) => {
-    // Skip non-GET requests
-    if (event.request.method !== 'GET') {
-        return;
-    }
+  const { request } = event;
 
-    // Skip cross-origin requests
-    if (!event.request.url.startsWith(self.location.origin)) {
-        return;
-    }
+  // Only handle safe, same-origin GET requests
+  if (request.method !== 'GET') return;
+  if (!request.url.startsWith(self.location.origin)) return;
 
-    event.respondWith(
-        caches.match(event.request)
-            .then((response) => {
-                // Return cached version or fetch from network
-                return response || fetch(event.request)
-                    .then((response) => {
-                        // Don't cache non-successful responses
-                        if (!response || response.status !== 200 || response.type !== 'basic') {
-                            return response;
-                        }
+  // Always fetch latest HTML documents
+  if (request.destination === 'document') {
+    event.respondWith(fetch(request));
+    return;
+  }
 
-                        // Clone the response
-                        const responseToCache = response.clone();
+  // Serve cached assets first, fallback to network
+  event.respondWith(
+    caches.match(request).then((cached) => {
+      if (cached) return cached;
 
-                        caches.open(CACHE_NAME)
-                            .then((cache) => {
-                                cache.put(event.request, responseToCache);
-                            });
-
-                        return response;
-                    })
-                    .catch(() => {
-                        // Return offline page if available
-                        if (event.request.destination === 'document') {
-                            return caches.match('/');
-                        }
-                    });
-            })
-    );
+      return fetch(request).then((response) => {
+        if (response && response.status === 200 && response.type === 'basic') {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(request, clone);
+          });
+        }
+        return response;
+      });
+    })
+  );
 });
-
