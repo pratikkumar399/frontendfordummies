@@ -306,5 +306,22 @@ In this challenge, implement a polyfill that mirrors call's behavior:
     createdAt: '2025-12-22',
     goal: 'Implement a client-side rate limiter to prevent abuse of the code execution.',
     directToPractice: true
+  },
+  {
+    id: '15',
+    name: 'Image Carousel',
+    slug: 'image-carousel',
+    shortDescription: '',
+    fullDescription: '',
+    imageUrl: 'https://placehold.co/800x600/14b8a6/ffffff/png?text=image+carousel',
+    demoUrl: '/design/image-carousel/demo',
+    githubUrl: '#',
+    tags: ['Medium', 'Image Carousel', 'React'],
+    category: Category.REACT,
+    subcategory: ReactSubcategory.MACHINE_CODING_QUESTIONS,
+    techStack: ['React'],
+    author: 'modernDev',
+    createdAt: '2025-12-22',
+    goal: 'Implement a image carousel component that can be used to display a list of images.'
   }
 ];

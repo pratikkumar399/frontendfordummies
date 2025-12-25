@@ -1,0 +1,17 @@
+.image-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.viewport {
+  width: 400px;
+  overflow: hidden;
+}
+
+.track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
