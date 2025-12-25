@@ -5,10 +5,17 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useApp } from '@/context/AppContext';
 import { TemplateCard } from '@/components/TemplateCard';
 import { TemplateListItem } from '@/components/TemplateListItem';
-import { Category, ButtonVariant, ButtonSize } from '@/types/types';
+import { Category, ButtonVariant, ButtonSize, Subcategory } from '@/types/types';
 import { Button } from '@repo/ui';
 import { Search, Layers, ChevronRight, Zap, Menu, X, Grid3x3, List } from 'lucide-react';
 import { generateCollectionStructuredData } from '@/lib/seo';
+import {
+  getSubcategoriesForCategory,
+  getCategoryForSubcategory,
+  getSubcategoryDisplayName,
+  getAllSubcategories,
+  hasSubcategories,
+} from '@/lib/category-config';
 
 type ViewMode = 'card' | 'list';
 
@@ -18,17 +25,33 @@ export default function ExplorePage() {
   const router = useRouter();
 
   const [selectedCategory, setSelectedCategory] = useState<Category | 'All'>('All');
+  const [selectedSubcategory, setSelectedSubcategory] = useState<Subcategory | null>(null);
+  const [expandedCategories, setExpandedCategories] = useState<Set<Category>>(new Set());
   const [searchQuery, setSearchQuery] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>('list');
 
-  // Initialize selected category and view mode from URL query params
+  // Initialize selected category, subcategory and view mode from URL query params
   useEffect(() => {
     const categoryFromUrl = searchParams.get('category');
     if (categoryFromUrl) {
       // Check if it's a valid category or 'All'
       if (categoryFromUrl === 'All' || Object.values(Category).includes(categoryFromUrl as Category)) {
+        const category = categoryFromUrl as Category;
         setSelectedCategory(categoryFromUrl as Category | 'All');
+        // Expand category if it has subcategories
+        if (hasSubcategories(category)) {
+          setExpandedCategories(prev => new Set(prev).add(category));
+        }
+      }
+    }
+
+    const subcategoryFromUrl = searchParams.get('subcategory');
+    if (subcategoryFromUrl) {
+      // Check if it's a valid subcategory
+      const allSubcategories = getAllSubcategories();
+      if (allSubcategories.includes(subcategoryFromUrl as Subcategory)) {
+        setSelectedSubcategory(subcategoryFromUrl as Subcategory);
       }
     }
 
@@ -44,9 +67,10 @@ export default function ExplorePage() {
         t.shortDescription.toLowerCase().includes(searchQuery.toLowerCase()) ||
         t.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
       const matchesCategory = selectedCategory === 'All' || t.category === selectedCategory;
-      return matchesSearch && matchesCategory;
+      const matchesSubcategory = !selectedSubcategory || t.subcategory === selectedSubcategory;
+      return matchesSearch && matchesCategory && matchesSubcategory;
     });
-  }, [templates, searchQuery, selectedCategory]);
+  }, [templates, searchQuery, selectedCategory, selectedSubcategory]);
 
   const categoriesWithContent = useMemo(() => {
     const categorySet = new Set<Category>();
@@ -62,19 +86,67 @@ export default function ExplorePage() {
 
   const handleCategorySelect = useCallback((cat: Category | 'All') => {
     setSelectedCategory(cat);
+    setSelectedSubcategory(null);
     setIsSidebarOpen(false);
+
+    // Handle category expansion - close all others, toggle current
+    if (cat === 'All') {
+      // Close all subcategories when selecting 'All'
+      setExpandedCategories(new Set());
+    } else if (hasSubcategories(cat)) {
+      setExpandedCategories(prev => {
+        const newSet = new Set<Category>();
+        // If clicking the same category that's already expanded, close it
+        // Otherwise, expand it and close all others
+        if (!prev.has(cat)) {
+          newSet.add(cat);
+        }
+        return newSet;
+      });
+    } else {
+      // For other categories, close all subcategories
+      setExpandedCategories(new Set());
+    }
 
     // Update URL query params
     const params = new URLSearchParams(searchParams.toString());
     if (cat === 'All') {
       params.delete('category');
+      params.delete('subcategory');
     } else {
       params.set('category', cat);
+      params.delete('subcategory');
     }
 
     const newUrl = params.toString() ? `?${params.toString()}` : '/explore';
     router.push(newUrl, { scroll: false });
   }, [searchParams, router]);
+
+  const handleSubcategorySelect = useCallback((subcat: Subcategory) => {
+    setSelectedSubcategory(subcat);
+    setIsSidebarOpen(false);
+
+    // Update URL query params
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('subcategory', subcat);
+
+    // Always determine and update category from subcategory
+    const newCategory = getCategoryForSubcategory(subcat);
+
+    // Update category if it's different from current or if current is 'All'
+    if (newCategory && (selectedCategory === 'All' || selectedCategory !== newCategory)) {
+      params.set('category', newCategory);
+      setSelectedCategory(newCategory);
+    }
+
+    // Close all other categories' subcategories and expand the current category
+    if (newCategory) {
+      setExpandedCategories(new Set([newCategory]));
+    }
+
+    const newUrl = params.toString() ? `?${params.toString()}` : '/explore';
+    router.push(newUrl, { scroll: false });
+  }, [searchParams, router, selectedCategory]);
 
   const handleViewModeChange = useCallback((mode: ViewMode) => {
     setViewMode(mode);
@@ -145,21 +217,57 @@ export default function ExplorePage() {
               </div>
 
               <nav className="space-y-2">
-                {categories.map((cat) => (
-                  <Button
-                    key={cat}
-                    onClick={() => handleCategorySelect(cat as Category | 'All')}
-                    variant={ButtonVariant.GHOST}
-                    size={ButtonSize.MD}
-                    className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${selectedCategory === cat
-                      ? 'bg-primary-600/10 text-primary-400 border border-primary-600/20'
-                      : 'text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'
-                      }`}
-                  >
-                    <span>{cat}</span>
-                    {selectedCategory === cat && <ChevronRight size={14} />}
-                  </Button>
-                ))}
+                {categories.map((cat) => {
+                  const category = cat as Category | 'All';
+                  const subcategories = category !== 'All' ? getSubcategoriesForCategory(category) : [];
+                  const isExpanded = category !== 'All' && expandedCategories.has(category);
+                  const hasSubcategories = subcategories.length > 0;
+
+                  return (
+                    <div key={cat} className="space-y-1">
+                      <Button
+                        onClick={() => handleCategorySelect(category)}
+                        variant={ButtonVariant.GHOST}
+                        size={ButtonSize.MD}
+                        className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${selectedCategory === cat && !selectedSubcategory
+                          ? 'bg-primary-600/10 text-primary-400 border border-primary-600/20'
+                          : 'text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'
+                          }`}
+                      >
+                        <span>{cat}</span>
+                        <div className="flex items-center gap-2">
+                          {hasSubcategories && (
+                            <ChevronRight
+                              size={14}
+                              className={`transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`}
+                            />
+                          )}
+                          {selectedCategory === cat && !selectedSubcategory && !hasSubcategories && (
+                            <ChevronRight size={14} />
+                          )}
+                        </div>
+                      </Button>
+                      {hasSubcategories && isExpanded && (
+                        <div className="ml-4 space-y-1 border-l border-dark-border pl-2">
+                          {subcategories.map((subcat) => (
+                            <Button
+                              key={subcat}
+                              onClick={() => handleSubcategorySelect(subcat)}
+                              variant={ButtonVariant.GHOST}
+                              size={ButtonSize.SM}
+                              className={`w-full flex items-center justify-start px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${selectedSubcategory === subcat
+                                ? 'bg-primary-600/10 text-primary-400 border border-primary-600/20'
+                                : 'text-zinc-500 hover:bg-white/5 hover:text-zinc-300 border border-transparent'
+                                }`}
+                            >
+                              <span>{getSubcategoryDisplayName(subcat)}</span>
+                            </Button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </nav>
             </div>
           </aside>
@@ -184,7 +292,11 @@ export default function ExplorePage() {
                 <div className="flex-1 md:flex md:items-end md:justify-between md:mb-4">
                   <div>
                     <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">
-                      {selectedCategory === 'All' ? 'All Challenges' : selectedCategory}
+                      {selectedSubcategory
+                        ? getSubcategoryDisplayName(selectedSubcategory)
+                        : selectedCategory === 'All'
+                          ? 'All Challenges'
+                          : selectedCategory}
                     </h1>
                     <p className="text-zinc-400 text-sm hidden md:block">
                       Showing {filteredTemplates.length} {filteredTemplates.length === 1 ? 'result' : 'results'}
@@ -288,6 +400,7 @@ export default function ExplorePage() {
                   onClick={() => {
                     setSearchQuery('');
                     setSelectedCategory('All');
+                    setSelectedSubcategory(null);
                     setViewMode('list');
                     router.push('/explore', { scroll: false });
                   }}

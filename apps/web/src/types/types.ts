@@ -19,6 +19,7 @@ export interface Template {
     githubUrl: string;
     tags: string[];
     category: Category;
+    subcategory?: Subcategory; // Optional subcategory for better organization
     techStack: string[];
     author: string;
     createdAt: string;
@@ -40,6 +41,19 @@ export enum Category {
     SNIPPET_PRACTICE = 'Snippet Practice',
     BLOGS = 'Blogs'
 }
+
+export enum JavaScriptSubcategory {
+    SNIPPET_PRACTICE = 'snippet-practice',
+    JS_PRACTICE = 'js-practice',
+    JS_BLOGS_TECHNICAL_DEEP_DIVES = 'js-blogs/technical-deep-dives'
+}
+
+export enum ReactSubcategory {
+    MACHINE_CODING_QUESTIONS = 'machine-coding-questions',
+    TECHNICAL_DEEP_DIVE_BLOGS = 'technical-deep-dive/blogs'
+}
+
+export type Subcategory = JavaScriptSubcategory | ReactSubcategory;
 
 export enum SortOption {
     NEWEST = 'newest',
