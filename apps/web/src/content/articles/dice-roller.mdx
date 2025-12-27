@@ -1,0 +1,330 @@
+Build a dice roller component that displays multiple dice with accurate dot patterns. The key challenges are generating random dice values, mapping numbers to visual dot patterns, and using CSS Grid to position dots correctly on each die face.
+
+## Overview
+
+A dice roller allows users to specify how many dice to roll (1-12) and displays each die with the correct number of dots arranged in the standard pattern. Each die face shows dots in a 3×3 grid layout, matching real-world dice patterns.
+
+## Core Challenge: Dot Pattern Mapping
+
+The most critical part is mapping each dice value (1-6) to its corresponding dot positions. Standard dice follow specific patterns that must be accurately represented.
+
+### Standard Dice Patterns
+
+Each die face uses a 3×3 grid where dots can be placed. Here are the patterns:
+
+**1 dot (center):**
+```
+┌───┬───┬───┐
+│   │   │   │
+├───┼───┼───┤
+│   │ ● │   │
+├───┼───┼───┤
+│   │   │   │
+└───┴───┴───┘
+```
+
+**2 dots (diagonal):**
+```
+┌───┬───┬───┐
+│ ● │   │   │
+├───┼───┼───┤
+│   │   │   │
+├───┼───┼───┤
+│   │   │ ● │
+└───┴───┴───┘
+```
+
+**3 dots (diagonal):**
+```
+┌───┬───┬───┐
+│ ● │   │   │
+├───┼───┼───┤
+│   │ ● │   │
+├───┼───┼───┤
+│   │   │ ● │
+└───┴───┴───┘
+```
+
+**4 dots (corners):**
+```
+┌───┬───┬───┐
+│ ● │   │ ● │
+├───┼───┼───┤
+│   │   │   │
+├───┼───┼───┤
+│ ● │   │ ● │
+└───┴───┴───┘
+```
+
+**5 dots (corners + center):**
+```
+┌───┬───┬───┐
+│ ● │   │ ● │
+├───┼───┼───┤
+│   │ ● │   │
+├───┼───┼───┤
+│ ● │   │ ● │
+└───┴───┴───┘
+```
+
+**6 dots (two columns):**
+```
+┌───┬───┬───┐
+│ ● │   │ ● │
+├───┼───┼───┤
+│ ● │   │ ● │
+├───┼───┼───┤
+│ ● │   │ ● │
+└───┴───┴───┘
+```
+
+### Implementation: Pattern Mapping Function
+
+We use a lookup object to map each value to its dot positions:
+
+```tsx
+const getDotPositions = (value: number): string[] => {
+    const positions: Record<number, string[]> = {
+        1: ['center'],
+        2: ['top-left', 'bottom-right'],
+        3: ['top-left', 'center', 'bottom-right'],
+        4: ['top-left', 'top-right', 'bottom-left', 'bottom-right'],
+        5: ['top-left', 'top-right', 'center', 'bottom-left', 'bottom-right'],
+        6: ['top-left', 'top-right', 'middle-left', 'middle-right', 'bottom-left', 'bottom-right']
+    };
+    return positions[value] || [];
+};
+```
+
+**Key Points:**
+- Each position name corresponds to a CSS Grid cell
+- The function returns an array of class names
+- Invalid values return an empty array (graceful degradation)
+
+## Random Number Generation
+
+Generating random dice values uses `Math.random()` and `Math.floor()`:
+
+```tsx
+function rollDice(count: number) {
+    return Array.from({ length: count }, () => Math.floor(Math.random() * 6) + 1);
+}
+```
+
+**How it works:**
+- `Math.random()` generates a number between 0 (inclusive) and 1 (exclusive)
+- Multiply by 6 to get a range of 0 to 5.999...
+- `Math.floor()` rounds down to integers 0-5
+- Add 1 to shift the range to 1-6
+
+**Example:**
+- `Math.random() = 0.73` → `0.73 × 6 = 4.38` → `Math.floor(4.38) = 4` → `4 + 1 = 5`
+- `Math.random() = 0.15` → `0.15 × 6 = 0.9` → `Math.floor(0.9) = 0` → `0 + 1 = 1`
+
+## Component Architecture
+
+The implementation follows a **parent-child component** pattern:
+
+### 1. DiceRoller (Parent Component)
+
+Manages the application state and user interaction:
+
+```tsx
+const DiceRoller = () => {
+    const [numberOfDice, setNumberOfDice] = useState<string>('');
+    const [results, setResults] = useState<number[]>([]);
+
+    function handleRollDice() {
+        const count = Number(numberOfDice);
+        if (isNaN(count) || count < 1 || count > 12) {
+            return;
+        }
+        const rolled = rollDice(count);
+        setResults(rolled);
+    }
+
+    return (
+        <div className="dice-roller-container">
+            <input 
+                type="number"
+                value={numberOfDice}
+                onChange={(e) => setNumberOfDice(e.target.value)}
+            />
+            <button onClick={handleRollDice}>Roll Dice</button>
+            {results.length > 0 && <DiceRollerComponent results={results} />}
+        </div>
+    );
+};
+```
+
+**Responsibilities:**
+- Manages input state (number of dice to roll)
+- Validates input (1-12 range)
+- Generates random dice values
+- Passes results to child component
+
+**State Management:**
+- `numberOfDice`: String to allow empty input (better UX)
+- `results`: Array of dice values (1-6) to display
+
+### 2. DiceRollerComponent (Child Component)
+
+Renders the visual dice faces:
+
+```tsx
+const DiceRollerComponent = ({ results }: { results: number[] }) => {
+    return (
+        <div className="dice-roller">
+            {results.map((result, index) => {
+                const dotPositions = getDotPositions(result);
+                return (
+                    <div key={index} className="dice-face">
+                        {dotPositions.map((position, dotIndex) => (
+                            <span key={dotIndex} className={`dot ${position}`}></span>
+                        ))}
+                    </div>
+                );
+            })}
+        </div>
+    );
+};
+```
+
+**Responsibilities:**
+- Maps each dice value to dot positions
+- Renders dice faces with correct dot patterns
+- Uses CSS Grid for dot positioning
+
+## CSS Grid Layout for Dice Faces
+
+Each die face uses a 3×3 CSS Grid to position dots accurately:
+
+```css
+.dice-face {
+    width: 80px;
+    height: 80px;
+    background-color: white;
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    padding: 8px;
+}
+```
+
+**Grid Structure:**
+```
+┌─────┬─────┬─────┐
+│  1  │  2  │  3  │  Row 1
+├─────┼─────┼─────┤
+│  4  │  5  │  6  │  Row 2
+├─────┼─────┼─────┤
+│  7  │  8  │  9  │  Row 3
+└─────┴─────┴─────┘
+```
+
+### Dot Positioning Classes
+
+Each dot position maps to a specific grid cell:
+
+```css
+.dot.center {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.dot.top-left {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.dot.top-right {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+.dot.middle-left {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.dot.middle-right {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+.dot.bottom-left {
+    grid-column: 1;
+    grid-row: 3;
+}
+
+.dot.bottom-right {
+    grid-column: 3;
+    grid-row: 3;
+}
+```
+
+**Why CSS Grid?**
+- Precise positioning: Each dot goes exactly where it should
+- Responsive: Grid cells automatically size to container
+- Clean markup: No absolute positioning or complex calculations
+- Maintainable: Easy to adjust spacing and sizing
+
+## Input Validation
+
+The component validates user input before rolling:
+
+```tsx
+function handleRollDice() {
+    const count = Number(numberOfDice);
+    if (isNaN(count) || count < 1 || count > 12) {
+        return; // Invalid input, do nothing
+    }
+    const rolled = rollDice(count);
+    setResults(rolled);
+}
+```
+
+**Validation Checks:**
+1. **`isNaN(count)`**: Ensures input is a valid number
+2. **`count < 1`**: Prevents rolling zero or negative dice
+3. **`count > 12`**: Limits to reasonable maximum (prevents performance issues)
+
+**Why String State for Input?**
+Using `useState<string>('')` instead of `useState<number>(0)` allows:
+- Empty input field initially (better UX)
+- Users can clear the field
+- No "0" showing when component mounts
+- Natural input behavior
+
+## Rendering Multiple Dice
+
+The component uses a responsive grid to display multiple dice:
+
+```css
+.dice-roller {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 20px;
+    max-width: 600px;
+    width: 100%;
+}
+```
+
+**Features:**
+- `auto-fill`: Automatically creates columns based on available space
+- `minmax(80px, 1fr)`: Each die is at least 80px wide, can grow to fill space
+- Responsive: Adapts to different screen sizes
+- Centered: Max-width centers the grid on larger screens
+
+## Key Takeaways
+
+1. **Pattern Mapping**: Use a lookup object to map dice values to dot positions
+2. **Random Generation**: `Math.floor(Math.random() * 6) + 1` generates values 1-6
+3. **CSS Grid**: 3×3 grid provides precise dot positioning
+4. **Input Validation**: Always validate user input before processing
+5. **Component Separation**: Parent manages state, child handles rendering
+6. **Responsive Design**: Use CSS Grid's `auto-fill` for flexible layouts
+
+The beauty of this approach is its simplicity and accuracy. The pattern mapping ensures each die looks correct, and CSS Grid handles all the positioning automatically. Whether rolling 1 die or 12, the same logic works perfectly.
+

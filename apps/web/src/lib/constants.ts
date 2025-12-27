@@ -9,6 +9,7 @@ import criticalRenderingPathImage from '@/data/assets/crp.png';
 import clientSideRateLimiterImage from '@/data/assets/rate-limiter.png';
 import imageCarouselImage from '@/data/assets/image-carousel.png';
 import dynamicTicTacToeImage from '@/data/assets/tic-tac-toe.png';
+import diceRollerImage from '@/data/assets/dice-roller.png';
 import { PROMISE_OUTPUT_CHALLENGES_SNIPPETS } from '@/data/snippets/promise-output-challenges';
 
 export const INITIAL_TEMPLATES: Template[] = [
@@ -342,5 +343,22 @@ In this challenge, implement a polyfill that mirrors call's behavior:
     author: 'modernDev',
     createdAt: '2025-12-22',
     goal: 'Implement a dynamic tic tac toe game that can be used to play a game of tic tac toe.'
+  },
+  {
+    id: '17',
+    name: 'Dice Roller',
+    slug: 'dice-roller',
+    shortDescription: 'A dice roller component that can be used to roll dice.',
+    fullDescription: '',
+    imageUrl: diceRollerImage.src,
+    demoUrl: '/design/dice-roller/demo',
+    githubUrl: '#',
+    tags: ['Medium', 'Dice Roller', 'React'],
+    category: Category.REACT,
+    subcategory: ReactSubcategory.MACHINE_CODING_QUESTIONS,
+    techStack: ['React', 'JavaScript'],
+    author: 'modernDev',
+    createdAt: '2025-12-22',
+    goal: 'Implement a dice roller component that can be used to roll dice.'
   }
 ];

@@ -1,0 +1,104 @@
+
+.dice-roller-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: #1a1a1a;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #333;
+}
+
+.dice-roller-input {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.dice-roller-input input {
+    width: 300px;
+    background-color: transparent;
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.dice-roller-input button {
+    border: 1px solid green;
+    background-color: green;
+    color: white;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dice-roller {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(20px, 1fr));
+    gap: 20px;
+}
+
+.dice-face {
+    width: 80px;
+    height: 80px;
+    background-color: white;
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    padding: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    background-color: black;
+    border-radius: 50%;
+    margin: auto;
+}
+
+.dot.center {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.dot.top-left {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.dot.top-right {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+.dot.middle-left {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.dot.middle-right {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+.dot.bottom-left {
+    grid-column: 1;
+    grid-row: 3;
+}
+
+.dot.bottom-right {
+    grid-column: 3;
+    grid-row: 3;
+}

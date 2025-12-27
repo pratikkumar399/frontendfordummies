@@ -6,6 +6,7 @@ const DEMO_PATHS: Record<string, string> = {
   'modal-component': 'src/components/demos/ModalDemo',
   'image-carousel': 'src/components/demos/ImageCarousel',
   'dynamic-tic-tac-toe': 'src/components/demos/DynamicTicTacToe',
+  'dice-roller': 'src/components/demos/DiceRoller',
 };
 
 export interface FileNode {
