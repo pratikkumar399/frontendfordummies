@@ -1,4 +1,4 @@
-const CACHE_NAME = 'frontend-dummies-v10';
+const CACHE_NAME = 'frontend-dummies-v1.1';
 
 const STATIC_ASSETS = [
     '/manifest.json',
