@@ -12,13 +12,15 @@ import { BackButton } from '@/components/design-detail/BackButton';
 import ImageCarouselHome from '@/components/demos/ImageCarousel';
 import DynamicTicTacToe from '@/components/demos/DynamicTicTacToe';
 import DiceRoller from '@/components/demos/DiceRoller';
+import WhackAMole from '@/components/demos/WhackAMole';
 
 const DEMO_REGISTRY: Record<string, React.FC> = {
   'nested-comments-system': CommentsList,
   'modal-component': ModalDemo,
   'image-carousel': ImageCarouselHome,
   'dynamic-tic-tac-toe': DynamicTicTacToe,
-  'dice-roller': DiceRoller
+  'dice-roller': DiceRoller,
+  'whack-a-mole': WhackAMole
 };
 
 type PageProps = {

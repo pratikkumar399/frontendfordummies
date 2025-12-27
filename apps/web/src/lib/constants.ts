@@ -10,6 +10,7 @@ import clientSideRateLimiterImage from '@/data/assets/rate-limiter.png';
 import imageCarouselImage from '@/data/assets/image-carousel.png';
 import dynamicTicTacToeImage from '@/data/assets/tic-tac-toe.png';
 import diceRollerImage from '@/data/assets/dice-roller.png';
+import whackAMoleImage from '@/data/assets/whack-a-mole.png';
 import { PROMISE_OUTPUT_CHALLENGES_SNIPPETS } from '@/data/snippets/promise-output-challenges';
 
 export const INITIAL_TEMPLATES: Template[] = [
@@ -360,5 +361,22 @@ In this challenge, implement a polyfill that mirrors call's behavior:
     author: 'modernDev',
     createdAt: '2025-12-22',
     goal: 'Implement a dice roller component that can be used to roll dice.'
+  },
+  {
+    id: '18',
+    name: 'Whack A Mole',
+    slug: 'whack-a-mole',
+    shortDescription: 'A whack-a-mole game where moles appear randomly and you need to whack them.',
+    fullDescription: '',
+    imageUrl: whackAMoleImage.src,
+    demoUrl: '/design/whack-a-mole/demo',
+    githubUrl: '#',
+    tags: ['Medium', 'Whack A Mole', 'React', 'Game'],
+    category: Category.REACT,
+    subcategory: ReactSubcategory.MACHINE_CODING_QUESTIONS,
+    techStack: ['React', 'JavaScript'],
+    author: 'modernDev',
+    createdAt: '2025-12-22',
+    goal: 'Implement a whack-a-mole game component with scoring and timing mechanics.'
   }
 ];

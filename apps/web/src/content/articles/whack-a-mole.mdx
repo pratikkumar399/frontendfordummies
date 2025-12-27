@@ -1,0 +1,322 @@
+Build a whack-a-mole game where moles randomly appear in holes and players must click them to score points. The key challenges are managing random mole appearances, timing mechanics, score tracking, and preventing double-click exploits.
+
+## Overview
+
+A whack-a-mole game displays a 3×3 grid of 9 holes. Moles randomly appear from these holes for 1.5 seconds, and players must click them before they disappear to score points. The game runs for 15 seconds, and players try to whack as many moles as possible.
+
+## Game Requirements
+
+- **Grid**: 9 holes arranged in a 3×3 grid
+- **Mole appearance**: One mole appears at a time, randomly selected from the 9 holes
+- **Mole lifetime**: Each mole stays visible for 1.5 seconds before disappearing
+- **Scoring**: Clicking a mole awards 1 point
+- **Game duration**: 15 seconds per game
+- **Double-click prevention**: Each mole can only be whacked once
+
+## Core Challenge: Recursive Mole Spawning
+
+The most critical part is implementing a recursive spawning system where moles appear one at a time, and when a mole disappears (either by timeout or being whacked), a new mole immediately spawns.
+
+### Constants
+
+The game uses constants for easy configuration:
+
+```tsx
+const TOTAL_TIME = 15;        // Game duration in seconds
+const MOLE_LIFETIME = 1500;   // How long mole stays visible (1.5 seconds)
+const GRID_SIZE = 9;          // Total number of holes (3×3 grid)
+```
+
+## Component Architecture
+
+The implementation follows a **recursive spawning pattern**:
+
+### 1. WhackAMole (Main Component)
+
+Manages game state and recursive mole spawning:
+
+```tsx
+const WhackAMole = () => {
+    const [activeIndex, setActiveIndex] = useState<number | null>(null);
+    const [score, setScore] = useState(0);
+    const [timeLeft, setTimeLeft] = useState(TOTAL_TIME);
+    const [isPlaying, setIsPlaying] = useState(false);
+
+    const moleTimeoutRef = useRef<number | null>(null);
+    const gameTimerRef = useRef<number | null>(null);
+    const moleHitRef = useRef<boolean>(false);
+};
+```
+
+**State Management:**
+- `activeIndex`: The current hole index with an active mole (null if no mole)
+- `score`: Points accumulated by whacking moles
+- `timeLeft`: Remaining game time in seconds
+- `isPlaying`: Whether the game is currently active
+
+**Refs:**
+- `moleTimeoutRef`: Stores the timeout ID for auto-hiding the mole
+- `gameTimerRef`: Stores the interval ID for the game countdown
+- `moleHitRef`: Prevents double-clicking the same mole
+
+### 2. WhackAMoleComponent (Game Board)
+
+Renders the 3×3 grid and displays moles:
+
+```tsx
+const WhackAMoleComponent = ({ 
+    onWhack, 
+    activeIndex 
+}: { 
+    onWhack: (index: number) => void;
+    activeIndex: number | null;
+}) => {
+    return (
+        <div className="whack-a-mole">
+            <div className="grid">
+                {Array.from({ length: 9 }).map((_, index) => (
+                    <div
+                        key={index}
+                        className="hole"
+                        onClick={() => onWhack(index)}
+                    >
+                        {activeIndex === index && "🐹"}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+```
+
+**Responsibilities:**
+- Renders 9 holes in a grid layout
+- Shows mole emoji (🐹) when `activeIndex` matches the hole index
+- Handles click events and passes the hole index to parent
+
+## Recursive Mole Spawning
+
+The game uses a **recursive spawning function** instead of intervals:
+
+```tsx
+const spawnMole = () => {
+    moleHitRef.current = false;  // Reset hit flag for new mole
+    const index = getRandomIndex();
+    setActiveIndex(index);
+
+    moleTimeoutRef.current = window.setTimeout(() => {
+        setActiveIndex(null);
+
+        if (isPlaying) {
+            spawnMole();  // Recursively spawn next mole
+        }
+    }, MOLE_LIFETIME);
+};
+```
+
+**How it works:**
+1. Reset the `moleHitRef` flag so the new mole can be whacked
+2. Generate a random hole index (0-8)
+3. Set that hole as active
+4. Set a timeout for `MOLE_LIFETIME` (1.5 seconds)
+5. When timeout fires:
+   - Clear the active mole
+   - If game is still playing, recursively call `spawnMole()` again
+
+**Advantages of recursive spawning:**
+- **Continuous flow**: New mole appears immediately after previous one disappears
+- **No gaps**: No delay between moles (unlike fixed intervals)
+- **Self-managing**: Each mole manages its own lifecycle
+- **Clean**: Automatically stops when game ends
+
+### Random Index Generation
+
+```tsx
+const getRandomIndex = () => Math.floor(Math.random() * GRID_SIZE);
+```
+
+This generates a random integer from 0 to 8, corresponding to one of the 9 holes.
+
+## Preventing Double-Clicks
+
+The game prevents double-click exploits using a ref:
+
+```tsx
+const handleWhack = (index: number) => {
+    if (!isPlaying || index !== activeIndex) return;
+    if (moleHitRef.current) return;  // Already whacked this mole
+
+    moleHitRef.current = true;  // Mark as whacked
+
+    setScore(prev => prev + 1);
+
+    // Clear the auto-hide timeout
+    if (moleTimeoutRef.current) {
+        clearTimeout(moleTimeoutRef.current);
+    }
+
+    setActiveIndex(null);
+    spawnMole();  // Immediately spawn next mole
+};
+```
+
+**Double-click prevention:**
+1. Check if game is playing and clicked hole has active mole
+2. Check `moleHitRef.current` - if true, mole already whacked, ignore click
+3. Set `moleHitRef.current = true` immediately to prevent subsequent clicks
+4. Increment score
+5. Clear the timeout (mole was whacked, no need to auto-hide)
+6. Clear active mole and spawn next one
+
+**Why this works:**
+- `moleHitRef` is a ref, so it updates synchronously
+- Even if user clicks rapidly, second click sees `moleHitRef.current === true` and returns early
+- Each new mole resets the flag in `spawnMole()`
+
+## Game Timer
+
+The game timer runs independently from mole spawning:
+
+```tsx
+gameTimerRef.current = window.setInterval(() => {
+    setTimeLeft(prev => {
+        if (prev <= 1) {
+            stopGame();
+            return 0;
+        }
+        return prev - 1;
+    });
+}, 1000);
+```
+
+**Features:**
+- Decrements every second
+- Automatically stops game when timer reaches 0
+- Runs independently of mole spawning logic
+
+## Starting and Stopping the Game
+
+### Start Game
+
+```tsx
+const startGame = () => {
+    stopGame();  // Clean up any existing timers
+
+    setScore(0);
+    setTimeLeft(TOTAL_TIME);
+    setIsPlaying(true);
+
+    spawnMole();  // Start the mole spawning chain
+
+    gameTimerRef.current = window.setInterval(() => {
+        setTimeLeft(prev => {
+            if (prev <= 1) {
+                stopGame();
+                return 0;
+            }
+            return prev - 1;
+        });
+    }, 1000);
+};
+```
+
+**Flow:**
+1. Clean up any existing game state
+2. Reset score and timer
+3. Set playing state to true
+4. Start recursive mole spawning
+5. Start game countdown timer
+
+### Stop Game
+
+```tsx
+const stopGame = () => {
+    if (moleTimeoutRef.current) clearTimeout(moleTimeoutRef.current);
+    if (gameTimerRef.current) clearInterval(gameTimerRef.current);
+
+    setActiveIndex(null);
+    setIsPlaying(false);
+};
+```
+
+**Cleanup:**
+- Clear mole timeout (stops recursive spawning)
+- Clear game timer (stops countdown)
+- Clear active mole
+- Set playing state to false
+
+## Cleanup on Unmount
+
+Always clean up timers when component unmounts:
+
+```tsx
+useEffect(() => {
+    return () => {
+        if (moleTimeoutRef.current) clearTimeout(moleTimeoutRef.current);
+        if (gameTimerRef.current) clearInterval(gameTimerRef.current);
+    };
+}, []);
+```
+
+This prevents memory leaks and ensures timers don't continue running after the component is removed.
+
+## Styling the Game
+
+### Grid Layout
+
+The game uses CSS Grid for the 3×3 layout:
+
+```css
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.hole {
+    width: 100px;
+    height: 100px;
+    aspect-ratio: 1;
+    background-color: #8b4513;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+```
+
+**Features:**
+- 3 columns, equal width (`repeat(3, 1fr)`)
+- Circular holes with brown background
+- Centered content (mole emoji)
+- Pointer cursor for interactivity
+
+### Container Styling
+
+```css
+.whack-a-mole-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: #1a1a1a;
+    border-radius: 10px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+```
+
+## Key Takeaways
+
+1. **Recursive Spawning**: Use recursive function calls instead of intervals for continuous mole flow
+2. **Refs for Synchronous Checks**: Use refs to prevent double-clicks (refs update synchronously)
+3. **Separate Timers**: Game timer and mole spawning are independent systems
+4. **Proper Cleanup**: Always clear timeouts and intervals to prevent memory leaks
+5. **Single Active Mole**: Only one mole active at a time (simpler state management)
+6. **Immediate Feedback**: Spawn next mole immediately after whacking or timeout
+7. **Constants for Configuration**: Use constants for easy game tuning
+
+The beauty of this implementation is its simplicity. The recursive spawning pattern creates a smooth, continuous flow of moles without gaps. The ref-based double-click prevention is elegant and effective. The separation of concerns (spawning vs. timing) makes the code maintainable and easy to understand.
