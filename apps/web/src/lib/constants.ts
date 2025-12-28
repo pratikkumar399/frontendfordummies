@@ -11,6 +11,7 @@ import imageCarouselImage from '@/data/assets/image-carousel.png';
 import dynamicTicTacToeImage from '@/data/assets/tic-tac-toe.png';
 import diceRollerImage from '@/data/assets/dice-roller.png';
 import whackAMoleImage from '@/data/assets/whack-a-mole.png';
+import memoryGameImage from '@/data/assets/memory-game.png';
 import { PROMISE_OUTPUT_CHALLENGES_SNIPPETS } from '@/data/snippets/promise-output-challenges';
 
 export const INITIAL_TEMPLATES: Template[] = [
@@ -378,5 +379,22 @@ In this challenge, implement a polyfill that mirrors call's behavior:
     author: 'modernDev',
     createdAt: '2025-12-22',
     goal: 'Implement a whack-a-mole game component with scoring and timing mechanics.'
+  },
+  {
+    id: '19',
+    name: 'Memory Game',
+    slug: 'memory-game',
+    shortDescription: 'A memory game where you need to match pairs of cards.',
+    fullDescription: '',
+    imageUrl: memoryGameImage.src,
+    demoUrl: '/design/memory-game/demo',
+    githubUrl: '#',
+    tags: ['Medium', 'Memory Game', 'React', 'Game'],
+    category: Category.REACT,
+    subcategory: ReactSubcategory.MACHINE_CODING_QUESTIONS,
+    techStack: ['React', 'JavaScript'],
+    author: 'modernDev',
+    createdAt: '2025-12-22',
+    goal: 'Implement a memory game component with card matching and scoring mechanics.'
   }
 ];

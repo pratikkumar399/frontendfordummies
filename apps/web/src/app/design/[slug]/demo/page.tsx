@@ -13,6 +13,7 @@ import ImageCarouselHome from '@/components/demos/ImageCarousel';
 import DynamicTicTacToe from '@/components/demos/DynamicTicTacToe';
 import DiceRoller from '@/components/demos/DiceRoller';
 import WhackAMole from '@/components/demos/WhackAMole';
+import MemoryGame from '@/components/demos/MemoryGame';
 
 const DEMO_REGISTRY: Record<string, React.FC> = {
   'nested-comments-system': CommentsList,
@@ -20,7 +21,8 @@ const DEMO_REGISTRY: Record<string, React.FC> = {
   'image-carousel': ImageCarouselHome,
   'dynamic-tic-tac-toe': DynamicTicTacToe,
   'dice-roller': DiceRoller,
-  'whack-a-mole': WhackAMole
+  'whack-a-mole': WhackAMole,
+  'memory-game': MemoryGame
 };
 
 type PageProps = {

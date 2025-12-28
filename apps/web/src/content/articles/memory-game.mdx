@@ -1,0 +1,329 @@
+Build a memory game where players flip cards to find matching pairs. The key challenges are managing card state (flipped, matched), preventing multiple card selections, handling match logic, and tracking game progress.
+
+## Overview
+
+A memory game displays a 4×4 grid of 16 cards (8 pairs of emojis). Players click cards to flip them, trying to find matching pairs. When two cards are flipped, they're compared. If they match, they stay visible. If not, they flip back after a short delay. The game tracks moves and ends when all pairs are matched.
+
+## Game Setup
+
+### Card Generation
+
+The game starts with a pool of emoji options and creates pairs:
+
+```tsx
+const emojis = [
+    '🐵', '🐶', '🦊', '🐱', '🦁', '🐯', '🐴', '🦄',
+    '🦓', '🦌', '🐮', '🐷', '🐭', '🐹', '🐻',
+    '🐨', '🐼', '🐽', '🐸', '🐰', '🐙',
+];
+
+const getShuffledCards = () => {
+    const selected = emojis.slice(0, 8);  // Select first 8 emojis
+    const pairs = [...selected, ...selected];  // Create pairs (16 cards)
+
+    return pairs.map((item, index) => ({
+        id: index,
+        value: item,
+        isFlipped: false,
+        isMatched: false
+    })).sort(() => Math.random() - 0.5);  // Shuffle randomly
+};
+```
+
+**How it works:**
+1. Select first 8 emojis from the pool
+2. Duplicate them to create 8 pairs (16 cards total)
+3. Map each emoji to a card object with:
+   - `id`: Unique identifier (0-15)
+   - `value`: The emoji character
+   - `isFlipped`: Whether card is currently face-up
+   - `isMatched`: Whether card has been matched with its pair
+4. Shuffle using `Math.random() - 0.5` to randomize order
+
+**Shuffling explanation:**
+- `sort(() => Math.random() - 0.5)` returns random positive/negative values
+- This randomizes the comparison result, shuffling the array
+
+## Component Architecture
+
+The implementation uses a **parent-child component** pattern:
+
+### 1. MemoryGame (Main Component)
+
+Manages game state and logic:
+
+```tsx
+const MemoryGame = () => {
+    const [cards, setCards] = useState(getShuffledCards());
+    const [selectedIndex, setSelectedIndex] = useState<any>([]);
+    const [lockBoard, setLockBoard] = useState(false);
+    const [moves, setMoves] = useState(0);
+    const [gameOver, setGameOver] = useState(false);
+};
+```
+
+**State Management:**
+- `cards`: Array of 16 card objects with their current state
+- `selectedIndex`: Array tracking currently selected card indices (max 2)
+- `lockBoard`: Boolean preventing clicks during flip-back animation
+- `moves`: Counter for number of card pair attempts
+- `gameOver`: Boolean indicating if all pairs are matched
+
+### 2. MemoryGameComponent (Card Grid)
+
+Renders the card grid and handles clicks:
+
+```tsx
+const MemoryGameComponent = ({ onCardClick, cards }) => {
+    return (
+        <div className="memory-game">
+            <div className="cards">
+                {cards.map((card, index) => (
+                    <div
+                        className={`card ${card.isMatched ? "matched" : card.isFlipped ? "flipped" : ""}`}
+                        key={card.id}
+                        onClick={() => onCardClick(index)}
+                    >
+                        {card.isFlipped || card.isMatched ? card.value : ""}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+```
+
+**Responsibilities:**
+- Renders 16 cards in a 4×4 grid
+- Applies CSS classes based on card state
+- Shows emoji when card is flipped or matched
+- Handles click events
+
+## Card Click Handling
+
+The core logic handles card flips and match checking:
+
+```tsx
+const handleCardClick = (id: number) => {
+    if (lockBoard) return;  // Prevent clicks during animation
+
+    const card = cards[id];
+
+    if (card.isFlipped || card.isMatched) return;  // Ignore already flipped/matched cards
+
+    // Flip the card
+    const newCards = [...cards];
+    newCards[id] = { ...card, isFlipped: true };
+    setCards(newCards);
+
+    // Add to selected cards
+    const newSelected = [...selectedIndex, id];
+    setSelectedIndex(newSelected);
+
+    // If 2 cards selected, check for match
+    if (newSelected.length === 2) {
+        setMoves(prev => prev + 1);
+        checkMatch(newSelected, newCards);
+    }
+};
+```
+
+**Flow:**
+1. **Guard checks**: Return early if board is locked or card already flipped/matched
+2. **Flip card**: Create new array, update clicked card's `isFlipped` to `true`
+3. **Track selection**: Add card index to `selectedIndex` array
+4. **Check match**: When 2 cards selected, increment moves and check for match
+
+## Match Checking Logic
+
+When two cards are selected, the game checks if they match:
+
+```tsx
+const checkMatch = (selectedIndexes: any, updatedCard: any[]) => {
+    const [first, second] = selectedIndexes;
+
+    // If it's a match
+    if (updatedCard[first].value === updatedCard[second].value) {
+        const matchedCards = [...updatedCard];
+        
+        matchedCards[first].isMatched = true;
+        matchedCards[second].isMatched = true;
+
+        setCards(matchedCards);
+        setSelectedIndex([]);
+        checkGameOver(matchedCards);
+    }
+    // If not a match
+    else {
+        setLockBoard(true);  // Lock board during flip-back
+
+        setTimeout(() => {
+            const resetCards = [...cards];  // Use current state
+
+            resetCards[first].isFlipped = false;
+            resetCards[second].isFlipped = false;
+
+            setSelectedIndex([]);
+            setCards(resetCards);
+            setLockBoard(false);
+        }, 800);  // 800ms delay before flipping back
+    }
+};
+```
+
+**Match Found:**
+1. Mark both cards as `isMatched: true`
+2. Clear selected cards array
+3. Check if game is over
+
+**No Match:**
+1. Lock the board (prevent new clicks)
+2. Wait 800ms for players to see the cards
+3. Flip both cards back (`isFlipped: false`)
+4. Clear selection and unlock board
+
+**Important Note:** The `resetCards` uses `[...cards]` (current state), not `updatedCard`, because state updates are asynchronous. This ensures we're working with the latest state.
+
+## Game Over Detection
+
+The game ends when all cards are matched:
+
+```tsx
+const checkGameOver = (cardList: any[]) => {
+    const allMatched = cardList.every(card => card.isMatched);
+
+    if (allMatched) {
+        setGameOver(true);
+    }
+};
+```
+
+**How it works:**
+- `every()` checks if all cards have `isMatched === true`
+- If true, set `gameOver` to trigger "Play Again" button
+
+## Board Locking
+
+The `lockBoard` state prevents clicks during the flip-back animation:
+
+```tsx
+if (lockBoard) return;  // In handleCardClick
+```
+
+**Why it's needed:**
+- Without locking, players could click more cards during the 800ms delay
+- This would break the "two cards at a time" rule
+- Locking ensures players wait for cards to flip back before continuing
+
+## Card State Priority
+
+The card styling uses a priority system:
+
+```tsx
+className={`card ${card.isMatched ? "matched" : card.isFlipped ? "flipped" : ""}`}
+```
+
+**Priority order:**
+1. **Matched**: If `isMatched === true`, apply "matched" class (green border)
+2. **Flipped**: If not matched but `isFlipped === true`, apply "flipped" class (gray background)
+3. **Default**: Otherwise, no special class (dark background)
+
+**Visual states:**
+- **Default**: Dark background (#333), no emoji visible
+- **Flipped**: Gray background (#666), emoji visible
+- **Matched**: Transparent background with green border, emoji always visible
+
+## Display Logic
+
+Cards show their emoji value conditionally:
+
+```tsx
+{card.isFlipped || card.isMatched ? card.value : ""}
+```
+
+**Display rules:**
+- Show emoji if card is flipped OR matched
+- Hide emoji if card is face-down and not matched
+- Matched cards always show emoji (even if `isFlipped` becomes false)
+
+## Game Reset
+
+Players can restart the game:
+
+```tsx
+const resetGame = () => {
+    setCards(getShuffledCards());  // New random shuffle
+    setSelectedIndex([]);
+    setMoves(0);
+    setGameOver(false);
+    setLockBoard(false);
+};
+```
+
+**Reset actions:**
+- Generate new shuffled cards
+- Clear selected cards
+- Reset move counter
+- Reset game over state
+- Unlock board
+
+## Styling
+
+### Grid Layout
+
+The game uses CSS Grid for the 4×4 card layout:
+
+```css
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+```
+
+**Features:**
+- 4 equal-width columns
+- 10px gap between cards
+- Responsive grid that adapts to container size
+
+### Card States
+
+```css
+.card {
+    width: 60px;
+    height: 60px;
+    background-color: #333;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card.flipped {
+    background-color: #666;
+}
+
+.card.matched {
+    background-color: transparent;
+    border: 1px solid green;
+}
+```
+
+**Visual feedback:**
+- Default: Dark card, no content visible
+- Flipped: Lighter background, emoji visible
+- Matched: Transparent with green border, emoji always visible
+
+## Key Takeaways
+
+1. **State Management**: Track `isFlipped` and `isMatched` separately for different behaviors
+2. **Board Locking**: Use `lockBoard` to prevent clicks during animations
+3. **Selection Tracking**: Use array to track selected card indices (max 2)
+4. **Match Logic**: Compare card values when 2 cards are selected
+5. **Delayed Flip-Back**: Use `setTimeout` to show mismatched cards before flipping
+6. **State Priority**: Matched cards take priority over flipped cards in styling
+7. **Move Tracking**: Increment moves only when checking a pair (not on every click)
+8. **Game Over**: Check if all cards are matched after each successful match
+
+The beauty of this implementation is its clear separation of concerns. The card state (`isFlipped`, `isMatched`) drives both the visual appearance and the game logic. The board locking mechanism ensures a smooth user experience during animations. The move counter provides feedback on player performance, making the game more engaging.
+
