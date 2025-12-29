@@ -372,7 +372,7 @@ In this challenge, implement a polyfill that mirrors call's behavior:
     imageUrl: whackAMoleImage.src,
     demoUrl: '/design/whack-a-mole/demo',
     githubUrl: '#',
-    tags: ['Medium', 'Whack A Mole', 'React', 'Game'],
+    tags: ['Medium', 'Whack A Mole', 'React', 'Game', "Whack-a-mole-for-frontend"],
     category: Category.REACT,
     subcategory: ReactSubcategory.MACHINE_CODING_QUESTIONS,
     techStack: ['React', 'JavaScript'],
