@@ -14,6 +14,7 @@ import DynamicTicTacToe from '@/components/demos/DynamicTicTacToe';
 import DiceRoller from '@/components/demos/DiceRoller';
 import WhackAMole from '@/components/demos/WhackAMole';
 import MemoryGame from '@/components/demos/MemoryGame';
+import SimonSays from '@/components/demos/SimonSays';
 
 const DEMO_REGISTRY: Record<string, React.FC> = {
   'nested-comments-system': CommentsList,
@@ -22,7 +23,8 @@ const DEMO_REGISTRY: Record<string, React.FC> = {
   'dynamic-tic-tac-toe': DynamicTicTacToe,
   'dice-roller': DiceRoller,
   'whack-a-mole': WhackAMole,
-  'memory-game': MemoryGame
+  'memory-game': MemoryGame,
+  'simon-says': SimonSays
 };
 
 type PageProps = {

@@ -396,5 +396,22 @@ In this challenge, implement a polyfill that mirrors call's behavior:
     author: 'modernDev',
     createdAt: '2025-12-22',
     goal: 'Implement a memory game component with card matching and scoring mechanics.'
+  },
+  {
+    id: '20',
+    name: 'Simon Says',
+    slug: 'simon-says',
+    shortDescription: 'A Simon Says game where you need to repeat sequences of colors.',
+    fullDescription: '',
+    imageUrl: 'https://placehold.co/800x600/8b5cf6/ffffff/png?text=Simon+Says',
+    demoUrl: '/design/simon-says/demo',
+    githubUrl: '#',
+    tags: ['Medium', 'Simon Says', 'React', 'Game'],
+    category: Category.REACT,
+    subcategory: ReactSubcategory.MACHINE_CODING_QUESTIONS,
+    techStack: ['React', 'JavaScript'],
+    author: 'modernDev',
+    createdAt: '2025-12-22',
+    goal: 'Implement a Simon Says game component with sequence generation and player input validation.'
   }
 ];

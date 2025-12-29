@@ -1,0 +1,48 @@
+.simon-container {
+  text-align: center;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 120px);
+  gap: 16px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pad {
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  opacity: 0.6;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+}
+
+
+
+.pad.active {
+  opacity: 1;
+  transform: scale(1.08);
+  box-shadow: 0 0 20px rgba(255,255,255,0.6);
+}
+
+.green { background: green; }
+.red { background: red; }
+.yellow { background: gold; }
+.blue { background: blue; }
+.purple { background: purple; }
+.orange { background: orange; }
+.pink { background: pink; }
+.brown { background: brown; }
+.gray { background: gray; }
+
+
+.start-btn {
+    margin-top: 20px;
+  padding: 10px 16px;
+  font-size: 16px;
+  background-color: green;
+  border-radius: 5px;
+  cursor: pointer;
+}

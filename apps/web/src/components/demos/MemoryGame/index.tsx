@@ -47,12 +47,12 @@ const MemoryGame = () => {
         setCards(newCards);
 
         // selected index logic
-        const newSelected = [...selectedIndex, id];
-        setSelectedIndex(newSelected);
+        const newSelectedIndexes = [...selectedIndex, id];
+        setSelectedIndex(newSelectedIndexes);
 
-        if (newSelected.length === 2) {
+        if (newSelectedIndexes.length === 2) {
             setMoves(prev => prev + 1)
-            checkMatch(newSelected, newCards)
+            checkMatch(newSelectedIndexes, newCards)
         }
 
     }

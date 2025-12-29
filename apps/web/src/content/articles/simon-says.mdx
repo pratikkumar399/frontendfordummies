@@ -1,0 +1,324 @@
+Build a Simon Says game where players must repeat sequences of colored pads. The key challenges are generating random sequences, playing sequences with visual feedback, validating user input, and managing game state transitions.
+
+## Overview
+
+A Simon Says game displays a 3×3 grid of 9 colored pads. The game plays a sequence of colors, and players must repeat the sequence by clicking the pads in the correct order. Each round adds one more color to the sequence, making it progressively harder. The game ends when the player makes a mistake.
+
+## Game Setup
+
+### Color Configuration
+
+The game uses 9 colors arranged in a 3×3 grid:
+
+```tsx
+const COLORS = ["green", "red", "yellow", "blue", "purple", "orange", "pink", "brown", "gray"];
+
+const getRandomColor = () =>
+    COLORS[Math.floor(Math.random() * COLORS.length)];
+```
+
+**How it works:**
+- `COLORS` array defines all available colors
+- `getRandomColor()` selects a random color from the array
+- Each round adds one random color to the sequence
+
+## Component Architecture
+
+The implementation uses a **single component** with state-driven game flow:
+
+```tsx
+const SimonSays = () => {
+    const [sequence, setSequence] = useState<string[]>([]);
+    const [userSequence, setUserSequence] = useState<string[]>([]);
+    const [activeColor, setActiveColor] = useState<string | null>(null);
+    const [isUserTurn, setIsUserTurn] = useState(false);
+    const [level, setLevel] = useState(0);
+    const [isPlaying, setIsPlaying] = useState(false);
+
+    const timeoutRef = useRef<number | null>(null);
+};
+```
+
+**State Management:**
+- `sequence`: The complete sequence the player must repeat (grows each round)
+- `userSequence`: The colors the player has clicked so far
+- `activeColor`: Currently flashing color (for visual feedback)
+- `isUserTurn`: Whether player can click pads
+- `level`: Current level (equals sequence length)
+- `isPlaying`: Whether game is active
+- `timeoutRef`: Stores timeout ID for cleanup
+
+## Game Flow
+
+The game follows a **sequence-play-input-validation** pattern:
+
+### 1. Start Game
+
+```tsx
+const startGame = () => {
+    resetGame();
+    setIsPlaying(true);
+    nextRound([]);
+};
+```
+
+**Flow:**
+1. Reset all game state
+2. Set playing state to true
+3. Start first round with empty sequence
+
+### 2. Next Round
+
+Each round adds one color to the sequence:
+
+```tsx
+const nextRound = (prevSequence: string[]) => {
+    const next = [...prevSequence, getRandomColor()];
+    setSequence(next);
+    setLevel(next.length);
+    playSequence(next);
+};
+```
+
+**How it works:**
+1. Create new sequence by adding random color to previous sequence
+2. Update sequence state
+3. Set level to sequence length
+4. Play the sequence for player to see
+
+**Example progression:**
+- Round 1: `["green"]` (level 1)
+- Round 2: `["green", "red"]` (level 2)
+- Round 3: `["green", "red", "blue"]` (level 3)
+- And so on...
+
+### 3. Play Sequence
+
+The game plays the sequence with visual flashes:
+
+```tsx
+const playSequence = async (seq: string[]) => {
+    setIsUserTurn(false);  // Disable clicks during playback
+
+    for (let i = 0; i < seq.length; i++) {
+        await flash(seq[i]);
+    }
+
+    setUserSequence([]);  // Reset user input
+    setIsUserTurn(true);  // Enable clicks
+};
+```
+
+**Flow:**
+1. Disable user input (`isUserTurn = false`)
+2. Flash each color in sequence sequentially
+3. Wait for each flash to complete before next
+4. Reset user sequence
+5. Enable user input (`isUserTurn = true`)
+
+**Why async/await?**
+- Ensures colors flash one at a time
+- Prevents overlapping flashes
+- Creates clear, sequential visual pattern
+
+### 4. Flash Animation
+
+Each color flashes with timing:
+
+```tsx
+const flash = (color: string) => {
+    return new Promise<void>((resolve) => {
+        setActiveColor(color);  // Show color
+
+        timeoutRef.current = window.setTimeout(() => {
+            setActiveColor(null);  // Hide color
+
+            timeoutRef.current = window.setTimeout(() => {
+                resolve();  // Continue to next color
+            }, 200);
+        }, 500);
+    });
+};
+```
+
+**Timing breakdown:**
+- **0ms**: Set active color (pad lights up)
+- **500ms**: Clear active color (pad dims)
+- **700ms**: Resolve promise (200ms gap before next flash)
+
+**Visual effect:**
+- Pad flashes for 500ms
+- 200ms gap between flashes
+- Creates clear separation between colors
+
+## User Input Handling
+
+### Visual Feedback on Click
+
+When player clicks a pad, it flashes briefly:
+
+```tsx
+const flashUserClick = (color: string) => {
+    setActiveColor(color);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = window.setTimeout(() => {
+        setActiveColor(null);
+    }, 200);
+};
+```
+
+**Features:**
+- Immediate visual feedback (200ms flash)
+- Clears any existing timeout to prevent conflicts
+- Uses same `activeColor` state as sequence playback
+
+### Input Validation
+
+Player clicks are validated against the sequence:
+
+```tsx
+const handleClick = (color: string) => {
+    if (!isUserTurn) return;  // Ignore clicks during sequence playback
+
+    flashUserClick(color);  // Visual feedback
+
+    const nextInput = [...userSequence, color];
+    setUserSequence(nextInput);
+
+    const currentIndex = nextInput.length - 1;
+
+    // Wrong input
+    if (sequence[currentIndex] !== color) {
+        gameOver();
+        return;
+    }
+
+    // Completed round
+    if (nextInput.length === sequence.length) {
+        setIsUserTurn(false);
+        setTimeout(() => {
+            nextRound(sequence);
+        }, 800);
+    }
+};
+```
+
+**Validation logic:**
+1. **Guard check**: Ignore clicks if not user's turn
+2. **Visual feedback**: Flash clicked pad
+3. **Update input**: Add color to user sequence
+4. **Check match**: Compare clicked color with sequence at current index
+5. **Wrong input**: End game if colors don't match
+6. **Round complete**: If all colors matched, start next round after 800ms delay
+
+**Example:**
+- Sequence: `["green", "red", "blue"]`
+- User clicks: `["green", "red"]` ✓
+- User clicks: `["green", "red", "yellow"]` ✗ (game over)
+
+## Game Over
+
+When player makes a mistake:
+
+```tsx
+const gameOver = () => {
+    alert("Game Over");
+    resetGame();
+    setIsPlaying(false);
+};
+```
+
+**Actions:**
+- Show game over alert
+- Reset all game state
+- Set playing state to false (shows "Start Game" button)
+
+## Reset Game
+
+Resets all state to initial values:
+
+```tsx
+const resetGame = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setSequence([]);
+    setUserSequence([]);
+    setActiveColor(null);
+    setIsUserTurn(false);
+    setLevel(0);
+};
+```
+
+**Cleanup:**
+- Clear any pending timeouts
+- Reset sequence to empty
+- Clear user input
+- Clear active color
+- Disable user input
+- Reset level to 0
+
+## Styling
+
+### Grid Layout
+
+The game uses CSS Grid for the 3×3 pad layout:
+
+```css
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 120px);
+    gap: 16px;
+    justify-content: center;
+    margin-top: 20px;
+}
+```
+
+**Features:**
+- 3 columns, each 120px wide
+- 16px gap between pads
+- Centered grid
+- 20px top margin
+
+### Pad Styling
+
+Each pad has base styling and active state:
+
+```css
+.pad {
+    width: 120px;
+    height: 120px;
+    border-radius: 12px;
+    opacity: 0.6;
+    cursor: pointer;
+    transition: opacity 0.15s ease, transform 0.1s ease;
+}
+
+.pad.active {
+    opacity: 1;
+    transform: scale(1.08);
+    box-shadow: 0 0 20px rgba(255,255,255,0.6);
+}
+```
+
+**Visual states:**
+- **Default**: 60% opacity, normal size
+- **Active**: 100% opacity, 8% larger, white glow shadow
+
+**Color classes:**
+Each color has its own background class:
+- `.green`, `.red`, `.yellow`, `.blue`, `.purple`, `.orange`, `.pink`, `.brown`, `.gray`
+
+## Key Takeaways
+
+1. **Sequence Generation**: Each round adds one random color to growing sequence
+2. **Async Sequence Playback**: Use `async/await` with `Promise` to flash colors sequentially
+3. **State Management**: Separate `sequence` (game's sequence) and `userSequence` (player's input)
+4. **Turn Management**: Use `isUserTurn` to control when player can interact
+5. **Visual Feedback**: Flash pads during both sequence playback and user clicks
+6. **Input Validation**: Compare user input index-by-index with sequence
+7. **Level Tracking**: Level equals sequence length (increases each round)
+8. **Timeout Cleanup**: Always clear timeouts to prevent memory leaks and conflicts
+
+The beauty of this implementation is its clear separation of concerns. The sequence playback is completely separate from user input validation. The async/await pattern creates smooth, sequential animations. The turn-based system (`isUserTurn`) ensures players can't click during sequence playback, preventing confusion and errors.
+
+The progressive difficulty (one color per round) creates an engaging challenge that scales naturally. The visual feedback system provides clear indication of both game actions and player actions, making the game intuitive and satisfying to play.
+
