@@ -1,0 +1,269 @@
+## What is Performance Optimization in Frontend?
+
+Let me break this down:
+
+**What the browser actually does:**
+
+- Downloads files (HTML, CSS, JavaScript, images, assets)
+- Parses them
+- Executes JavaScript
+- Creates the UI
+- Renders everything
+- Responds to user interactions
+- Re-renders based on user actions
+
+That's an incredible amount of work happening every single time someone visits your site.
+
+**So what happens when the browser does too much work?**
+```
+→ It blocks the main thread
+→ User interactions have to wait
+→ The rendering process slows down
+→ The page feels unresponsive
+```
+
+**Here's the reality:**
+
+Your code might be 100% correct. It might work exactly as you intended. But if your page still feels slow, then there's a performance problem.
+And here's what matters: even a delay of `150-200ms` is noticeable to users. That tiny lag? They feel it. And it impacts their experience.
+
+`Therefore, performance optimisation isn't optional.` It's about ensuring the users visiting your webpage don't experience lag or delays because of the decisions you made while building it.
+
+---
+
+## Root Cause of Performance Problems
+
+The fundamental issue is simple: **we are making browsers do unnecessary work, or poorly timed work**.
+
+---
+
+## How Do We Optimize Performance?
+
+If we are making the browser do unnecessary work, then we should free it from that work.
+
+From now on, every time you write code, think about these questions:
+
+- Does this code need to run right now?
+- Does this need to run again and again?
+- Does this need to block the UI?
+- Does this need to load immediately?
+- Can this be delayed, reused, cached or skipped?
+
+---
+
+## Strategies We are going to Follow
+
+### 1. Reduce Unnecessary JavaScript
+
+Some common ideas here:
+
+- Avoid unnecessary re-renders
+- Avoid computing expensive values again and again
+- Avoid recreating the same functions again and again
+- Avoid updating states when nothing changed (if you're using a framework like React)
+
+This is where concepts like memoization, stable references, and render control come from. They exist because re-execution is expensive and should be avoided wherever possible.
+
+### 2. Control When Some Work Happens
+
+We need to decide if this work needs to happen immediately?
+
+**Examples:**
+- Does this feature need to load on page load?
+- Can we wait until the user clicks?
+- Can we wait until the user scrolls?
+
+**Strategies to use here:**
+- Code splitting
+- Lazy loading
+- Defer non-critical work
+- Schedule work after initial render
+
+The simple idea is to make the page usable, and then to make it complete.
+
+### 3. Reduce Network Cost
+
+Let's talk about the data that we are feeding our browsers, and ask ourselves these questions:
+
+- Why are we downloading the whole data, or this much amount of data?
+- Why do I need to send this request again?
+- Why is the size of the image so big?
+
+**Strategies that we can use over here:**
+- Send fewer requests
+- Smaller payloads (remove unnecessary payloads)
+- Cached response, if the response is always the same
+- Optimize the images, or the assets
+- Avoid fetching the data again and again
+
+### 4. Make the Processing of Rendering Cheaper
+
+Rendering UI is not a cheap thing. The browser:
+
+- Calculates the layout
+- Paints pixels
+- Composites layers (combines layout and paint results into final screen pixels)
+
+So the questions that you need to ask over here are:
+
+- Why is the size of the DOM so big?
+- Why are we recalculating the styles again and again?
+- Why does scrolling cause lag or jank?
+
+**Strategies to follow over here:**
+- Avoid deep DOM trees
+- Avoid layout thrashing
+- Batch the DOM updates
+- Use CSS wisely (critical CSS should be inline)
+- If the list that you're rendering is long, then virtualize it
+
+---
+
+### Key Principle: Perceived Performance
+
+One of the key things that we need to note down is that : ***Instead of thinking that the page loads instantly, we should think that the user should interact without any delay***
+
+this simply means : 
+
+- show something fast
+- progressively enhance the ui
+- use skeletons over blank screens
+- optimistic ui updates wherever possible
+
+---
+
+## Things to Consider When Optimizing a Webpage
+
+When we look at a webpage, there are 4 phases:
+
+### Loading Phase
+- How big is the JavaScript bundle when the webpage loads?
+- How many requests are the blocking requests?
+- What is loaded at first?
+
+### Rendering Phase
+- How often does the web page re-render?
+- What are the causes of layout recalculation?
+- Is the DOM too heavy?
+
+### Interaction Phase
+- Are the clicks instant?
+- Is it lagging while we type?
+- When we scroll, does that feel smooth?
+
+### Runtime Phase
+- Are effects running unnecessarily?
+- Are timers, listeners, observers cleaned up?
+- Is the memory usage optimized, or is it increasing over time?
+
+---
+
+## The Core Question
+
+So basically when we are talking about performance from frontend perspective, we are basically asking the same question again and again:
+
+**Is the browser doing something right now, that it does not need to do?**
+
+And once we have figured that out, we can use concepts like:
+- Memoization
+- Lazy loading
+- Caching
+- Debouncing
+- Throttling
+- Minification
+- Code splitting
+- And more...
+
+---
+
+## Topics Breakdown
+
+I will be breaking each of these things in detail in the upcoming blogs and videos.
+
+### 1. How the Browsers Work (It is the Foundation of Performance)
+
+Understanding how the browsers work, before optimizing will help us to identify how to proceed in the right direction.
+
+We will break this down into several subtopics:
+
+- What actually happens when a user opens a webpage?
+- What work does the browser perform step by step?
+- What is the main thread and why blocking it hurts?
+- What is parsing, rendering, painting and compositing?
+
+### 2. Loading Performance (Before the Page Appears)
+
+So before the user sees anything on screen, there are a lot of things that happen behind the scene and understanding that is very essential…
+
+- Why does bundles slow down the first paint?
+- Why too many requests slow down the performance?
+- Why unused code is not a good idea?
+
+**Key ideas that we will explore over here:**
+- Code splitting
+- Lazy loading
+- Tree shaking
+- Asset optimisation
+- Critical vs non-critical resources
+
+### 3. Rendering Performance (Why Does the UI Feel Smooth or Slow?)
+
+So basically this is the thing that happens after the content is rendered on the screen.
+
+This will explain you:
+
+- Why does re-render happen?
+- Why are some updates expensive?
+- Why the DOM can become a serious trouble?
+
+**Key ideas that we are going to discuss over here are:**
+- Reconciliation and rendering cost
+- Avoiding unnecessary re-renders
+- Virtualisation for long lists
+- CSS and layouts performance
+
+### 4. Runtime and Interaction Performance (During User Actions)
+
+Here, I am going to talk about the user actions and how can we make sure that the users will not feel any kind of hinderance while using our webpage…
+
+**These are the questions that we are going to explore:**
+- Why do clicks lag?
+- Why does typing feel slow?
+- Why does scrolling feel slow?
+- Why timers and effects cause jank or lag?
+
+**And the key ideas that we will explore are:**
+- Event handling cost
+- Debouncing and throttling
+- Scheduling work
+- Cleanup of timers and efficient memory management
+
+### 5. Data and Caching (Making the Website Feel Fast)
+
+This will be the last topic.
+
+In this we will be exploring some smart decisions that we can make to make our webpage feel faster.
+
+**The key ideas that we will look over here:**
+- Why repeated API calls can become hurtful?
+- Why does loading feel slow?
+
+**Strategies that we are going to discuss:**
+- Caching strategies
+- How to avoid duplicate requests
+- How to make optimistic UI-updates
+
+---
+
+## Summary
+
+Each topic answers a **different performance question**:
+
+1. *What is the browser doing?*
+2. *How fast does the page appear?*
+3. *How expensive is UI rendering?*
+4. *How smooth are interactions?*
+5. *How fast does it feel?*
+
+Performance optimization is a continuous process of asking the right questions and making informed decisions. Every optimization should be measured, and every decision should be based on understanding what the browser is actually doing.
+

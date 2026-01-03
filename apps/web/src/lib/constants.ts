@@ -413,5 +413,21 @@ In this challenge, implement a polyfill that mirrors call's behavior:
     author: 'modernDev',
     createdAt: '2025-12-22',
     goal: 'Implement a Simon Says game component with sequence generation and player input validation.'
+  },
+  {
+    id: '21',
+    name: 'Performance Optimisation from First Principles',
+    slug: 'performance-optimisation-from-first-principles',
+    shortDescription: 'Understanding frontend performance optimization from the ground up - learn how browsers work and optimize your code accordingly.',
+    fullDescription: '',
+    imageUrl: 'https://placehold.co/800x600/10b981/ffffff/png?text=Performance+Optimization',
+    demoUrl: '#',
+    githubUrl: '#',
+    tags: ['Performance', 'Frontend', 'Optimization', 'Browser'],
+    category: Category.BLOGS,
+    techStack: ['Performance', 'Frontend', 'JavaScript', 'Browser'],
+    author: 'modernDev',
+    createdAt: '2025-12-23',
+    goal: 'Understand performance optimization from first principles and learn to identify and eliminate unnecessary browser work.'
   }
 ];
