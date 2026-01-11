@@ -10,6 +10,7 @@ const DEMO_PATHS: Record<string, string> = {
   'whack-a-mole': 'src/components/demos/WhackAMole',
   'memory-game': 'src/components/demos/MemoryGame',
   'simon-says': 'src/components/demos/SimonSays',
+  'infinite-scrolling': 'src/components/demos/InfiniteScrolling',
 };
 
 export interface FileNode {

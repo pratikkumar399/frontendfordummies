@@ -21,6 +21,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Disable caching in development
+  ...(process.env.NODE_ENV === 'development' && {
+    experimental: {
+      staleTimes: {
+        dynamic: 0,
+        static: 0,
+      },
+    },
+  }),
 };
 
 export default nextConfig;

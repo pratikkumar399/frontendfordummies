@@ -11,6 +11,9 @@ export function PWARegister() {
     if (typeof window === 'undefined') return;
     if (!('serviceWorker' in navigator)) return;
 
+    // Skip service worker registration in development
+    if (process.env.NODE_ENV === 'development') return;
+
     let controllerChangeHandler: (() => void) | null = null;
 
     // Register the Service Worker

@@ -15,6 +15,7 @@ import DiceRoller from '@/components/demos/DiceRoller';
 import WhackAMole from '@/components/demos/WhackAMole';
 import MemoryGame from '@/components/demos/MemoryGame';
 import SimonSays from '@/components/demos/SimonSays';
+import InfiniteScrollingDemo from '@/components/demos/InfiniteScrolling';
 
 const DEMO_REGISTRY: Record<string, React.FC> = {
   'nested-comments-system': CommentsList,
@@ -24,7 +25,8 @@ const DEMO_REGISTRY: Record<string, React.FC> = {
   'dice-roller': DiceRoller,
   'whack-a-mole': WhackAMole,
   'memory-game': MemoryGame,
-  'simon-says': SimonSays
+  'simon-says': SimonSays,
+  'infinite-scrolling': InfiniteScrollingDemo
 };
 
 type PageProps = {

@@ -40,6 +40,12 @@ self.addEventListener('message', (event) => {
 self.addEventListener('fetch', (event) => {
     const { request } = event;
 
+    // Skip caching in development
+    if (self.location.hostname === 'localhost' || self.location.hostname === '127.0.0.1') {
+        event.respondWith(fetch(request));
+        return;
+    }
+
     // Only handle safe, same-origin GET requests
     if (request.method !== 'GET') return;
     if (!request.url.startsWith(self.location.origin)) return;

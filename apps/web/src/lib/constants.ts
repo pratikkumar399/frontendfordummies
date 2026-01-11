@@ -398,6 +398,23 @@ In this challenge, implement a polyfill that mirrors call's behavior:
     goal: 'Implement a memory game component with card matching and scoring mechanics.'
   },
   {
+    id: '22',
+    name: 'Infinite Scrolling',
+    slug: 'infinite-scrolling',
+    shortDescription: 'An infinite scrolling list that keeps loading more content as you scroll.',
+    fullDescription: '',
+    imageUrl: 'https://placehold.co/800x600/3b82f6/ffffff/png?text=Infinite+Scrolling',
+    demoUrl: '/design/infinite-scrolling/demo',
+    githubUrl: '#',
+    tags: ['Medium', 'Infinite Scroll', 'React', 'List'],
+    category: Category.REACT,
+    subcategory: ReactSubcategory.MACHINE_CODING_QUESTIONS,
+    techStack: ['React', 'JavaScript'],
+    author: 'modernDev',
+    createdAt: '2025-12-23',
+    goal: 'Implement an infinite scrolling list that fetches and renders more items as the user scrolls.'
+  },
+  {
     id: '20',
     name: 'Simon Says',
     slug: 'simon-says',
